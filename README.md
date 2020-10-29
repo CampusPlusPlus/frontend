@@ -29,3 +29,25 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+## Command History
+
+### generate new project
+
+ `ng new frontend --createApplication=true --routing=true`
+
+### install material
+
+`ng add @angular/material`
+
+> ? Choose a prebuilt theme name, or "custom" for a custom theme: Deep Purple/Amber  [ Preview: https://material.angular.io?theme=deeppurple-amber ]
+> ? Set up global Angular Material typography styles? Yes
+> ? Set up browser animations for Angular Material? Yes
+
+### Basic Setup
+
+Core Module: `ng g m core`  
+Shared Module: `ng g m shared`    
+Service: `ng g s shared/services/testapi`  
+
+
