@@ -25,7 +25,7 @@
       <span class="logo" routerLink="/">🎓 Campus++</span>
 
       <span class="fill-space"></span>
-      <div *ngIf="!(isHandset$ | async)">
+      <div *ngIf="(isHandset$ | async) === false">
         <a mat-button routerLink="/disciplines">📗 Disciplines</a>
         <a mat-button routerLink="/settings">🔧 Settings</a>
       </div>
