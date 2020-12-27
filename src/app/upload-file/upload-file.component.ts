@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-upload-file',
@@ -8,6 +8,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 })
 export class UploadFileComponent implements OnInit {
   uploadForm: FormGroup;
+  submit = false;
 
   constructor() {
   }
@@ -23,19 +24,27 @@ export class UploadFileComponent implements OnInit {
             null, [Validators.required]
           ),
         }),
-        addTagToFile: new FormControl(
-          null
-        ),
-      })
+        tags: new FormArray([]),
+      }),
     });
   }
 
   onSubmit(): void {
     console.log(this.uploadForm);
+    this.submit = true;
   }
 
   onReset(): void {
     this.uploadForm.reset();
+  }
+
+  onAddTag(): void {
+    const control = new FormControl(null, Validators.required);
+    (this.uploadForm.get('fileAllData.tags') as FormArray).push(control);
+  }
+
+  getControls(): object {
+    return (this.uploadForm.get('fileAllData.tags') as FormArray).controls;
   }
 
 }

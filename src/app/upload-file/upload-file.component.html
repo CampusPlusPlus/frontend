@@ -1,7 +1,7 @@
 <div class="container">
   <form [formGroup]="uploadForm" (ngSubmit)="onSubmit()">
     <div formGroupName="fileAllData">
-      <mat-form-field style="width: 100%" appearance="standard">
+      <mat-form-field style="width: 100%" appearance="fill">
         <mat-label>Choose File to upload</mat-label>
         <input
           type="text"
@@ -14,7 +14,7 @@
         <mat-hint>Search for a file!</mat-hint>
       </mat-form-field>
       <div formGroupName="fileUploadLocationData">
-        <mat-form-field style="width: 100%" appearance="standard">
+        <mat-form-field style="width: 100%" appearance="fill">
           <mat-label>Location</mat-label>
           <input
             type="text"
@@ -25,20 +25,28 @@
           <mat-hint>Enter the string interpolation</mat-hint>
         </mat-form-field>
       </div>
-      <mat-form-field style="width: 100%" appearance="standard">
-        <mat-label>Tags</mat-label>
-        <input
-          type="text"
-          class="form-control"
-          matInput
-          formControlName="addTagToFile"
-        />
-        <mat-hint>Enter the string interpolation</mat-hint>
-      </mat-form-field>
-    </div>
-    <div style="margin-top: 20px">
-      <button mat-raised-button color="primary" type="submit">Submit</button>
-      <button  mat-raised-button color="warn" (click)="onReset()" type="button">Reset</button>
+      <p></p>
+      <div formArrayName="tags">
+        <mat-label>Add a Tag</mat-label>
+        <div
+          class="form-group"
+          *ngFor="let tagControl of getControls(); let i = index">
+          <mat-form-field appearance="fill">
+            <input
+              type="text"
+              class="form-control"
+              matInput
+              [formControlName]="i"
+            />
+          </mat-form-field>
+        </div>
+        <p></p>
+        <mat-icon style="cursor: pointer" matSuffix (click)="onAddTag()">add_box</mat-icon>
+      </div>
+      <div style="margin-top: 20px">
+        <button mat-raised-button color="primary" type="submit">Submit</button>
+        <button mat-raised-button color="warn" (click)="onReset()" type="button">Reset</button>
+      </div>
     </div>
   </form>
 </div>
