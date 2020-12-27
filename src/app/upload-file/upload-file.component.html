@@ -1,0 +1,44 @@
+<div class="container">
+  <form [formGroup]="uploadForm" (ngSubmit)="onSubmit()">
+    <div formGroupName="fileAllData">
+      <mat-form-field style="width: 100%" appearance="standard">
+        <mat-label>Choose File to upload</mat-label>
+        <input
+          type="text"
+          class="form-control"
+          id="chooseUploadFile"
+          matInput
+          formControlName="chooseUploadFile"
+        />
+        <mat-icon matSuffix>folder</mat-icon>
+        <mat-hint>Search for a file!</mat-hint>
+      </mat-form-field>
+      <div formGroupName="fileUploadLocationData">
+        <mat-form-field style="width: 100%" appearance="standard">
+          <mat-label>Location</mat-label>
+          <input
+            type="text"
+            class="form-control"
+            matInput
+            formControlName="uploadLocation"
+          />
+          <mat-hint>Enter the string interpolation</mat-hint>
+        </mat-form-field>
+      </div>
+      <mat-form-field style="width: 100%" appearance="standard">
+        <mat-label>Tags</mat-label>
+        <input
+          type="text"
+          class="form-control"
+          matInput
+          formControlName="addTagToFile"
+        />
+        <mat-hint>Enter the string interpolation</mat-hint>
+      </mat-form-field>
+    </div>
+    <div style="margin-top: 20px">
+      <button mat-raised-button color="primary" type="submit">Submit</button>
+      <button  mat-raised-button color="warn" (click)="onReset()" type="button">Reset</button>
+    </div>
+  </form>
+</div>
