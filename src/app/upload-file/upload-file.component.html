@@ -1,18 +1,42 @@
 <div class="container">
   <form [formGroup]="uploadForm" (ngSubmit)="onSubmit()">
     <div formGroupName="fileAllData">
-      <mat-form-field style="width: 100%" appearance="fill">
+      <div style="text-align:center; margin-top: 100px; ">
+        <mat-card style="margin-top:10px; width: 50%;">
+          <mat-card-content>
+            <ul>
+              <li *ngFor="let file of files">
+                <mat-progress-bar [value]="file.progress"></mat-progress-bar>
+                <span id="file-label">
+
+                    </span>
+              </li>
+            </ul>
+          </mat-card-content>
+          <mat-card-actions>
+            <button type="button" mat-button color="warn" (click)="onClick()">
+              <mat-icon>file_upload</mat-icon>
+              Upload
+            </button>
+          </mat-card-actions>
+        </mat-card>
+        <input type="file" #fileUpload id="fileUpload" name="fileUpload" multiple="multiple" accept="image/*"
+               style="display:none;"/></div>
+      <!--<mat-form-field style="width: 100%" appearance="fill">
         <mat-label>Choose File to upload</mat-label>
         <input
           type="text"
+          #fileUpload
           class="form-control"
+          name="fileUpload"
+          multiple="multiple"
           id="chooseUploadFile"
           matInput
           formControlName="chooseUploadFile"
         />
-        <mat-icon matSuffix>folder</mat-icon>
+        <mat-icon matSuffix (click)="onClick()" style="cursor: pointer">folder</mat-icon>
         <mat-hint>Search for a file!</mat-hint>
-      </mat-form-field>
+      </mat-form-field>-->
       <div formGroupName="fileUploadLocationData">
         <mat-form-field style="width: 100%" appearance="fill">
           <mat-label>Location</mat-label>
@@ -21,28 +45,30 @@
             class="form-control"
             matInput
             formControlName="uploadLocation"
+            [matAutocomplete]="auto"
           />
-          <mat-hint>Enter the string interpolation</mat-hint>
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+              {{option}}
+            </mat-option>
+          </mat-autocomplete>
         </mat-form-field>
       </div>
-      <p></p>
-      <div formArrayName="tags">
-        <mat-label>Add a Tag</mat-label>
-        <div
-          class="form-group"
-          *ngFor="let tagControl of getControls(); let i = index">
-          <mat-form-field appearance="fill">
-            <input
-              type="text"
-              class="form-control"
-              matInput
-              [formControlName]="i"
-            />
-          </mat-form-field>
-        </div>
-        <p></p>
-        <mat-icon style="cursor: pointer" matSuffix (click)="onAddTag()">add_box</mat-icon>
+      <br>
+      <mat-label>Add a Tag</mat-label>
+      <br>
+      <div formArrayName="tags" *ngFor="let tagControl of getControls(); let i = index">
+        <mat-form-field appearance="fill">
+          <input
+            type="text"
+            class="form-control"
+            matInput
+            [formControlName]="i"
+          />
+        </mat-form-field>
+        <br>
       </div>
+      <mat-icon style="cursor: pointer" matSuffix (click)="onAddTag()">add_box</mat-icon>
       <div style="margin-top: 20px">
         <button mat-raised-button color="primary" type="submit">Submit</button>
         <button mat-raised-button color="warn" (click)="onReset()" type="button">Reset</button>
