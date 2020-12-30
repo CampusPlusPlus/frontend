@@ -6,12 +6,12 @@ import {
   FormControl,
   FormGroup,
   NG_VALIDATORS,
-  NG_VALUE_ACCESSOR
+  NG_VALUE_ACCESSOR, Validators
 } from '@angular/forms';
 import {Subscription} from 'rxjs';
 
 export interface TagsFormValues {
-  tags: string;
+  tags: string[];
 }
 
 @Component({
@@ -47,7 +47,7 @@ export class TagsFormComponent implements ControlValueAccessor, OnDestroy {
 
   constructor(private formBuilder: FormBuilder) {
     this.form = this.formBuilder.group({
-        tags: [],
+        tags: this.formBuilder.array([]) // this.formBuilder.array([this.createTag()])
       }
     );
     this.subscriptions.push(
@@ -56,6 +56,24 @@ export class TagsFormComponent implements ControlValueAccessor, OnDestroy {
         this.onTouched();
       })
     );
+  }
+
+  tags(): FormArray {
+    return this.form.get('tags') as FormArray;
+  }
+
+  newTag(): FormGroup {
+    return this.formBuilder.group({
+      tag: null
+    });
+  }
+
+  onAddTag(): void {
+    this.tags().push(this.newTag());
+  }
+
+  onRemoveTag(index: number) {
+    this.tags().removeAt(index);
   }
 
   ngOnDestroy() {
@@ -89,9 +107,15 @@ export class TagsFormComponent implements ControlValueAccessor, OnDestroy {
     return this.form.valid ? null : {tags: {valid: false}};
   }
 
-
-// getControls() {
-//   return (this.uploadForm.get('fileAllData.tags-form') as FormArray).controls;
-// }
+  // onAddTag(): void {
+  //   const control = new FormControl(null, Validators.required);
+  //   (this.form.get('tags') as FormArray).push(control);
+  //   // (this.uploadForm.get('fileAllData.tags-form') as FormArray).push(control);
+  // }
+  //
+  //
+  // getControls() {
+  //   return (this.form.get('tags') as FormArray).controls;
+  // }
 
 }

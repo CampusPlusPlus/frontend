@@ -78,10 +78,6 @@ export class FileUploadFormComponent implements OnInit {
     this.uploadForm.reset();
   }
 
-  onAddTag(): void {
-    // const control = new FormControl(null, Validators.required);
-    // (this.uploadForm.get('fileAllData.tags-form') as FormArray).push(control);
-  }
 
 
 }
