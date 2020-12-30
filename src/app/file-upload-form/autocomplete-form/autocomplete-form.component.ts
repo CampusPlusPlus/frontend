@@ -6,7 +6,10 @@ import {
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR, FormControl
 } from '@angular/forms';
-import {Subscription} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
+import {map, startWith, tap} from "rxjs/operators";
+import {RestService} from "../../shared/services/rest.service";
+import {log} from "util";
 
 export interface AutocompleteFormValues {
   discipline: string;
@@ -33,9 +36,11 @@ export interface AutocompleteFormValues {
     }
   ]
 })
-export class AutocompleteFormComponent implements ControlValueAccessor, OnDestroy {
+export class AutocompleteFormComponent implements ControlValueAccessor, OnDestroy, OnInit {
   form: FormGroup;
   subscriptions: Subscription[] = [];
+  filteredDisciplines: Observable<string[]>;
+  disciplines: string[] = [];
 
   get value(): AutocompleteFormValues {
     return this.form.value;
@@ -47,7 +52,7 @@ export class AutocompleteFormComponent implements ControlValueAccessor, OnDestro
     this.onTouched();
   }
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private restService: RestService) {
     this.form = this.formBuilder.group({
       discipline: [],
       studyCourses: [],
@@ -64,7 +69,29 @@ export class AutocompleteFormComponent implements ControlValueAccessor, OnDestro
     );
   }
 
-  ngOnDestroy() {
+  getDisciplineName() {
+    this.restService.getDisciplines().subscribe(response => {
+      response.forEach(d => this.disciplines.push(d.name));
+    });
+  }
+
+  ngOnInit(): void {
+    this.filteredDisciplines = this.form.get('discipline').valueChanges
+      .pipe(
+        startWith(''),
+        map(value => this._filter(value))
+      );
+    this.getDisciplineName();
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+
+    return this.disciplines.filter(discipline =>
+      discipline.toLowerCase().includes(filterValue));
+  }
+
+  ngOnDestroy(): void {
     this.subscriptions.forEach(s => s.unsubscribe());
   }
 
