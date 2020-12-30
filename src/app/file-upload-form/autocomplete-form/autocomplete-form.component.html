@@ -8,6 +8,8 @@
       formControlName="discipline"
       [formGroup]="form"
       [matAutocomplete]="auto"
+      (click)="autocompleteDisciplines()"
+      #disciplineValue
     />
     <mat-autocomplete #auto="matAutocomplete">
       <mat-option *ngFor="let discipline of filteredDisciplines | async" [value]="discipline">
@@ -15,20 +17,27 @@
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>
+  <button type="button" (click)="log()">Log</button>
   <mat-form-field style="width: 100%" appearance="fill">
     <mat-label>Study Courses</mat-label>
     <input
       type="text"
-      class="form-control"
       matInput
       formControlName="studyCourses"
+      [formGroup]="form"
+      [matAutocomplete]="auto2"
+      (click)="initStudyCourses()"
     />
+    <mat-autocomplete #auto2="matAutocomplete">
+      <mat-option *ngFor="let studyCourse of filteredStudyCourses | async" [value]="studyCourse">
+        {{studyCourse}}
+      </mat-option>
+    </mat-autocomplete>
   </mat-form-field>
   <mat-form-field style="width: 100%" appearance="fill">
     <mat-label>Curriculum</mat-label>
     <input
       type="text"
-      class="form-control"
       matInput
       formControlName="curriculum"
     />
@@ -37,7 +46,6 @@
     <mat-label>Lectures</mat-label>
     <input
       type="text"
-      class="form-control"
       matInput
       formControlName="lectures"
     />
@@ -46,7 +54,6 @@
     <mat-label>Assignment</mat-label>
     <input
       type="text"
-      class="form-control"
       matInput
       formControlName="assignments"
     />

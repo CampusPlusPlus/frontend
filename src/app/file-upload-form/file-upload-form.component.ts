@@ -42,32 +42,6 @@ export class FileUploadFormComponent implements OnInit {
   ngOnInit(): void {
   }
 
-
-  // private initForm(): FormGroup {
-  //   return (this.uploadForm = new FormGroup({
-  //     fileAllData: new FormGroup({
-  //       chooseUploadFile: new FormControl(null, [Validators.required]),
-  //       fileUploadLocationData: new FormGroup({
-  //         disciplines: new FormControl(null, [Validators.required]),
-  //         studyCourses: new FormControl(null, [Validators.required]),
-  //         curriculum: new FormControl(null, [Validators.required]),
-  //         lectures: new FormControl(null, [Validators.required]),
-  //         assignments: new FormControl(null, [Validators.required]),
-  //       }),
-  //       tags-form: new FormArray([], [Validators.required]),
-  //     }),
-  //   }));
-  // }
-
-  private getDisciplineNames() {
-    this.arrayService.getDisciplines().subscribe((disciplines) => {
-      for (let i = 0; i < disciplines.length; i++) {
-        this.disciplinesFromGet[i] = disciplines[i].name;
-      }
-    });
-  }
-
-
   onSubmit(): void {
     console.log(this.uploadForm.value);
     this.submit = true;

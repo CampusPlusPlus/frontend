@@ -1,15 +1,15 @@
-import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, forwardRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {
   ControlValueAccessor,
   FormBuilder,
   FormGroup,
   NG_VALIDATORS,
-  NG_VALUE_ACCESSOR, FormControl
+  NG_VALUE_ACCESSOR,
+  FormControl,
 } from '@angular/forms';
 import {Observable, Subscription} from 'rxjs';
-import {map, startWith, tap} from "rxjs/operators";
-import {RestService} from "../../shared/services/rest.service";
-import {log} from "util";
+import {map, startWith} from 'rxjs/operators';
+import {RestService} from '../../shared/services/rest.service';
 
 export interface AutocompleteFormValues {
   discipline: string;
@@ -27,23 +27,31 @@ export interface AutocompleteFormValues {
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => AutocompleteFormComponent),
-      multi: true
+      multi: true,
     },
     {
       provide: NG_VALIDATORS,
       useExisting: forwardRef(() => AutocompleteFormComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
-export class AutocompleteFormComponent implements ControlValueAccessor, OnDestroy, OnInit {
+export class AutocompleteFormComponent
+  implements ControlValueAccessor, OnDestroy, OnInit {
+  @ViewChild('disciplineValue', {static: true}) disciplineName: ElementRef;
   form: FormGroup;
   subscriptions: Subscription[] = [];
   filteredDisciplines: Observable<string[]>;
+  filteredStudyCourses: Observable<string[]>;
   disciplines: string[] = [];
+  studyCourses: string[] = [];
 
   get value(): AutocompleteFormValues {
     return this.form.value;
+  }
+
+  log() {
+    console.log(this.disciplineName.nativeElement.value);
   }
 
   set value(value: AutocompleteFormValues) {
@@ -52,47 +60,72 @@ export class AutocompleteFormComponent implements ControlValueAccessor, OnDestro
     this.onTouched();
   }
 
-  constructor(private formBuilder: FormBuilder, private restService: RestService) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private restService: RestService
+  ) {
     this.form = this.formBuilder.group({
       discipline: [],
       studyCourses: [],
       curriculum: [],
       lectures: [],
-      assignments: []
+      assignments: [],
     });
 
     this.subscriptions.push(
-      this.form.valueChanges.subscribe(value => {
+      this.form.valueChanges.subscribe((value) => {
         this.onChange(value);
         this.onTouched();
       })
     );
   }
 
-  getDisciplineName() {
-    this.restService.getDisciplines().subscribe(response => {
-      response.forEach(d => this.disciplines.push(d.name));
-    });
-  }
-
   ngOnInit(): void {
-    this.filteredDisciplines = this.form.get('discipline').valueChanges
-      .pipe(
-        startWith(''),
-        map(value => this._filter(value))
-      );
-    this.getDisciplineName();
+    this.restService.getDisciplines();
   }
 
-  private _filter(value: string): string[] {
+  autocompleteDisciplines() {
+    this.disciplines = this.restService.getDisciplineName();
+    this.filteredDisciplines = this.form.get('discipline').valueChanges.pipe(
+      startWith(''),
+      map((value) => this._disciplineFilter(value))
+    );
+  }
+
+  private _disciplineFilter(value: string): string[] {
     const filterValue = value.toLowerCase();
-
-    return this.disciplines.filter(discipline =>
-      discipline.toLowerCase().includes(filterValue));
+    return this.disciplines.filter((discipline) =>
+      discipline.toLowerCase().includes(filterValue)
+    );
   }
+
+  initStudyCourses(): string[] {
+    const name = this.disciplineName.nativeElement.value;
+    const id = this.restService.getDisciplineID(name);
+    console.log(id);
+    this.restService.getStudyCourseByDisciplineID(id);
+    console.log(this.studyCourses);
+    return this.studyCourses;
+  }
+
+   autocompleteStudyCourses() {
+  // this.filteredDisciplines = this.form.get('studyCourses').valueChanges.pipe(
+  //   startWith(''),
+  //   map((value) => this._studyCoursesFilter(value))
+  // );
+   }
+
+  // private _studyCoursesFilter(value: string): string[] {
+  // const filterValue = value.toLowerCase();
+  // const studyCourses: string[] = this.restService.getStudyCourseByDisciplineID(
+  //   this.restService.getDisciplineIDByName(this.disciplineName.nativeElement.value));
+  // return studyCourses.filter((discipline) =>
+  //   discipline.toLowerCase().includes(filterValue)
+  // );
+  // }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(s => s.unsubscribe());
+    this.subscriptions.forEach((s) => s.unsubscribe());
   }
 
   onChange: any = () => {
@@ -121,24 +154,4 @@ export class AutocompleteFormComponent implements ControlValueAccessor, OnDestro
   validate(_: FormControl) {
     return this.form.valid ? null : {autocomplete: {valid: false}};
   }
-
-  // private disciplineAutocomplete() {
-  //   this.filteredOptions = this.uploadForm
-  //     .get('fileAllData.fileUploadLocationData.disciplines')
-  //     .valueChanges.pipe(
-  //       startWith(''),
-  //       map((value) => this._filter(value))
-  //     );
-  // }
-  //
-  // private _filter(value: string): string[] {
-  //   console.log(value);
-  //   const filterValue = value.toLowerCase();
-  //
-  //   return this.disciplinesFromGet.filter((option) =>
-  //     option.toLowerCase().includes(filterValue)
-  //   );
-  // }
-  //
-
 }
