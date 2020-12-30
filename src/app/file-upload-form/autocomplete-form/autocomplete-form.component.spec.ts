@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UploadFileComponent } from './upload-file.component';
+import { AutocompleteFormComponent } from './autocomplete-form.component';
 
-describe('UploadFileComponent', () => {
-  let component: UploadFileComponent;
-  let fixture: ComponentFixture<UploadFileComponent>;
+describe('AutocompleteComponent', () => {
+  let component: AutocompleteFormComponent;
+  let fixture: ComponentFixture<AutocompleteFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UploadFileComponent ]
+      declarations: [ AutocompleteFormComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UploadFileComponent);
+    fixture = TestBed.createComponent(AutocompleteFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

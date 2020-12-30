@@ -5,34 +5,26 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from './shared/shared.module';
-import { UploadFileComponent } from './upload-file/upload-file.component';
-import {ReactiveFormsModule} from '@angular/forms';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
-import {HttpClientModule} from '@angular/common/http';
-import {MatIconModule} from '@angular/material/icon';
-import {MatButtonModule} from '@angular/material/button';
-import {MatCardModule} from '@angular/material/card';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { FileUploadFormComponent } from './file-upload-form/file-upload-form.component';
+import { AutocompleteFormComponent } from './file-upload-form/autocomplete-form/autocomplete-form.component';
+import { TagsFormComponent } from './file-upload-form/tags-form/tags-form.component';
+import { UploadFormComponent } from './file-upload-form/upload-form/upload-form.component';
 
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    UploadFileComponent
+    FileUploadFormComponent,
+    AutocompleteFormComponent,
+    TagsFormComponent,
+    UploadFormComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     SharedModule,
-    ReactiveFormsModule,
-    MatAutocompleteModule,
-    HttpClientModule,
-    MatIconModule,
-    MatButtonModule,
-    MatCardModule,
-    MatProgressBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

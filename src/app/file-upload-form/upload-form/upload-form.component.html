@@ -1,0 +1,14 @@
+<div [formGroup]="form">
+  <mat-form-field style="width: 100%" appearance="fill">
+    <mat-label>Choose File to upload</mat-label>
+    <input
+      type="text"
+      id="chooseUploadFile"
+      matInput
+      formControlName="file"
+    />
+    <mat-icon matSuffix style="cursor: pointer">folder</mat-icon>
+    <mat-hint>Search for a file!</mat-hint>
+  </mat-form-field>
+</div>
+

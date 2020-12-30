@@ -2,12 +2,12 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HelloWorldComponent } from './hello-world/hello-world.component';
 import { LoginComponent } from './login/login.component';
-import {UploadFileComponent} from './upload-file/upload-file.component';
+import {FileUploadFormComponent} from './file-upload-form/file-upload-form.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', component: HelloWorldComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'upload', component: UploadFileComponent },
+  { path: 'upload', component: FileUploadFormComponent },
 ];
 
 @NgModule({

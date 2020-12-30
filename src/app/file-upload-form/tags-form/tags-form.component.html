@@ -1,0 +1,16 @@
+<div [formGroup]="form">
+  <br>
+  <mat-label>Add a Tag</mat-label>
+  <br>
+  <!--<div formArrayName="tags-form" *ngFor="let tagControl of getControls(); let i = index">-->
+  <div>
+    <mat-form-field appearance="fill">
+      <input
+        type="text"
+        class="form-control"
+        formControlName="tags"
+        matInput
+      />
+    </mat-form-field>
+  </div>
+</div>
