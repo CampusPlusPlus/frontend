@@ -1,14 +1,11 @@
 <div [formGroup]="form">
+  <button (click)="onClick()">upload</button>
+  <input type="file" #fileUpload name="fileUpload" multiple>
   <mat-form-field style="width: 100%" appearance="fill">
     <mat-label>Choose File to upload</mat-label>
-    <input
-      type="text"
-      id="chooseUploadFile"
-      matInput
-      formControlName="file"
-    />
-    <mat-icon matSuffix style="cursor: pointer">folder</mat-icon>
+    <ngx-mat-file-input formControlName="file">
+      <mat-icon ngxMatFileInputIcon>folder</mat-icon>
+    </ngx-mat-file-input>
     <mat-hint>Search for a file!</mat-hint>
   </mat-form-field>
 </div>
-

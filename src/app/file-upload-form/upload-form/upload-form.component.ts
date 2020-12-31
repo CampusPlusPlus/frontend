@@ -1,4 +1,4 @@
-import {Component, forwardRef, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, forwardRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -8,6 +8,8 @@ import {
   NG_VALUE_ACCESSOR
 } from '@angular/forms';
 import {Subscription} from 'rxjs';
+import {FileService} from "../../shared/services/file.service";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 
 export interface UploadFormValues {
   file: string;
@@ -33,6 +35,8 @@ export interface UploadFormValues {
 export class UploadFormComponent implements OnDestroy, ControlValueAccessor {
   form: FormGroup;
   subscription: Subscription[] = [];
+  @ViewChild('fileUpload', {static: false}) fileUpload: ElementRef;
+  files = [];
 
   get value(): UploadFormValues {
     return this.form.value;
@@ -44,7 +48,7 @@ export class UploadFormComponent implements OnDestroy, ControlValueAccessor {
     this.onTouched();
   }
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private http: HttpClient, private formBuilder: FormBuilder, private fileService: FileService) {
     this.form = this.formBuilder.group({
       file: [],
     });
@@ -56,6 +60,10 @@ export class UploadFormComponent implements OnDestroy, ControlValueAccessor {
     );
   }
 
+  onClick() {
+    console.log(this.form.get('file').value);
+  }
+
   ngOnDestroy(): void {
     this.subscription.forEach(s => s.unsubscribe());
   }
@@ -65,11 +73,11 @@ export class UploadFormComponent implements OnDestroy, ControlValueAccessor {
   onTouched: any = () => {
   }
 
-  registerOnChange(fn) {
+  registerOnChange(fn): void {
     this.onChange = fn;
   }
 
-  writeValue(value) {
+  writeValue(value): void {
     if (value) {
       this.value = value;
     }
@@ -79,11 +87,11 @@ export class UploadFormComponent implements OnDestroy, ControlValueAccessor {
     }
   }
 
-  registerOnTouched(fn) {
+  registerOnTouched(fn): void {
     this.onTouched = fn;
   }
 
-  validate(_: FormControl) {
+  validate(_: FormControl): any {
     return this.form.valid ? null : {upload: {valid: false}};
   }
 

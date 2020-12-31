@@ -140,6 +140,13 @@
     ora "5.1.0"
     rxjs "6.6.3"
 
+"@angular-material-components/file-input@^5.0.1":
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/@angular-material-components/file-input/-/file-input-5.0.1.tgz#5250165243b4f7b09251c0f80839cabcf1b1ab67"
+  integrity sha512-IqforYNdtY5B7iyWMGGt/r/s8IvLW3pmRKehIVjTzNE0aX4pumAIlOeRoPvR0Q6pRvTEEij0lRssipJrzWrY5Q==
+  dependencies:
+    tslib "^2.0.0"
+
 "@angular/animations@~11.0.5":
   version "11.0.5"
   resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-11.0.5.tgz#44157c8bbb3f20ce1d3d6386eae956659cefd9d7"

@@ -9,6 +9,7 @@ import { FileUploadFormComponent } from './file-upload-form/file-upload-form.com
 import { AutocompleteFormComponent } from './file-upload-form/autocomplete-form/autocomplete-form.component';
 import { TagsFormComponent } from './file-upload-form/tags-form/tags-form.component';
 import { UploadFormComponent } from './file-upload-form/upload-form/upload-form.component';
+import {NgxMatFileInputModule} from '@angular-material-components/file-input';
 
 
 
@@ -25,6 +26,7 @@ import { UploadFormComponent } from './file-upload-form/upload-form/upload-form.
     AppRoutingModule,
     BrowserAnimationsModule,
     SharedModule,
+    NgxMatFileInputModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
