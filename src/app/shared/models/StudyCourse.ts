@@ -1,4 +1,6 @@
 export type StudyCourse = {
   id: number,
-  name: string
+  name: string,
+  disciplineId: number,
+  links: []
 };

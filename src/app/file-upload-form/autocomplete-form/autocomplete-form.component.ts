@@ -9,7 +9,10 @@ import {
 } from '@angular/forms';
 import {Observable, Subscription} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
-import {RestService} from '../../shared/services/rest.service';
+import {DisciplineService} from '../../shared/services/discipline.service';
+import {StudyCourseService} from '../../shared/services/study-course.service';
+import {CurriculumService} from '../../shared/services/curriculum.service';
+import {LectureService} from '../../shared/services/lecture.service';
 
 export interface AutocompleteFormValues {
   discipline: string;
@@ -44,14 +47,11 @@ export class AutocompleteFormComponent
   filteredDisciplines: Observable<string[]>;
   filteredStudyCourses: Observable<string[]>;
   disciplines: string[] = [];
-  studyCourses: string[] = [];
+  studyCourses = [];
+  studyCourseNames = [];
 
   get value(): AutocompleteFormValues {
     return this.form.value;
-  }
-
-  log() {
-    console.log(this.disciplineName.nativeElement.value);
   }
 
   set value(value: AutocompleteFormValues) {
@@ -62,7 +62,10 @@ export class AutocompleteFormComponent
 
   constructor(
     private formBuilder: FormBuilder,
-    private restService: RestService
+    private disciplineService: DisciplineService,
+    private studyCourseService: StudyCourseService,
+    private curriculumService: CurriculumService,
+    private lectureService: LectureService
   ) {
     this.form = this.formBuilder.group({
       discipline: [],
@@ -81,11 +84,11 @@ export class AutocompleteFormComponent
   }
 
   ngOnInit(): void {
-    this.restService.getDisciplines();
+    this.disciplineService.getDisciplines();
   }
 
   autocompleteDisciplines() {
-    this.disciplines = this.restService.getDisciplineName();
+    this.disciplines = this.disciplineService.getDisciplineName();
     this.filteredDisciplines = this.form.get('discipline').valueChanges.pipe(
       startWith(''),
       map((value) => this._disciplineFilter(value))
@@ -99,30 +102,27 @@ export class AutocompleteFormComponent
     );
   }
 
-  initStudyCourses(): string[] {
+  initStudyCourses() {
     const name = this.disciplineName.nativeElement.value;
-    const id = this.restService.getDisciplineID(name);
-    console.log(id);
-    this.restService.getStudyCourseByDisciplineID(id);
-    console.log(this.studyCourses);
-    return this.studyCourses;
+    const id = this.disciplineService.getDisciplineID(name);
+    this.studyCourses = this.disciplineService.getStudyCourseByDisciplineID(id);
+    this.studyCourses.forEach(s => this.studyCourseNames.push(s.name));
   }
 
-   autocompleteStudyCourses() {
-  // this.filteredDisciplines = this.form.get('studyCourses').valueChanges.pipe(
-  //   startWith(''),
-  //   map((value) => this._studyCoursesFilter(value))
-  // );
-   }
+  autocompleteStudyCourses() {
+    this.initStudyCourses();
+    this.filteredStudyCourses = this.form.get('studyCourses').valueChanges.pipe(
+      startWith(''),
+      map((value) => this._studyCoursesFilter(value))
+    );
+  }
 
-  // private _studyCoursesFilter(value: string): string[] {
-  // const filterValue = value.toLowerCase();
-  // const studyCourses: string[] = this.restService.getStudyCourseByDisciplineID(
-  //   this.restService.getDisciplineIDByName(this.disciplineName.nativeElement.value));
-  // return studyCourses.filter((discipline) =>
-  //   discipline.toLowerCase().includes(filterValue)
-  // );
-  // }
+  private _studyCoursesFilter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.studyCourseNames.filter((discipline) =>
+      discipline.toLowerCase().includes(filterValue)
+    );
+  }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((s) => s.unsubscribe());
