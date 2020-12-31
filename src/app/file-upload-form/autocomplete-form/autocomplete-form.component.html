@@ -12,8 +12,11 @@
       #disciplineValue
     />
     <mat-autocomplete #auto="matAutocomplete">
-      <mat-option *ngFor="let discipline of filteredDisciplines | async" [value]="discipline">
-        {{discipline}}
+      <mat-option
+        *ngFor="let discipline of filteredDisciplines | async"
+        [value]="discipline"
+      >
+        {{ discipline }}
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>
@@ -26,10 +29,14 @@
       [formGroup]="form"
       [matAutocomplete]="auto2"
       (click)="autocompleteStudyCourses()"
+      #studyCourseValue
     />
     <mat-autocomplete #auto2="matAutocomplete">
-      <mat-option *ngFor="let studyCourse of filteredStudyCourses | async" [value]="studyCourse">
-        {{studyCourse}}
+      <mat-option
+        *ngFor="let studyCourse of filteredStudyCourses | async"
+        [value]="studyCourse"
+      >
+        {{ studyCourse }}
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>
@@ -39,22 +46,40 @@
       type="text"
       matInput
       formControlName="curriculum"
+      [formGroup]="form"
+      [matAutocomplete]="auto3"
+      (click)="autocompleteCurricula()"
+      #curriculaValue
     />
+    <mat-autocomplete #auto3="matAutocomplete">
+      <mat-option
+        *ngFor="let curricula of filteredCurricular | async"
+        [value]="curricula"
+      >
+        {{ curricula }}
+      </mat-option>
+    </mat-autocomplete>
   </mat-form-field>
   <mat-form-field style="width: 100%" appearance="fill">
     <mat-label>Lectures</mat-label>
-    <input
-      type="text"
-      matInput
-      formControlName="lectures"
+    <input type="text"
+           matInput
+           formControlName="lectures"
+           [formGroup]="form"
+           [matAutocomplete]="auto4"
+           (click)="autocompleteLectures()"
     />
+    <mat-autocomplete #auto4="matAutocomplete">
+      <mat-option
+        *ngFor="let lecture of filteredLectures | async"
+        [value]="lecture"
+      >
+        {{ lecture }}
+      </mat-option>
+    </mat-autocomplete>
   </mat-form-field>
   <mat-form-field style="width: 100%" appearance="fill">
     <mat-label>Assignment</mat-label>
-    <input
-      type="text"
-      matInput
-      formControlName="assignments"
-    />
+    <input type="text" matInput formControlName="assignments" />
   </mat-form-field>
 </div>

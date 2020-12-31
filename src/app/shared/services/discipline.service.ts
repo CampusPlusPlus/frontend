@@ -1,48 +1,48 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {catchError, map} from 'rxjs/operators';
 import {throwError} from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DisciplineService {
   SERVER_URL = 'http://localhost:9000';
   disciplines = [];
-  studyCourses = [];
   disciplineNames: string[] = [];
-  disciplineID: number[] = [];
 
   constructor(private http: HttpClient) {
   }
 
   getDisciplines(): any[] {
-    this.http.get(
-      this.SERVER_URL + '/disciplines').pipe(
-      map((responseData) => {
-        const disciplineArray = [];
-        for (const key in responseData) {
-          disciplineArray.push(responseData[key]);
-        }
-        return disciplineArray;
-      }),
-      catchError((errorResponse) => {
-        return throwError(errorResponse);
-      })
-    ).subscribe(response => {
-      response.forEach(d => this.disciplines.push(d));
-    });
+    this.http
+      .get(this.SERVER_URL + '/disciplines')
+      .pipe(
+        map((responseData) => {
+          const disciplineArray = [];
+          for (const key in responseData) {
+            disciplineArray.push(responseData[key]);
+          }
+          return disciplineArray;
+        }),
+        catchError((errorResponse) => {
+          return throwError(errorResponse);
+        })
+      )
+      .subscribe((response) => {
+        response.forEach((d) => this.disciplines.push(d));
+      });
     return this.disciplines;
   }
 
   getDisciplineName(): string[] {
-    this.disciplines.forEach(d => this.disciplineNames.push(d.name));
+    this.disciplines.forEach((d) => this.disciplineNames.push(d.name));
     return this.disciplineNames;
   }
 
   getDisciplineID(name: string): number {
     let id: number;
-    this.disciplines.forEach(d => {
+    this.disciplines.forEach((d) => {
       if (d.name === name) {
         id = d.id;
       } else {
@@ -50,26 +50,5 @@ export class DisciplineService {
       }
     });
     return id;
-  }
-
-
-  getStudyCourseByDisciplineID(disciplineId: number): string[] {
-    this.http.get(
-      this.SERVER_URL + '/disciplines' + '/' + disciplineId + '/studyCourses'
-    ).pipe(
-      map((responseData) => {
-        const array = [];
-        for (const key in responseData) {
-          array.push(responseData[key]);
-        }
-        return array;
-      }),
-      catchError((errorResponse) => {
-        return throwError(errorResponse);
-      })
-    ).subscribe(response => {
-      response.slice(0, 1).forEach(s => this.studyCourses.push(...s));
-    });
-    return this.studyCourses;
   }
 }

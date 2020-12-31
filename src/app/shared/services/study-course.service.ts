@@ -1,22 +1,19 @@
 import { Injectable } from '@angular/core';
-import {Observable, throwError} from "rxjs";
-import {catchError, map} from "rxjs/operators";
-import {HttpClient} from "@angular/common/http";
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class StudyCourseService {
   SERVER_URL = 'http://localhost:9000';
   studyCourses = [];
-  studyCoursesNames = [];
 
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) {}
 
   getAllStudyCourses(): Observable<any> {
-    return this.http.get(
-      this.SERVER_URL + '/StudyCourses').pipe(
+    return this.http.get(this.SERVER_URL + '/StudyCourses').pipe(
       map((responseData) => {
         const disciplineArray = [];
         for (const key in responseData) {
@@ -28,5 +25,40 @@ export class StudyCourseService {
         return throwError(errorResponse);
       })
     );
+  }
+
+  getStudyCourseID(name: string): number {
+    let id: number;
+    this.studyCourses.forEach((d) => {
+      if (d.name === name) {
+        id = d.id;
+      } else {
+        return null;
+      }
+    });
+    return id;
+  }
+
+  getStudyCourseByDisciplineID(disciplineId: number): string[] {
+    this.http
+      .get(
+        this.SERVER_URL + '/disciplines' + '/' + disciplineId + '/studyCourses'
+      )
+      .pipe(
+        map((responseData) => {
+          const array = [];
+          for (const key in responseData) {
+            array.push(responseData[key]);
+          }
+          return array;
+        }),
+        catchError((errorResponse) => {
+          return throwError(errorResponse);
+        })
+      )
+      .subscribe((response) => {
+        response.slice(0, 1).forEach((s) => this.studyCourses.push(...s));
+      });
+    return this.studyCourses;
   }
 }

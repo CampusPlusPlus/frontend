@@ -1,4 +1,11 @@
-import {Component, ElementRef, forwardRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  forwardRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {
   ControlValueAccessor,
   FormBuilder,
@@ -41,14 +48,25 @@ export interface AutocompleteFormValues {
 })
 export class AutocompleteFormComponent
   implements ControlValueAccessor, OnDestroy, OnInit {
-  @ViewChild('disciplineValue', {static: true}) disciplineName: ElementRef;
+  @ViewChild('disciplineValue', {static: true})
+  disciplineNameDOMElement: ElementRef;
+  @ViewChild('studyCourseValue', {static: true})
+  studyCourseDOMElement: ElementRef;
+  @ViewChild('curriculaValue', {static: true})
+  lectureDOMElement: ElementRef;
   form: FormGroup;
   subscriptions: Subscription[] = [];
   filteredDisciplines: Observable<string[]>;
   filteredStudyCourses: Observable<string[]>;
+  filteredCurricular: Observable<string[]>;
+  filteredLectures: Observable<string[]>;
   disciplines: string[] = [];
   studyCourses = [];
   studyCourseNames = [];
+  curricula = [];
+  curriculaNames = [];
+  lectures = [];
+  lectureNames = [];
 
   get value(): AutocompleteFormValues {
     return this.form.value;
@@ -87,7 +105,7 @@ export class AutocompleteFormComponent
     this.disciplineService.getDisciplines();
   }
 
-  autocompleteDisciplines() {
+  autocompleteDisciplines(): void {
     this.disciplines = this.disciplineService.getDisciplineName();
     this.filteredDisciplines = this.form.get('discipline').valueChanges.pipe(
       startWith(''),
@@ -102,11 +120,13 @@ export class AutocompleteFormComponent
     );
   }
 
-  initStudyCourses() {
-    const name = this.disciplineName.nativeElement.value;
+  private initStudyCourses(): void {
+    const name = this.disciplineNameDOMElement.nativeElement.value;
     const id = this.disciplineService.getDisciplineID(name);
-    this.studyCourses = this.disciplineService.getStudyCourseByDisciplineID(id);
-    this.studyCourses.forEach(s => this.studyCourseNames.push(s.name));
+    this.studyCourses = this.studyCourseService.getStudyCourseByDisciplineID(
+      id
+    );
+    this.studyCourses.forEach((s) => this.studyCourseNames.push(s.name));
   }
 
   autocompleteStudyCourses() {
@@ -119,8 +139,52 @@ export class AutocompleteFormComponent
 
   private _studyCoursesFilter(value: string): string[] {
     const filterValue = value.toLowerCase();
-    return this.studyCourseNames.filter((discipline) =>
-      discipline.toLowerCase().includes(filterValue)
+    return this.studyCourseNames.filter((studyCourse) =>
+      studyCourse.toLowerCase().includes(filterValue)
+    );
+  }
+
+  private initCurricular(): void {
+    const name = this.studyCourseDOMElement.nativeElement.value;
+    const id = this.studyCourseService.getStudyCourseID(name);
+    this.curricula = this.curriculumService.getCurriculaByStudyCourse(id);
+    this.curricula.forEach((c) => this.curriculaNames.push(c.name));
+  }
+
+  autocompleteCurricula() {
+    this.initCurricular();
+    this.filteredCurricular = this.form.get('curriculum').valueChanges.pipe(
+      startWith(''),
+      map((value) => this._curriculaFilter(value))
+    );
+  }
+
+  private _curriculaFilter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.curriculaNames.filter((curricula) =>
+      curricula.toLowerCase().includes(filterValue)
+    );
+  }
+
+  private initLectures(): void {
+    const name = this.lectureDOMElement.nativeElement.value;
+    const id = this.curriculumService.getCurriculaID(name);
+    this.lectures = this.lectureService.getLecturesByCurriculaID(id);
+    this.lectures.forEach((c) => this.lectureNames.push(c.name));
+  }
+
+  autocompleteLectures() {
+    this.initLectures();
+    this.filteredLectures = this.form.get('lectures').valueChanges.pipe(
+      startWith(''),
+      map((value) => this._lectureFilter(value))
+    );
+  }
+
+  private _lectureFilter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.lectureNames.filter((lecture) =>
+      lecture.toLowerCase().includes(filterValue)
     );
   }
 
@@ -129,16 +193,16 @@ export class AutocompleteFormComponent
   }
 
   onChange: any = () => {
-  }
+  };
 
   onTouched: any = () => {
-  }
+  };
 
-  registerOnChange(fn: any) {
+  registerOnChange(fn: any): void {
     this.onChange = fn;
   }
 
-  writeValue(value) {
+  writeValue(value): void {
     if (value) {
       this.value = value;
     }
@@ -147,11 +211,11 @@ export class AutocompleteFormComponent
     }
   }
 
-  registerOnTouched(fn: any) {
+  registerOnTouched(fn: any): void {
     this.onTouched = fn;
   }
 
-  validate(_: FormControl) {
+  validate(_: FormControl): any {
     return this.form.valid ? null : {autocomplete: {valid: false}};
   }
 }
