@@ -1,11 +1,19 @@
 <div [formGroup]="form">
-  <button (click)="onClick()">upload</button>
-  <input type="file" #fileUpload name="fileUpload" multiple>
   <mat-form-field style="width: 100%" appearance="fill">
-    <mat-label>Choose File to upload</mat-label>
-    <ngx-mat-file-input formControlName="file">
-      <mat-icon ngxMatFileInputIcon>folder</mat-icon>
-    </ngx-mat-file-input>
-    <mat-hint>Search for a file!</mat-hint>
+    <mat-label>Selected File</mat-label>
+    <input
+      type="text"
+      matInput
+      readonly
+      [formGroup]="form"
+      formControlName="dummyFile"
+    />
   </mat-form-field>
+  <button type="button" mat-raised-button (click)="fileInput.click()">Choose File</button>
+  <input
+    hidden (change)="onFileSelect($event)"
+    #fileInput
+    type="file"
+    name="file">
+  <button type="button" (click)="onUpload()">upload</button>
 </div>

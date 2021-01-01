@@ -8,8 +8,8 @@ import {
   NG_VALUE_ACCESSOR
 } from '@angular/forms';
 import {Subscription} from 'rxjs';
-import {FileService} from "../../shared/services/file.service";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {FileService} from '../../shared/services/file.service';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 export interface UploadFormValues {
   file: string;
@@ -36,7 +36,7 @@ export class UploadFormComponent implements OnDestroy, ControlValueAccessor {
   form: FormGroup;
   subscription: Subscription[] = [];
   @ViewChild('fileUpload', {static: false}) fileUpload: ElementRef;
-  files = [];
+  fileValue: File;
 
   get value(): UploadFormValues {
     return this.form.value;
@@ -50,7 +50,8 @@ export class UploadFormComponent implements OnDestroy, ControlValueAccessor {
 
   constructor(private http: HttpClient, private formBuilder: FormBuilder, private fileService: FileService) {
     this.form = this.formBuilder.group({
-      file: [],
+      file: [''],
+      dummyFile: ['']
     });
     this.subscription.push(
       this.form.valueChanges.subscribe(value => {
@@ -60,8 +61,28 @@ export class UploadFormComponent implements OnDestroy, ControlValueAccessor {
     );
   }
 
-  onClick() {
+  onFileSelect(event): any {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      this.form.get('file').setValue(file);
+      this.form.get('dummyFile').setValue(file.name);
+      this.fileValue = file;
+      console.log(this.fileValue);
+    }
+  }
+
+
+  onUpload(): void {
     console.log(this.form.get('file').value);
+    const formData = new FormData();
+    // const lectureId = '24';
+    formData.append('lectureId', '24');
+    formData.append('file', this.form.get('file').value);
+    console.log('b: ' + formData);
+    this.fileService.uploadFile(formData).subscribe(
+        (res) => console.log(res),
+        (err) => console.log(err)
+    );
   }
 
   ngOnDestroy(): void {
@@ -95,49 +116,4 @@ export class UploadFormComponent implements OnDestroy, ControlValueAccessor {
     return this.form.valid ? null : {upload: {valid: false}};
   }
 
-  /*
-  uploadFile(file): void {
-    const formData = new FormData();
-    formData.append('file', file.data);
-    file.inProgress = true;
-    this.uploadService.upload-form(formData).pipe(
-      map(event => {
-        switch (event.type) {
-          case HttpEventType.UploadProgress:
-            file.progress = Math.round(event.loaded * 100 / event.total);
-            break;
-          case HttpEventType.Response:
-            return event;
-        }
-      }),
-      catchError((error: HttpErrorResponse) => {
-        file.inProgress = false;
-        return of(`${file.data.name} upload-form failed`);
-      })
-    ).subscribe((event: any) => {
-      if (typeof (event) === 'object') {
-        console.log(event.body);
-      }
-    });
-  }
-
-  private uploadFiles(): void {
-    this.fileUpload.nativeElement.value = '';
-    this.files.forEach(file => {
-      this.uploadFile(file);
-    });
-  }
-
-  onClick(): void {
-    const fileUpload = this.fileUpload.nativeElement;
-    fileUpload.onchange = () => {
-      for (let index = 0; index < fileUpload.files.length; index++) {
-        const file = fileUpload.files[index];
-        this.files.push({data: file, inProgress: false, progress: 0});
-      }
-      this.uploadFiles();
-    };
-    fileUpload.click();
-  }
-*/
 }

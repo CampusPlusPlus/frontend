@@ -30,6 +30,7 @@ export class FileUploadFormComponent implements OnInit {
 
   onSubmit(): void {
     console.log(this.uploadForm.value);
+    console.log(this.uploadForm.get('fileUploadLocations'));
     this.submit = true;
   }
 

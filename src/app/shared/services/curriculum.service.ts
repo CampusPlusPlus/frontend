@@ -46,4 +46,5 @@ export class CurriculumService {
       });
     return this.curricula;
   }
+
 }
