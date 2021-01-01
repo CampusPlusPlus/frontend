@@ -102,6 +102,10 @@ export class AutocompleteFormComponent
   }
 
   ngOnInit(): void {
+    this.initDisciplines();
+  }
+
+  private initDisciplines(): void {
     this.disciplineService.getDisciplines();
   }
 
@@ -120,7 +124,7 @@ export class AutocompleteFormComponent
     );
   }
 
-  private initStudyCourses(): void {
+  private initStudyCourses() {
     const name = this.disciplineNameDOMElement.nativeElement.value;
     const id = this.disciplineService.getDisciplineID(name);
     this.studyCourses = this.studyCourseService.getStudyCourseByDisciplineID(
@@ -168,7 +172,7 @@ export class AutocompleteFormComponent
 
   private initLectures(): void {
     const name = this.lectureDOMElement.nativeElement.value;
-    const id = this.curriculumService.getCurriculaID(name);
+    const id = this.curriculumService.getCurriculaIDByName(name);
     this.lectures = this.lectureService.getLecturesByCurriculaID(id);
     this.lectures.forEach((c) => this.lectureNames.push(c.name));
   }

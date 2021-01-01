@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {catchError, map} from 'rxjs/operators';
 import {throwError} from 'rxjs';
+import {ErrorService} from "./error.service";
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,7 @@ export class DisciplineService {
   disciplines = [];
   disciplineNames: string[] = [];
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private errorService: ErrorService) {
   }
 
   getDisciplines(): any[] {
@@ -36,17 +37,19 @@ export class DisciplineService {
   }
 
   getDisciplineName(): string[] {
+    this.errorService.arrayIsEmpty(this.disciplines);
     this.disciplines.forEach((d) => this.disciplineNames.push(d.name));
     return this.disciplineNames;
   }
 
   getDisciplineID(name: string): number {
     let id: number;
+    this.errorService.arrayIsEmpty(this.disciplines);
     this.disciplines.forEach((d) => {
       if (d.name === name) {
         id = d.id;
       } else {
-        return null;
+        return new Error('no id could be found for the discipline ' + name);
       }
     });
     return id;

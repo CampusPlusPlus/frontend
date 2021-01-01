@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
+import {StudyCourse} from "../models/StudyCourse";
 
 @Injectable({
   providedIn: 'root',
@@ -39,7 +40,7 @@ export class StudyCourseService {
     return id;
   }
 
-  getStudyCourseByDisciplineID(disciplineId: number): string[] {
+  getStudyCourseByDisciplineID(disciplineId: number): StudyCourse[] {
     this.http
       .get(
         this.SERVER_URL + '/disciplines' + '/' + disciplineId + '/studyCourses'
@@ -61,4 +62,9 @@ export class StudyCourseService {
       });
     return this.studyCourses;
   }
+
+  // getStudyCourseNamesByDisciplineID(disciplineId: number){
+  //   this.getStudyCourseByDisciplineID(disciplineId);
+  // }
+
 }
