@@ -1,0 +1,20 @@
+<div [formGroup]="form">
+  <br>
+  <mat-label>Add a Tag</mat-label>
+  <br>
+  <div formArrayName="tags">
+    <div *ngFor="let tag of tags().controls; let i = index">
+      <div [formGroupName]="i">
+        <mat-form-field appearance="fill">
+          <input
+            type="text"
+            formControlName="tag"
+            matInput
+          />
+        </mat-form-field>
+        <mat-icon style="cursor: pointer" matSuffix (click)="onRemoveTag(i)">delete_forever</mat-icon>
+      </div>
+    </div>
+    <mat-icon style="cursor: pointer" matSuffix (click)="onAddTag()">add_box</mat-icon>
+  </div>
+</div>

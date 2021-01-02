@@ -3,10 +3,13 @@ import { Route, RouterModule, Routes, UrlSegment, UrlSegmentGroup } from '@angul
 import { LoginComponent } from './login/login.component';
 import { LevelNavigatorComponent } from './level-navigator/level-navigator.component';
 import { FileDetailComponent } from './file-detail/file-detail.component';
+import { HelloWorldComponent } from './hello-world/hello-world.component';
+import {FileUploadFormComponent} from './file-upload-form/file-upload-form.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'discipline' },
   { path: 'login', component: LoginComponent },
+  { path: 'upload', component: FileUploadFormComponent },
   {
     matcher: (segments: UrlSegment[], group: UrlSegmentGroup, route: Route) => {
       console.log('segments', segments);
@@ -35,10 +38,11 @@ const routes: Routes = [
       return { consumed: segments };
     }, component: FileDetailComponent
   },
+
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
   exports: [RouterModule]
 })
 export class AppRoutingModule {

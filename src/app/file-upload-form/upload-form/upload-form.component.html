@@ -1,0 +1,19 @@
+<div [formGroup]="form">
+  <mat-form-field style="width: 100%" appearance="fill">
+    <mat-label>Selected File</mat-label>
+    <input
+      type="text"
+      matInput
+      readonly
+      [formGroup]="form"
+      formControlName="file"
+    />
+  </mat-form-field>
+  <button type="button" mat-raised-button (click)="fileInput.click()">Choose File</button>
+  <input
+    hidden (change)="onFileSelect($event)"
+    #fileInput
+    type="file"
+    name="file">
+  <button type="button" (click)="onUpload()">upload</button>
+</div>
