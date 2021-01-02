@@ -1,1 +1,8 @@
-<p>level-navigator works!</p>
+<mat-list>
+  <button (click)="backButton()">back</button>
+  <div mat-subheader>{{title}}</div>
+  <mat-list-item *ngFor="let d of data" (click)="loadData(d.id)">
+    <mat-icon mat-list-icon>folder</mat-icon>
+    <div mat-line>{{d.name}}</div>
+  </mat-list-item>
+</mat-list>

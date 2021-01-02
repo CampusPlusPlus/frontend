@@ -9,6 +9,9 @@ import { FileUploadFormComponent } from './file-upload-form/file-upload-form.com
 import { AutocompleteFormComponent } from './file-upload-form/autocomplete-form/autocomplete-form.component';
 import { TagsFormComponent } from './file-upload-form/tags-form/tags-form.component';
 import { UploadFormComponent } from './file-upload-form/upload-form/upload-form.component';
+import { LevelNavigatorComponent } from './level-navigator/level-navigator.component';
+import { FileDetailComponent } from './file-detail/file-detail.component';
+import { HelloWorldComponent } from './hello-world/hello-world.component';
 
 
 
@@ -17,6 +20,9 @@ import { UploadFormComponent } from './file-upload-form/upload-form/upload-form.
     AppComponent,
     FileUploadFormComponent,
     AutocompleteFormComponent,
+    LevelNavigatorComponent,
+    FileDetailComponent,
+    HelloWorldComponent,
     TagsFormComponent,
     UploadFormComponent
   ],
