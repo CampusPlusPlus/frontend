@@ -71,19 +71,6 @@ export class UploadFormComponent implements OnDestroy, ControlValueAccessor {
   }
 
 
-  onUpload(): void {
-    const formData = new FormData();
-    // const lectureId = '24';
-    formData.append('lectureId', '25');
-    formData.append('file', this.form.get('dummyFile').value);
-    console.log(this.form.get('dummyFile'));
-    console.log(this.form.get('file'));
-    // this.fileService.uploadFile(formData).subscribe(
-    //     (res) => console.log(res),
-    //     (err) => console.log(err)
-    // );
-  }
-
   ngOnDestroy(): void {
     this.subscription.forEach(s => s.unsubscribe());
   }

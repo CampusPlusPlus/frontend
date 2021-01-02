@@ -20,6 +20,7 @@ import {DisciplineService} from '../../shared/services/discipline.service';
 import {StudyCourseService} from '../../shared/services/study-course.service';
 import {CurriculumService} from '../../shared/services/curriculum.service';
 import {LectureService} from '../../shared/services/lecture.service';
+import {TagService} from '../../shared/services/tag.service';
 
 export interface AutocompleteFormValues {
   discipline: string;
@@ -60,6 +61,8 @@ export class AutocompleteFormComponent
   filteredStudyCourses: Observable<string[]>;
   filteredCurricular: Observable<string[]>;
   filteredLectures: Observable<string[]>;
+  filteredTagTypes: Observable<string[]>;
+  filteredTagNames: Observable<string[]>;
   disciplines = [];
   disciplineNames = [];
   studyCourses = [];
@@ -68,6 +71,9 @@ export class AutocompleteFormComponent
   curriculaNames = [];
   lectures = [];
   lectureNames = [];
+  tags = [];
+  tagTypes = [];
+  tagNames = [];
 
   get value(): AutocompleteFormValues {
     return this.form.value;
@@ -84,14 +90,16 @@ export class AutocompleteFormComponent
     private disciplineService: DisciplineService,
     private studyCourseService: StudyCourseService,
     private curriculumService: CurriculumService,
-    private lectureService: LectureService
+    private lectureService: LectureService,
+    private tagService: TagService
   ) {
     this.form = this.formBuilder.group({
       discipline: [],
       studyCourses: [],
       curriculum: [],
       lectures: [],
-      assignments: [],
+      tagTypes: [],
+      tagNames: [],
     });
 
     this.subscriptions.push(
@@ -104,6 +112,7 @@ export class AutocompleteFormComponent
 
   ngOnInit(): void {
     this.initDisciplines();
+    this.initTags();
   }
 
   private initDisciplines(): void {
@@ -222,6 +231,72 @@ export class AutocompleteFormComponent
     });
     return this.lectureNames.filter((lecture) =>
       lecture.toLowerCase().includes(filterValue)
+    );
+  }
+
+  private initTags(): void {
+    this.tags = this.tagService.getAllTags();
+  }
+
+
+  autocompleteTagTypes() {
+    this.filteredTagTypes = this.form.get('tagTypes').valueChanges.pipe(
+      startWith(''),
+      map((value) => {
+        console.log('a: ' + value);
+        this.tagTypes.forEach(d => {
+          console.log('b: ' + value);
+        });
+        return this._tagTypeFilter(value);
+      })
+    );
+  }
+
+  private _tagTypeFilter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    let uniqueTagTypes;
+    this.tags.forEach(l => {
+      if (l.tagType !== this.tagTypes) {
+        this.tagTypes.push(l.tagType);
+        uniqueTagTypes = [...new Set(this.tagTypes)];
+        this.tagTypes = [...uniqueTagTypes];
+        console.log(this.tagTypes);
+      }
+    });
+    return uniqueTagTypes.filter((tagType) =>
+      tagType.toLowerCase().includes(filterValue)
+    );
+  }
+
+  private getTagNamesFromType(tagType: string) {
+    let uniqueTagNames;
+    this.tags.forEach(t => {
+      if (t.tagType === tagType) {
+        this.tagNames.push(t.tagNames);
+      }
+      console.log(this.tagNames);
+      uniqueTagNames = [...new Set(this.tagNames)];
+      this.tagNames = [...uniqueTagNames];
+    });
+    console.log(this.tagNames);
+    return this.tagNames;
+  }
+
+
+  autocompleteTagNames() {
+    this.filteredTagNames = this.form.get('tagNames').valueChanges.pipe(
+      startWith(''),
+      map((value) => {
+        return this._tagNameFilter(value);
+      })
+    );
+  }
+
+
+  private _tagNameFilter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    return this.tagNames.filter((tagName) =>
+      tagName.toLowerCase().includes(filterValue)
     );
   }
 
