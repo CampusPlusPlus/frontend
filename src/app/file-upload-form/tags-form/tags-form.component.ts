@@ -64,7 +64,8 @@ export class TagsFormComponent implements ControlValueAccessor, OnDestroy {
 
   newTag(): FormGroup {
     return this.formBuilder.group({
-      tag: null
+      tagType: null,
+      tagName: null
     });
   }
 

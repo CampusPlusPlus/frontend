@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 import {FileService} from '../shared/services/file.service';
 import {DisciplineService} from '../shared/services/discipline.service';
 import {LectureService} from '../shared/services/lecture.service';
+import {TagService} from '../shared/services/tag.service';
 
 @Component({
   selector: 'app-file-upload-form',
@@ -18,7 +19,8 @@ export class FileUploadFormComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private fileService: FileService,
-    private lectureService: LectureService
+    private lectureService: LectureService,
+    private tagService: TagService
   ) {
     this.uploadForm = this.formBuilder.group({
       uploads: [],
@@ -31,8 +33,10 @@ export class FileUploadFormComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.upload();
-    this.submit = true;
+    console.log(this.uploadForm);
+    this.createTags();
+    // this.upload();
+    // this.submit = true;
   }
 
   private upload(): void {
@@ -45,6 +49,16 @@ export class FileUploadFormComponent implements OnInit {
     this.fileService.uploadFile(formData).subscribe(
       (res) => console.log(res),
       (err) => console.log(err)
+    );
+  }
+
+  createTags() {
+    this.uploadForm.get('tags').value.tags.forEach(
+      n => {
+        const name: string = n.tagName;
+        const type: string = n.tagType;
+        this.tagService.createTag(name, type);
+      }
     );
   }
 
