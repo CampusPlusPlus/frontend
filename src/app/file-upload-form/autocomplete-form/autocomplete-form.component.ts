@@ -20,7 +20,6 @@ import {DisciplineService} from '../../shared/services/discipline.service';
 import {StudyCourseService} from '../../shared/services/study-course.service';
 import {CurriculumService} from '../../shared/services/curriculum.service';
 import {LectureService} from '../../shared/services/lecture.service';
-import {log} from 'util';
 
 export interface AutocompleteFormValues {
   discipline: string;
@@ -109,7 +108,6 @@ export class AutocompleteFormComponent
 
   private initDisciplines(): void {
     this.disciplines = this.disciplineService.getDisciplines();
-    console.log(this.disciplines);
   }
 
   autocompleteDisciplines(): void {
@@ -119,7 +117,6 @@ export class AutocompleteFormComponent
         const id = this.disciplineService.getDisciplineID(value);
         this.disciplineNames.forEach(d => {
           if (value === d) {
-            console.log(id);
             this.initStudyCourses(id);
           }
         });
@@ -145,7 +142,6 @@ export class AutocompleteFormComponent
       id
     );
     this.studyCourses.forEach((s) => this.studyCourseNames.push(s.name));
-    console.log(this.studyCourses);
   }
 
   autocompleteStudyCourses() {

@@ -64,25 +64,24 @@ export class UploadFormComponent implements OnDestroy, ControlValueAccessor {
   onFileSelect(event): any {
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
-      this.form.get('file').setValue(file);
-      this.form.get('dummyFile').setValue(file.name);
+      this.form.get('dummyFile').setValue(file);
+      this.form.get('file').setValue(file.name);
       this.fileValue = file;
-      console.log(this.fileValue);
     }
   }
 
 
   onUpload(): void {
-    console.log(this.form.get('file').value);
     const formData = new FormData();
     // const lectureId = '24';
-    formData.append('lectureId', '24');
-    formData.append('file', this.form.get('file').value);
-    console.log('b: ' + formData);
-    this.fileService.uploadFile(formData).subscribe(
-        (res) => console.log(res),
-        (err) => console.log(err)
-    );
+    formData.append('lectureId', '25');
+    formData.append('file', this.form.get('dummyFile').value);
+    console.log(this.form.get('dummyFile'));
+    console.log(this.form.get('file'));
+    // this.fileService.uploadFile(formData).subscribe(
+    //     (res) => console.log(res),
+    //     (err) => console.log(err)
+    // );
   }
 
   ngOnDestroy(): void {
