@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {catchError, map} from 'rxjs/operators';
-import {throwError} from 'rxjs';
+import { Observable, Subscription, throwError } from 'rxjs';
+import { Discipline } from "../models/Discipline";
 
 @Injectable({
   providedIn: 'root',
@@ -14,9 +15,8 @@ export class DisciplineService {
   constructor(private http: HttpClient) {
   }
 
-  getDisciplines(): any[] {
-    this.http
-      .get(this.SERVER_URL + '/disciplines')
+  getDisciplines$(): Observable<Discipline[]> {
+    return this.http.get(this.SERVER_URL + '/disciplines')
       .pipe(
         map((responseData) => {
           const disciplineArray = [];
@@ -28,27 +28,15 @@ export class DisciplineService {
         catchError((errorResponse) => {
           return throwError(errorResponse);
         })
-      )
+      );
+  }
+  getDisciplines(): Discipline[] {
+    const disciplines: Discipline[] = [];
+    this.getDisciplines$()
       .subscribe((response) => {
-        response.forEach((d) => this.disciplines.push(d));
+        response.forEach((d) => disciplines.push(d));
       });
-    return this.disciplines;
+    return disciplines;
   }
 
-  getDisciplineName(): string[] {
-    this.disciplines.forEach((d) => this.disciplineNames.push(d.name));
-    return this.disciplineNames;
-  }
-
-  getDisciplineID(name: string): number {
-    let id: number;
-    this.disciplines.forEach((d) => {
-      if (d.name.toLowerCase() === name.toLowerCase()) {
-        id = d.id;
-      } else {
-        return new Error('no id could be found for the discipline ' + name);
-      }
-    });
-    return id;
-  }
 }

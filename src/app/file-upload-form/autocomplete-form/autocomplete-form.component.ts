@@ -14,13 +14,14 @@ import {
   NG_VALUE_ACCESSOR,
   FormControl,
 } from '@angular/forms';
-import {Observable, Subscription} from 'rxjs';
-import {map, startWith} from 'rxjs/operators';
-import {DisciplineService} from '../../shared/services/discipline.service';
-import {StudyCourseService} from '../../shared/services/study-course.service';
-import {CurriculumService} from '../../shared/services/curriculum.service';
-import {LectureService} from '../../shared/services/lecture.service';
-import {TagService} from '../../shared/services/tag.service';
+import { Observable, Subscription } from 'rxjs';
+import { map, startWith, tap } from 'rxjs/operators';
+import { DisciplineService } from '../../shared/services/discipline.service';
+import { StudyCourseService } from '../../shared/services/study-course.service';
+import { CurriculumService } from '../../shared/services/curriculum.service';
+import { LectureService } from '../../shared/services/lecture.service';
+import { TagService } from '../../shared/services/tag.service';
+import { Discipline } from "../../shared/models/Discipline";
 
 export interface AutocompleteFormValues {
   discipline: string;
@@ -49,11 +50,11 @@ export interface AutocompleteFormValues {
 })
 export class AutocompleteFormComponent
   implements ControlValueAccessor, OnDestroy, OnInit {
-  @ViewChild('disciplineValue', {static: true})
+  @ViewChild('disciplineValue', { static: true })
   disciplineNameDOMElement: ElementRef;
-  @ViewChild('studyCourseValue', {static: true})
+  @ViewChild('studyCourseValue', { static: true })
   studyCourseDOMElement: ElementRef;
-  @ViewChild('curriculaValue', {static: true})
+  @ViewChild('curriculaValue', { static: true })
   lectureDOMElement: ElementRef;
   form: FormGroup;
   subscriptions: Subscription[] = [];
@@ -63,7 +64,7 @@ export class AutocompleteFormComponent
   filteredLectures: Observable<string[]>;
   filteredTagTypes: Observable<string[]>;
   filteredTagNames: Observable<string[]>;
-  disciplines = [];
+  disciplines: Discipline[] = [];
   disciplineNames = [];
   studyCourses = [];
   studyCourseNames = [];
@@ -122,13 +123,13 @@ export class AutocompleteFormComponent
   autocompleteDisciplines(): void {
     this.filteredDisciplines = this.form.get('discipline').valueChanges.pipe(
       startWith(''),
-      map((value) => {
-        const id = this.disciplineService.getDisciplineID(value);
-        this.disciplineNames.forEach(d => {
-          if (value === d) {
+      map((value: string) => {
+        if (!!value) {
+          const id = this.disciplines.find(x => x.name.toLocaleLowerCase() === value.toLocaleLowerCase())?.id;
+          if (!!id) {
             this.initStudyCourses(id);
           }
-        });
+        }
         return this._disciplineFilter(value);
       }),
     );
@@ -328,6 +329,6 @@ export class AutocompleteFormComponent
   }
 
   validate(_: FormControl): any {
-    return this.form.valid ? null : {autocomplete: {valid: false}};
+    return this.form.valid ? null : { autocomplete: { valid: false } };
   }
 }
