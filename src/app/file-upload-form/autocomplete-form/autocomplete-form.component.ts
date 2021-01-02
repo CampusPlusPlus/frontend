@@ -20,6 +20,7 @@ import {DisciplineService} from '../../shared/services/discipline.service';
 import {StudyCourseService} from '../../shared/services/study-course.service';
 import {CurriculumService} from '../../shared/services/curriculum.service';
 import {LectureService} from '../../shared/services/lecture.service';
+import {log} from 'util';
 
 export interface AutocompleteFormValues {
   discipline: string;
@@ -60,7 +61,8 @@ export class AutocompleteFormComponent
   filteredStudyCourses: Observable<string[]>;
   filteredCurricular: Observable<string[]>;
   filteredLectures: Observable<string[]>;
-  disciplines: string[] = [];
+  disciplines = [];
+  disciplineNames = [];
   studyCourses = [];
   studyCourseNames = [];
   curricula = [];
@@ -106,79 +108,109 @@ export class AutocompleteFormComponent
   }
 
   private initDisciplines(): void {
-    this.disciplineService.getDisciplines();
+    this.disciplines = this.disciplineService.getDisciplines();
+    console.log(this.disciplines);
   }
 
   autocompleteDisciplines(): void {
-    this.disciplines = this.disciplineService.getDisciplineName();
     this.filteredDisciplines = this.form.get('discipline').valueChanges.pipe(
       startWith(''),
-      map((value) => this._disciplineFilter(value))
+      map((value) => {
+        const id = this.disciplineService.getDisciplineID(value);
+        this.disciplineNames.forEach(d => {
+          if (value === d) {
+            console.log(id);
+            this.initStudyCourses(id);
+          }
+        });
+        return this._disciplineFilter(value);
+      }),
     );
   }
 
   private _disciplineFilter(value: string): string[] {
     const filterValue = value.toLowerCase();
-    return this.disciplines.filter((discipline) =>
+    this.disciplines.forEach(d => {
+      if (this.disciplineNames.length < this.disciplines.length) {
+        this.disciplineNames.push(d.name);
+      }
+    });
+    return this.disciplineNames.filter((discipline) =>
       discipline.toLowerCase().includes(filterValue)
     );
   }
 
-  private initStudyCourses() {
-    const name = this.disciplineNameDOMElement.nativeElement.value;
-    const id = this.disciplineService.getDisciplineID(name);
+  private initStudyCourses(id: number) {
     this.studyCourses = this.studyCourseService.getStudyCourseByDisciplineID(
       id
     );
     this.studyCourses.forEach((s) => this.studyCourseNames.push(s.name));
+    console.log(this.studyCourses);
   }
 
   autocompleteStudyCourses() {
-    this.initStudyCourses();
     this.filteredStudyCourses = this.form.get('studyCourses').valueChanges.pipe(
       startWith(''),
-      map((value) => this._studyCoursesFilter(value))
+      map((value) => {
+        const id = this.studyCourseService.getStudyCourseID(value);
+        this.studyCourseNames.forEach(d => {
+          if (value === d) {
+            this.initCurricular(id);
+          }
+        });
+        return this._studyCoursesFilter(value);
+      })
     );
   }
 
   private _studyCoursesFilter(value: string): string[] {
     const filterValue = value.toLowerCase();
+    this.studyCourses.forEach(s => {
+      if (this.studyCourseNames.length < this.studyCourses.length) {
+        this.studyCourseNames.push(s.name);
+      }
+    });
     return this.studyCourseNames.filter((studyCourse) =>
       studyCourse.toLowerCase().includes(filterValue)
     );
   }
 
-  private initCurricular(): void {
-    const name = this.studyCourseDOMElement.nativeElement.value;
-    const id = this.studyCourseService.getStudyCourseID(name);
+  private initCurricular(id: number): void {
     this.curricula = this.curriculumService.getCurriculaByStudyCourse(id);
-    this.curricula.forEach((c) => this.curriculaNames.push(c.name));
   }
 
   autocompleteCurricula() {
-    this.initCurricular();
     this.filteredCurricular = this.form.get('curriculum').valueChanges.pipe(
       startWith(''),
-      map((value) => this._curriculaFilter(value))
+      map((value) => {
+        const id = this.curriculumService.getCurriculaIDByName(value);
+        this.curriculaNames.forEach(d => {
+          if (value === d) {
+            this.initLectures(id);
+          }
+        });
+        return this._curriculaFilter(value);
+      })
     );
   }
 
   private _curriculaFilter(value: string): string[] {
     const filterValue = value.toLowerCase();
+    this.curricula.forEach(c => {
+      if (this.curriculaNames.length < this.curricula.length) {
+        this.curriculaNames.push(c.name);
+      }
+    });
     return this.curriculaNames.filter((curricula) =>
       curricula.toLowerCase().includes(filterValue)
     );
   }
 
-  private initLectures(): void {
-    const name = this.lectureDOMElement.nativeElement.value;
-    const id = this.curriculumService.getCurriculaIDByName(name);
+  private initLectures(id: number): void {
     this.lectures = this.lectureService.getLecturesByCurriculaID(id);
-    this.lectures.forEach((c) => this.lectureNames.push(c.name));
   }
 
   autocompleteLectures() {
-    this.initLectures();
     this.filteredLectures = this.form.get('lectures').valueChanges.pipe(
       startWith(''),
       map((value) => this._lectureFilter(value))
@@ -187,6 +219,11 @@ export class AutocompleteFormComponent
 
   private _lectureFilter(value: string): string[] {
     const filterValue = value.toLowerCase();
+    this.lectures.forEach(l => {
+      if (this.lectureNames.length < this.lectures.length) {
+        this.lectureNames.push(l.name);
+      }
+    });
     return this.lectureNames.filter((lecture) =>
       lecture.toLowerCase().includes(filterValue)
     );

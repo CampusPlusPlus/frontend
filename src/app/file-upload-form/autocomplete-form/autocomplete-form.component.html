@@ -8,7 +8,7 @@
       formControlName="discipline"
       [formGroup]="form"
       [matAutocomplete]="auto"
-      (click)="autocompleteDisciplines()"
+      (focus)="autocompleteDisciplines()"
       #disciplineValue
     />
     <mat-autocomplete #auto="matAutocomplete">
@@ -28,7 +28,7 @@
       formControlName="studyCourses"
       [formGroup]="form"
       [matAutocomplete]="auto2"
-      (click)="autocompleteStudyCourses()"
+      (focus)="autocompleteStudyCourses()"
       #studyCourseValue
     />
     <mat-autocomplete #auto2="matAutocomplete">
@@ -48,7 +48,7 @@
       formControlName="curriculum"
       [formGroup]="form"
       [matAutocomplete]="auto3"
-      (click)="autocompleteCurricula()"
+      (focus)="autocompleteCurricula()"
       #curriculaValue
     />
     <mat-autocomplete #auto3="matAutocomplete">
@@ -67,7 +67,7 @@
            formControlName="lectures"
            [formGroup]="form"
            [matAutocomplete]="auto4"
-           (click)="autocompleteLectures()"
+           (focus)="autocompleteLectures()"
     />
     <mat-autocomplete #auto4="matAutocomplete">
       <mat-option
