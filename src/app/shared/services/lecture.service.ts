@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {catchError, map} from 'rxjs/operators';
 import {throwError} from 'rxjs';
@@ -10,7 +10,8 @@ export class LectureService {
   SERVER_URL = 'http://localhost:9000';
   lectures = [];
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
   getLecturesByCurriculaID(curriculaID: number): any[] {
     this.http
@@ -33,5 +34,17 @@ export class LectureService {
         response.slice(0, 1).forEach((s) => this.lectures.push(...s));
       });
     return this.lectures;
+  }
+
+  getLectureId(name: string): number {
+    let id: number;
+    this.lectures.forEach((d) => {
+      if (d.name.toLowerCase() === name.toLowerCase()) {
+        id = d.id;
+      } else {
+        return new Error('no id could be found for the discipline ' + name);
+      }
+    });
+    return id;
   }
 }
