@@ -5,6 +5,7 @@ import {HttpClient} from '@angular/common/http';
 import {StudyCourse} from '../models/StudyCourse';
 import {Discipline} from '../models/Discipline';
 import {Curricula} from '../models/Curriculum';
+import {PageableResponse} from '../models/PageableResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -45,12 +46,8 @@ export class StudyCourseService {
         this.SERVER_URL + '/' + studyCourseID + '/curricula'
       )
       .pipe(
-        map((responseData) => {
-          const array = [];
-          for (const key in responseData) {
-            array.push(responseData[key]);
-          }
-          return array;
+        map((responseData: PageableResponse<Curricula>) => {
+          return responseData.content;
         }),
         catchError((errorResponse) => {
           return throwError(errorResponse);
@@ -63,7 +60,7 @@ export class StudyCourseService {
     this.getCurriculaByStudyCourse$(studyCourseID)
       .subscribe((response) => {
         // @ts-ignore
-        response.splice(0, 1).forEach((c) => curricula.push(...c));
+        response.forEach((c) => curricula.push(c));
       });
     return curricula;
   }

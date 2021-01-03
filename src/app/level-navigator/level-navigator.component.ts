@@ -45,17 +45,17 @@ export class LevelNavigatorComponent implements OnInit {
         this.id = Number(this.route.snapshot.url[1].path);
         this.title = 'StudyCourse';
         this.emptyArray();
-        this.data = this.studyCourseService.getStudyCourseByDisciplineID(this.id);
+        this.data = this.disciplineService.getStudyCoursesByDisciplineID(this.id);
         break;
       case 3:
         this.id = Number(this.route.snapshot.url[2].path);
         this.title = 'Curriculum';
-        this.data = this.curriculumService.getCurriculaByStudyCourse(this.id);
+        this.data = this.studyCourseService.getCurriculaByStudyCourse(this.id);
         break;
       case 4:
         this.id = Number(this.route.snapshot.url[3].path);
         this.title = 'Lecture';
-        this.data = this.lectureService.getLecturesByCurriculaID(this.id);
+        this.data = this.curriculumService.getLecturesByCurriculaID(this.id);
         break;
       default:
         break;

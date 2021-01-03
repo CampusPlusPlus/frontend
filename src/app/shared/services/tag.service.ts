@@ -1,7 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {catchError, map} from 'rxjs/operators';
-import {throwError} from 'rxjs';
+import {Observable, throwError} from 'rxjs';
+import {Tag} from '../models/Tag';
+import {Lecture} from '../models/Lecture';
+import {PageableResponse} from '../models/PageableResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -13,25 +16,26 @@ export class TagService {
   constructor(private http: HttpClient) {
   }
 
-  getAllTags() {
-    this.http
-      .get(this.SERVER_URL)
+
+  getAllTags$(): Observable<Tag[]> {
+    return this.http.get(this.SERVER_URL)
       .pipe(
-        map((responseData) => {
-          const array = [];
-          for (const key in responseData) {
-            array.push(responseData[key]);
-          }
-          return array;
+        map((responseData: PageableResponse<Tag>) => {
+          return responseData.content;
         }),
         catchError((errorResponse) => {
           return throwError(errorResponse);
         })
-      )
+      );
+  }
+
+  getAllTags() {
+    const tags: Tag[] = [];
+    this.getAllTags$()
       .subscribe((response) => {
-        response.slice(0, 1).forEach((t) => this.tags.push(...t));
+        response.forEach((t) => tags.push(t));
       });
-    return this.tags;
+    return tags;
   }
 
   createTag(tagName: string, tagType: string) {

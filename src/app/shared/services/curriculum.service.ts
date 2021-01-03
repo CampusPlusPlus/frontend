@@ -4,6 +4,7 @@ import {catchError, map} from 'rxjs/operators';
 import {Observable, throwError} from 'rxjs';
 import {ErrorService} from './error.service';
 import {Lecture} from '../models/Lecture';
+import {PageableResponse} from '../models/PageableResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -21,12 +22,8 @@ export class CurriculumService {
         this.SERVER_URL + '/' + curriculaID + '/lectures'
       )
       .pipe(
-        map((responseData) => {
-          const array = [];
-          for (const key in responseData) {
-            array.push(responseData[key]);
-          }
-          return array;
+        map((responseData: PageableResponse<Lecture>) => {
+          return responseData.content;
         }),
         catchError((errorResponse) => {
           return throwError(errorResponse);
@@ -39,7 +36,7 @@ export class CurriculumService {
     this.getLecturesByCurriculaID$(curriculaID)
       .subscribe((response) => {
         // @ts-ignore
-        response.slice(0, 1).forEach((s) => lectures.push(...s));
+        response.forEach((s) => lectures.push(s));
       });
     return lectures;
   }

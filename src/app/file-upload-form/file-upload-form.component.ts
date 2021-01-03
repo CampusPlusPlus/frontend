@@ -39,6 +39,9 @@ export class FileUploadFormComponent implements OnInit {
   onSubmit(): void {
     // this.createTags();
     // this.upload();
+    const name: string = this.uploadForm.get('fileUploadLocations').value.lectures;
+    const id: string = String(this.getLectureIdByName(name));
+    console.log(id);
     // this.submit = true;
   }
 

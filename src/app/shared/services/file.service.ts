@@ -1,26 +1,22 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {File} from '../models/File';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FileService {
-  SERVER_URL = 'http://localhost:9000';
+  SERVER_URL = 'http://localhost:9000/files';
 
   constructor(private http: HttpClient) {
   }
 
-  uploadFile(formData) {
-    return this.http.post<any>(this.SERVER_URL + '/files',
+  uploadFile(formData): Observable<File> {
+    return this.http.post<any>(this.SERVER_URL,
       formData
-     );
+    );
   }
 
-  public sendFormData(formData) {
-    return this.http.post<any>(this.SERVER_URL + 'files', formData, {
-      reportProgress: true,
-      observe: 'events'
-    });
-  }
 }
 
