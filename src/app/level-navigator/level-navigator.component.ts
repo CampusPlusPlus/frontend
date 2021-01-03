@@ -72,6 +72,7 @@ export class LevelNavigatorComponent implements OnInit {
         this.title = 'Files';
         this.level = 5;
         this.data = this.lectureService.getFilesByLectureID(this.id);
+        console.log(this.data);
         break;
       default:
         break;

@@ -50,9 +50,9 @@ export class LectureService {
   }
 
   getFilesByLectureID(id: number): SimpleFile[] {
-    let files: SimpleFile[];
+    let files: SimpleFile[] = [];
     this.getFilesByLectureID$(id).subscribe((response) => {
-      files = [...response];
+      response.forEach((l) => files.push(l));
     });
     return files;
   }

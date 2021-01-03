@@ -3,8 +3,8 @@
   <div mat-subheader>{{title}}</div>
   <div *ngIf="level === 4; else simple">
     <div *ngFor="let d of data; let i = index">
-      <div mat-subheader>{{"Semester " + i}}</div>
-      <app-level-list  [data]="d" [level]="level" (navigateTo)="loadData($event)">{{d.rela}}</app-level-list>
+      <div mat-subheader>{{"Semester " + (i + 1)}}</div>
+      <app-level-list [data]="d" [level]="level" (navigateTo)="loadData($event)">{{d.rela}}</app-level-list>
     </div>
   </div>
   <ng-template #simple>
