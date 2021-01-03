@@ -5,6 +5,7 @@ import { DisciplineService } from '../shared/services/discipline.service';
 import { StudyCourseService } from '../shared/services/study-course.service';
 import { CurriculumService } from '../shared/services/curriculum.service';
 import { LectureService } from '../shared/services/lecture.service';
+import { FileService } from "../shared/services/file.service";
 
 @Component({
   selector: 'app-level-navigator',
@@ -15,6 +16,7 @@ export class LevelNavigatorComponent implements OnInit {
 
   data: any[] = [];
   id = -1;
+  level = -1;
   title = '';
 
   constructor(
@@ -24,7 +26,8 @@ export class LevelNavigatorComponent implements OnInit {
     private disciplineService: DisciplineService,
     private studyCourseService: StudyCourseService,
     private curriculumService: CurriculumService,
-    private lectureService: LectureService
+    private lectureService: LectureService,
+    private fileService: FileService
   ) {
   }
 
@@ -38,24 +41,33 @@ export class LevelNavigatorComponent implements OnInit {
     switch (len) {
       case 1:
         this.title = 'discipline';
+        this.level = 1;
         this.emptyArray();
         this.data = this.disciplineService.getDisciplines();
         break;
       case 2:
         this.id = Number(this.route.snapshot.url[1].path);
         this.title = 'StudyCourse';
+        this.level = 2;
         this.emptyArray();
-        this.data = this.studyCourseService.getStudyCourseByDisciplineID(this.id);
+        this.data = this.disciplineService.getStudyCoursesByDisciplineID(this.id);
         break;
       case 3:
         this.id = Number(this.route.snapshot.url[2].path);
         this.title = 'Curriculum';
-        this.data = this.curriculumService.getCurriculaByStudyCourse(this.id);
+        this.level = 3;
+        this.data = this.studyCourseService.getCurriculaByStudyCourse(this.id);
         break;
       case 4:
         this.id = Number(this.route.snapshot.url[3].path);
         this.title = 'Lecture';
-        this.data = this.lectureService.getLecturesByCurriculaID(this.id);
+        this.level = 4;
+        this.data = this.curriculumService.getLecturesByCurriculaID(this.id);
+        break;
+      case 5:
+        this.id = Number(this.route.snapshot.url[4].path);
+        this.title = 'Files';
+        this.level = 5;
         break;
       default:
         break;
