@@ -42,7 +42,7 @@ export class LevelNavigatorComponent implements OnInit {
 
     switch (len) {
       case 1:
-        this.title = 'discipline';
+        this.title = 'Discipline';
         this.level = 1;
         this.emptyArray();
         this.data = this.disciplineService.getDisciplines();
