@@ -6,6 +6,7 @@
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
       <a mat-list-item routerLink="/" (click)="drawer.close()">Home</a>
+      <a mat-list-item routerLink="/upload" (click)="drawer.close()">📤 Upload</a>
       <a mat-list-item routerLink="/discipline" (click)="drawer.close()">📗 Disciplines</a>
       <a mat-list-item routerLink="/settings" (click)="drawer.close()">🔧 ️Settings</a>
     </mat-nav-list>
@@ -26,6 +27,7 @@
 
       <span class="fill-space"></span>
       <div *ngIf="(isHandset$ | async) === false">
+        <a mat-button routerLink="/upload">📤 Upload</a>
         <a mat-button routerLink="/discipline">📗 Disciplines</a>
         <a mat-button routerLink="/settings">🔧 Settings</a>
       </div>
