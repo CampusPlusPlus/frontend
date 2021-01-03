@@ -61,5 +61,26 @@ export class FileService {
     );
   }
 
+  getFileByID$(id: number): Observable<SimpleFile> {
+    return this.http.get(`${this.SERVER_URL}/${id}`)
+      .pipe(
+        map((responseData: SimpleFile) => {
+          console.log("reeee", responseData);
+          return responseData;
+        }),
+        catchError((errorResponse) => {
+          return throwError(errorResponse);
+        })
+      );
+  }
+
+  getFileByID(id: number): SimpleFile {
+    let file: SimpleFile;
+    this.getFileByID$(id).subscribe(value => {
+      file = value;
+    });
+    return file;
+  }
+
 }
 

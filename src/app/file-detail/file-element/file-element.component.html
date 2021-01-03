@@ -1,0 +1,10 @@
+<mat-grid-list cols="4" rowHeight="100px">
+  <mat-grid-tile [colspan]="3" [rowspan]="1">
+    <mat-icon>attachment</mat-icon>{{data.name}}
+  </mat-grid-tile>
+  <mat-grid-tile [colspan]="1" [rowspan]="1">
+    <button (click)="download(data.id)" mat-raised-button color="primary">📥</button>
+  </mat-grid-tile>
+</mat-grid-list>
+<app-comment></app-comment>
+

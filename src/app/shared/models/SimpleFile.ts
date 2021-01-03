@@ -1,6 +1,6 @@
 export type SimpleFile = {
       id: number,
-      originalName: string,
+      name: string,
       size: number,
       rating: number,
       author: string,

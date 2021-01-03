@@ -20,6 +20,7 @@ import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {HttpClientModule} from '@angular/common/http';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 const modules = [
   CommonModule,
@@ -36,6 +37,7 @@ const modules = [
   MatFormFieldModule,
   MatInputModule,
   MatSnackBarModule,
+  MatGridListModule,
   ReactiveFormsModule,
   MatAutocompleteModule,
   HttpClientModule,
