@@ -17,7 +17,7 @@ export class TagService {
   }
 
 
-  private getAllTags$(): Observable<Tag[]> {
+  getAllTags$(): Observable<Tag[]> {
     return this.http.get(this.SERVER_URL + '/?page=0&size=10000')
       .pipe(
         map((responseData: PageableResponse<Tag>) => {
@@ -38,11 +38,14 @@ export class TagService {
     return tags;
   }
 
-  createTag(tagName: string, tagType: string): void {
-    this.http.post(this.SERVER_URL, {
-      'tagValue': tagName,
-      'tagType': tagType,
-    }).subscribe();
+  createTag$(tagName: string, tagType: string) {
+    return this.http.post(this.SERVER_URL, {
+        'tagValue': tagName,
+        'tagType': tagType,
+      }, {
+        observe: 'response'
+      }
+    );
   }
 
 }

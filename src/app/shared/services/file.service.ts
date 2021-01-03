@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {SimpleFile} from '../models/SimpleFile';
 import {FullFile} from '../models/FullFile';
@@ -37,20 +37,17 @@ export class FileService {
     return files;
   }
 
-  private uploadFile$(formData): Observable<SimpleFile> {
-    return this.http.post<any>(this.SERVER_URL,
-      formData
+  uploadFile$(formData) {
+    return this.http.post(this.SERVER_URL,
+      formData, {
+        observe: 'response'
+      }
     );
   }
 
-  uploadFile(formData): void {
-    this.uploadFile$(formData).subscribe(
-      res => console.log(res),
-      err => console.log(err)
-    );
-  }
 
-  private addTagToFile$(fileId: number, tagId: number): Observable<any> {
+
+  addTagToFile$(fileId: number, tagId: number): Observable<any> {
     return this.http.patch(this.SERVER_URL + fileId + tagId, null);
   }
 

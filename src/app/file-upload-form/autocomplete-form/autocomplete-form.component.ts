@@ -169,7 +169,6 @@ export class AutocompleteFormComponent
       map((value) => {
         if (!!value) {
           const id = this.studyCourses.find(x => x.name.toLocaleLowerCase() === value.toLocaleLowerCase())?.id;
-          console.log(id);
           if (!!id) {
             this.initCurricular(id);
           }
