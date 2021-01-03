@@ -65,11 +65,13 @@ export class LevelNavigatorComponent implements OnInit {
         this.title = 'Lecture';
         this.level = 4;
         this.data = this.curriculumService.getLecturesByCurriculaIDGroupedByRelativeSemester(this.id);
+        console.log(this.data);
         break;
       case 5:
         this.id = Number(this.route.snapshot.url[4].path);
         this.title = 'Files';
         this.level = 5;
+        this.data = this.lectureService.getFilesByLectureID(this.id);
         break;
       default:
         break;

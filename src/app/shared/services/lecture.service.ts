@@ -4,7 +4,7 @@ import { catchError, map } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 import { Discipline } from '../models/Discipline';
 import { Lecture } from '../models/Lecture';
-import { File } from '../models/File';
+import { SimpleFile } from '../models/SimpleFile';
 import { PageableResponse } from '../models/PageableResponse';
 
 @Injectable({
@@ -37,10 +37,10 @@ export class LectureService {
     return lectures;
   }
 
-  getFilesByLectureID$(id: number): Observable<File[]> {
+  getFilesByLectureID$(id: number): Observable<SimpleFile[]> {
     return this.http.get(`${this.SERVER_URL}/${id}/files`)
       .pipe(
-        map((responseData: PageableResponse<File>) => {
+        map((responseData: PageableResponse<SimpleFile>) => {
           return responseData.content;
         }),
         catchError((errorResponse) => {
@@ -49,8 +49,8 @@ export class LectureService {
       );
   }
 
-  getFilesByLectureID(id: number): File[] {
-    let files: File[];
+  getFilesByLectureID(id: number): SimpleFile[] {
+    let files: SimpleFile[];
     this.getFilesByLectureID$(id).subscribe((response) => {
       files = [...response];
     });
