@@ -9,6 +9,7 @@ import {Lecture} from '../shared/models/Lecture';
 import {forkJoin, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {SimpleFile} from '../shared/models/SimpleFile';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-file-upload-form',
@@ -20,13 +21,16 @@ export class FileUploadFormComponent implements OnInit {
   uploadForm: FormGroup;
   lectures: Lecture[] = [];
   submit = false;
+  tagName: string;
+  tagType: string;
 
   constructor(
     private formBuilder: FormBuilder,
     private fileService: FileService,
     private lectureService: LectureService,
     private curriculumService: CurriculumService,
-    private tagService: TagService
+    private tagService: TagService,
+    private http: HttpClient
   ) {
     this.uploadForm = this.formBuilder.group({
       uploads: [],
@@ -40,9 +44,13 @@ export class FileUploadFormComponent implements OnInit {
   }
 
   onSubmit(): void {
-    // this.createTags();
-    // this.upload();
-    this.getIdOfUploadedFile();
+    try {
+      this.upload();
+    } catch (e) {
+      console.log(e);
+      console.log('upload error');
+      return;
+    }
     // this.addTags();
     // this.submit = true;
   }
@@ -53,21 +61,72 @@ export class FileUploadFormComponent implements OnInit {
     const id: string = String(this.getLectureIdByName(name));
     formData.append('lectureId', id);
     formData.append('file', this.uploadForm.get('uploads').value.dummyFile);
-    this.fileService.uploadFile(formData);
-  }
-
-  createTags(): void {
     if (this.uploadForm.get('tags').value !== null) {
       this.uploadForm.get('tags').value.tags.forEach(
-        n => {
-          if (n.tagType !== null || n.tagName !== null) {
-            const name: string = n.tagName;
-            const type: string = n.tagType;
-            this.tagService.createTag(name, type);
+        t => {
+          if (t.tagType !== null || t.tagName !== null) {
+            this.tagName = t.tagName;
+            this.tagType = t.tagType;
           }
         });
     }
+    forkJoin(
+      {
+        file: this.http.post('http://localhost:9000/files',
+          formData, {
+            observe: 'response'
+          }
+        ),
+        tag: this.http.post('http://localhost:9000/tags', {
+            'tagValue': this.tagName,
+            'tagType': this.tagType,
+          }, {
+            observe: 'response'
+          }
+        )
+      }
+    ).subscribe(response => {
+      console.log(response.file.headers.get('location'));
+      console.log(response.tag.headers.get('location'));
+    });
+    // this.fileService.uploadFile$(formData).subscribe(
+    //   res => {
+    //     if (this.uploadForm.get('tags').value !== null) {
+    //       this.uploadForm.get('tags').value.tags.forEach(
+    //         t => {
+    //           if (t.tagType !== null || t.tagName !== null) {
+    //             const tagName: string = t.tagName;
+    //             const tagType: string = t.tagType;
+    //             this.tagService.createTag$(tagName, tagType)
+    //               .subscribe(response => {
+    //                 const tempTag: string = res.headers.get('location');
+    //                 const lastIndex = tempTag.lastIndexOf('/');
+    //                 const tagId = +tempTag.substring(lastIndex + 1);
+    //                 this.fileService.addTagToFile$(0, tagId);
+    //               });
+    //           }
+    //         });
+    //     }
+    //     const temp: string = res.headers.get('location');
+    //     const n = temp.lastIndexOf('/');
+    //     const fileId = temp.substring(n + 1);
+    //   },
+    //   err => console.log(err)
+    // );
   }
+
+  // createTags(): void {
+  //   if (this.uploadForm.get('tags').value !== null) {
+  //     this.uploadForm.get('tags').value.tags.forEach(
+  //       n => {
+  //         if (n.tagType !== null || n.tagName !== null) {
+  //           const name: string = n.tagName;
+  //           const type: string = n.tagType;
+  //           this.tagService.createTag(name, type);
+  //         }
+  //       });
+  //   }
+  // }
 
   getLectureIdByName(name: string): number {
     let id: number;
@@ -75,7 +134,6 @@ export class FileUploadFormComponent implements OnInit {
       .forEach(l => {
         if (l.name === name) {
           id = l.id;
-          console.log('a', id);
         }
       });
     return id;
