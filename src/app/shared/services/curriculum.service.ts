@@ -16,7 +16,7 @@ export class CurriculumService {
   }
 
 
-  getLecturesByCurriculaID$(curriculaID: number): Observable<Lecture[]> {
+  private getLecturesByCurriculaID$(curriculaID: number): Observable<Lecture[]> {
     return this.http
       .get(
         this.SERVER_URL + '/' + curriculaID + '/lectures'

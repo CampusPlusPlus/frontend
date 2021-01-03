@@ -15,7 +15,7 @@ export class LectureService {
   constructor(private http: HttpClient) {
   }
 
-  getLectures$(): Observable<Lecture[]> {
+  private getLectures$(): Observable<Lecture[]> {
     return this.http.get(this.SERVER_URL)
       .pipe(
         map((responseData: PageableResponse<Lecture>) => {

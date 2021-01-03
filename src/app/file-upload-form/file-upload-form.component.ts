@@ -6,6 +6,9 @@ import {LectureService} from '../shared/services/lecture.service';
 import {TagService} from '../shared/services/tag.service';
 import {CurriculumService} from '../shared/services/curriculum.service';
 import {Lecture} from '../shared/models/Lecture';
+import {forkJoin, throwError} from 'rxjs';
+import {catchError} from 'rxjs/operators';
+import {SimpleFile} from '../shared/models/SimpleFile';
 
 @Component({
   selector: 'app-file-upload-form',
@@ -39,9 +42,8 @@ export class FileUploadFormComponent implements OnInit {
   onSubmit(): void {
     // this.createTags();
     // this.upload();
-    const name: string = this.uploadForm.get('fileUploadLocations').value.lectures;
-    const id: string = String(this.getLectureIdByName(name));
-    console.log(id);
+    this.getIdOfUploadedFile();
+    // this.addTags();
     // this.submit = true;
   }
 
@@ -51,20 +53,20 @@ export class FileUploadFormComponent implements OnInit {
     const id: string = String(this.getLectureIdByName(name));
     formData.append('lectureId', id);
     formData.append('file', this.uploadForm.get('uploads').value.dummyFile);
-    this.fileService.uploadFile(formData).subscribe(
-      (res) => console.log(res),
-      (err) => console.log(err)
-    );
+    this.fileService.uploadFile(formData);
   }
 
   createTags(): void {
-    this.uploadForm.get('tags').value.tags.forEach(
-      n => {
-        const name: string = n.tagName;
-        const type: string = n.tagType;
-        this.tagService.createTag(name, type);
-      }
-    );
+    if (this.uploadForm.get('tags').value !== null) {
+      this.uploadForm.get('tags').value.tags.forEach(
+        n => {
+          if (n.tagType !== null || n.tagName !== null) {
+            const name: string = n.tagName;
+            const type: string = n.tagType;
+            this.tagService.createTag(name, type);
+          }
+        });
+    }
   }
 
   getLectureIdByName(name: string): number {
@@ -76,6 +78,14 @@ export class FileUploadFormComponent implements OnInit {
           console.log('a', id);
         }
       });
+    return id;
+  }
+
+  getIdOfUploadedFile(): number {
+    let id = 0;
+    if (this.uploadForm.get('uploads').value !== null) {
+      const name = this.uploadForm.get('uploads').value.dummyFile.name;
+    }
     return id;
   }
 

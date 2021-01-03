@@ -152,6 +152,14 @@ export class AutocompleteFormComponent
   }
 
   private initStudyCourses(id: number): void {
+    if (this.studyCourseNames.length > 0) {
+      this.form.get('studyCourses').reset();
+      this.form.get('curriculum').reset();
+      this.form.get('lectures').reset();
+      this.studyCourseNames = [];
+      this.curriculaNames = [];
+      this.lectureNames = [];
+    }
     this.studyCourses = this.disciplineService.getStudyCoursesByDisciplineID(id);
   }
 
@@ -184,6 +192,12 @@ export class AutocompleteFormComponent
   }
 
   private initCurricular(id: number): void {
+    if (this.curriculaNames.length > 0) {
+      this.form.get('curriculum').reset();
+      this.form.get('lectures').reset();
+      this.curriculaNames = [];
+      this.lectureNames = [];
+    }
     this.curricula = this.studyCourseService.getCurriculaByStudyCourse(id);
   }
 
@@ -215,6 +229,7 @@ export class AutocompleteFormComponent
   }
 
   private initLectures(id: number): void {
+    this.lectureNames = [];
     this.lectures = this.curriculumService.getLecturesByCurriculaID(id);
   }
 
@@ -259,7 +274,6 @@ export class AutocompleteFormComponent
 
   private _tagTypeFilter(value: string): string[] {
     const filterValue = value.toLowerCase();
-    let uniqueTagTypes;
     this.tags.forEach(l => {
       this.tagTypes.indexOf(l.tagType) === -1 ? this.tagTypes.push(l.tagType) : console.log();
     });
@@ -269,6 +283,8 @@ export class AutocompleteFormComponent
   }
 
   private initTagNames(name): void {
+    this.tagNames = [];
+    this.form.get('tagNames').reset();
     this.tags.forEach(t => {
       if (t.tagType === name) {
         this.tagNames.push(t.tagValue);

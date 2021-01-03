@@ -16,7 +16,7 @@ export class DisciplineService {
   constructor(private http: HttpClient) {
   }
 
-  getDisciplines$(): Observable<Discipline[]> {
+  private getDisciplines$(): Observable<Discipline[]> {
     return this.http.get(this.SERVER_URL)
       .pipe(
         map((responseData: Discipline[]) => {
@@ -37,7 +37,7 @@ export class DisciplineService {
     return disciplines;
   }
 
-  getStudyCoursesByDisciplineID$(disciplineId: number): Observable<StudyCourse[]> {
+  private getStudyCoursesByDisciplineID$(disciplineId: number): Observable<StudyCourse[]> {
     return this.http
       .get(this.SERVER_URL + '/' + disciplineId + '/studyCourses')
       .pipe(
