@@ -52,7 +52,7 @@ export class FileUploadFormComponent implements OnInit {
     );
   }
 
-  createTags() {
+  createTags(): void {
     this.uploadForm.get('tags').value.tags.forEach(
       n => {
         const name: string = n.tagName;

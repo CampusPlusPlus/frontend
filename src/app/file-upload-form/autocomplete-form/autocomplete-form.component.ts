@@ -14,14 +14,18 @@ import {
   NG_VALUE_ACCESSOR,
   FormControl,
 } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
-import { map, startWith, tap } from 'rxjs/operators';
-import { DisciplineService } from '../../shared/services/discipline.service';
-import { StudyCourseService } from '../../shared/services/study-course.service';
-import { CurriculumService } from '../../shared/services/curriculum.service';
-import { LectureService } from '../../shared/services/lecture.service';
-import { TagService } from '../../shared/services/tag.service';
-import { Discipline } from "../../shared/models/Discipline";
+import {Observable, Subscription} from 'rxjs';
+import {map, startWith, tap} from 'rxjs/operators';
+import {DisciplineService} from '../../shared/services/discipline.service';
+import {StudyCourseService} from '../../shared/services/study-course.service';
+import {CurriculumService} from '../../shared/services/curriculum.service';
+import {LectureService} from '../../shared/services/lecture.service';
+import {TagService} from '../../shared/services/tag.service';
+import {Discipline} from '../../shared/models/Discipline';
+import {StudyCourse} from '../../shared/models/StudyCourse';
+import {Curricula} from '../../shared/models/Curriculum';
+import {Lecture} from '../../shared/models/Lecture';
+import {Tag} from '../../shared/models/Tag';
 
 export interface AutocompleteFormValues {
   discipline: string;
@@ -50,11 +54,11 @@ export interface AutocompleteFormValues {
 })
 export class AutocompleteFormComponent
   implements ControlValueAccessor, OnDestroy, OnInit {
-  @ViewChild('disciplineValue', { static: true })
+  @ViewChild('disciplineValue', {static: true})
   disciplineNameDOMElement: ElementRef;
-  @ViewChild('studyCourseValue', { static: true })
+  @ViewChild('studyCourseValue', {static: true})
   studyCourseDOMElement: ElementRef;
-  @ViewChild('curriculaValue', { static: true })
+  @ViewChild('curriculaValue', {static: true})
   lectureDOMElement: ElementRef;
   form: FormGroup;
   subscriptions: Subscription[] = [];
@@ -65,16 +69,16 @@ export class AutocompleteFormComponent
   filteredTagTypes: Observable<string[]>;
   filteredTagNames: Observable<string[]>;
   disciplines: Discipline[] = [];
-  disciplineNames = [];
-  studyCourses = [];
-  studyCourseNames = [];
-  curricula = [];
-  curriculaNames = [];
-  lectures = [];
-  lectureNames = [];
-  tags = [];
-  tagTypes = [];
-  tagNames = [];
+  disciplineNames: string[] = [];
+  studyCourses: StudyCourse[] = [];
+  studyCourseNames: string[] = [];
+  curricula: Curricula[] = [];
+  curriculaNames: string[] = [];
+  lectures: Lecture[] = [];
+  lectureNames: string[] = [];
+  tags: Tag[] = [];
+  tagTypes: string[] = [];
+  tagNames: string[] = [];
 
   get value(): AutocompleteFormValues {
     return this.form.value;
@@ -147,23 +151,21 @@ export class AutocompleteFormComponent
     );
   }
 
-  private initStudyCourses(id: number) {
-    this.studyCourses = this.studyCourseService.getStudyCourseByDisciplineID(
-      id
-    );
-    this.studyCourses.forEach((s) => this.studyCourseNames.push(s.name));
+  private initStudyCourses(id: number): void {
+    this.studyCourses = this.disciplineService.getStudyCoursesByDisciplineID(id);
   }
 
-  autocompleteStudyCourses() {
+  autocompleteStudyCourses(): void {
     this.filteredStudyCourses = this.form.get('studyCourses').valueChanges.pipe(
       startWith(''),
       map((value) => {
-        const id = this.studyCourseService.getStudyCourseID(value);
-        this.studyCourseNames.forEach(d => {
-          if (value === d) {
+        if (!!value) {
+          const id = this.studyCourses.find(x => x.name.toLocaleLowerCase() === value.toLocaleLowerCase())?.id;
+          console.log(id);
+          if (!!id) {
             this.initCurricular(id);
           }
-        });
+        }
         return this._studyCoursesFilter(value);
       })
     );
@@ -182,19 +184,19 @@ export class AutocompleteFormComponent
   }
 
   private initCurricular(id: number): void {
-    this.curricula = this.curriculumService.getCurriculaByStudyCourse(id);
+    this.curricula = this.studyCourseService.getCurriculaByStudyCourse(id);
   }
 
-  autocompleteCurricula() {
+  autocompleteCurricula(): void {
     this.filteredCurricular = this.form.get('curriculum').valueChanges.pipe(
       startWith(''),
       map((value) => {
-        const id = this.curriculumService.getCurriculaIDByName(value);
-        this.curriculaNames.forEach(d => {
-          if (value === d) {
+        if (!!value) {
+          const id = this.curricula.find(x => x.name.toLocaleLowerCase() === value.toLocaleLowerCase())?.id;
+          if (!!id) {
             this.initLectures(id);
           }
-        });
+        }
         return this._curriculaFilter(value);
       })
     );
@@ -213,10 +215,10 @@ export class AutocompleteFormComponent
   }
 
   private initLectures(id: number): void {
-    this.lectures = this.lectureService.getLecturesByCurriculaID(id);
+    this.lectures = this.curriculumService.getLecturesByCurriculaID(id);
   }
 
-  autocompleteLectures() {
+  autocompleteLectures(): void {
     this.filteredLectures = this.form.get('lectures').valueChanges.pipe(
       startWith(''),
       map((value) => this._lectureFilter(value))
@@ -240,14 +242,16 @@ export class AutocompleteFormComponent
   }
 
 
-  autocompleteTagTypes() {
+  autocompleteTagTypes(): void {
     this.filteredTagTypes = this.form.get('tagTypes').valueChanges.pipe(
       startWith(''),
       map((value) => {
-        console.log('a: ' + value);
-        this.tagTypes.forEach(d => {
-          console.log('b: ' + value);
-        });
+        if (!!value) {
+          const name = this.tagTypes.find(x => x.toLocaleLowerCase() === value.toLocaleLowerCase());
+          if (!!name) {
+            this.initTagNames(name);
+          }
+        }
         return this._tagTypeFilter(value);
       })
     );
@@ -257,34 +261,22 @@ export class AutocompleteFormComponent
     const filterValue = value.toLowerCase();
     let uniqueTagTypes;
     this.tags.forEach(l => {
-      if (l.tagType !== this.tagTypes) {
-        this.tagTypes.push(l.tagType);
-        uniqueTagTypes = [...new Set(this.tagTypes)];
-        this.tagTypes = [...uniqueTagTypes];
-        console.log(this.tagTypes);
-      }
+      this.tagTypes.indexOf(l.tagType) === -1 ? this.tagTypes.push(l.tagType) : console.log();
     });
-    return uniqueTagTypes.filter((tagType) =>
+    return this.tagTypes.filter((tagType) =>
       tagType.toLowerCase().includes(filterValue)
     );
   }
 
-  private getTagNamesFromType(tagType: string) {
-    let uniqueTagNames;
+  private initTagNames(name): void {
     this.tags.forEach(t => {
-      if (t.tagType === tagType) {
-        this.tagNames.push(t.tagNames);
+      if (t.tagType === name) {
+        this.tagNames.push(t.tagValue);
       }
-      console.log(this.tagNames);
-      uniqueTagNames = [...new Set(this.tagNames)];
-      this.tagNames = [...uniqueTagNames];
     });
-    console.log(this.tagNames);
-    return this.tagNames;
   }
 
-
-  autocompleteTagNames() {
+  autocompleteTagNames(): void {
     this.filteredTagNames = this.form.get('tagNames').valueChanges.pipe(
       startWith(''),
       map((value) => {
@@ -329,6 +321,6 @@ export class AutocompleteFormComponent
   }
 
   validate(_: FormControl): any {
-    return this.form.valid ? null : { autocomplete: { valid: false } };
+    return this.form.valid ? null : {autocomplete: {valid: false}};
   }
 }
