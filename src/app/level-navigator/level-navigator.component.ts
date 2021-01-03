@@ -8,16 +8,7 @@ import { LectureService } from '../shared/services/lecture.service';
 
 @Component({
   selector: 'app-level-navigator',
-  template: `
-    <mat-list>
-      <button (click)="backButton()">back</button>
-      <div mat-subheader>{{title}}</div>
-      <mat-list-item *ngFor="let d of data" (click)="loadData(d.id)">
-        <mat-icon mat-list-icon>folder</mat-icon>
-        <div mat-line>{{d.name}}</div>
-      </mat-list-item>
-    </mat-list>
-  `,
+  templateUrl: 'level-navigator.component.html',
   styleUrls: ['./level-navigator.component.scss']
 })
 export class LevelNavigatorComponent implements OnInit {
