@@ -1,26 +1,28 @@
-import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
-import { HttpClient } from '@angular/common/http';
-import {StudyCourse} from "../models/StudyCourse";
+import {Injectable} from '@angular/core';
+import {Observable, throwError} from 'rxjs';
+import {catchError, map, tap} from 'rxjs/operators';
+import {HttpClient} from '@angular/common/http';
+import {StudyCourse} from '../models/StudyCourse';
+import {Discipline} from '../models/Discipline';
+import {Curricula} from '../models/Curriculum';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StudyCourseService {
-  SERVER_URL = 'http://localhost:9000';
-  studyCourses = [];
+  SERVER_URL = 'http://localhost:9000/studyCourses';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
-  getAllStudyCourses(): Observable<any> {
-    return this.http.get(this.SERVER_URL + '/StudyCourses').pipe(
+  getAllStudyCourses$(): Observable<StudyCourse[]> {
+    return this.http.get(this.SERVER_URL).pipe(
       map((responseData) => {
-        const disciplineArray = [];
+        const studyCourseArray = [];
         for (const key in responseData) {
-          disciplineArray.push(responseData[key]);
+          studyCourseArray.push(responseData[key]);
         }
-        return disciplineArray;
+        return studyCourseArray;
       }),
       catchError((errorResponse) => {
         return throwError(errorResponse);
@@ -28,22 +30,19 @@ export class StudyCourseService {
     );
   }
 
-  getStudyCourseID(name: string): number {
-    let id: number;
-    this.studyCourses.forEach((d) => {
-      if (d.name === name) {
-        id = d.id;
-      } else {
-        return null;
-      }
-    });
-    return id;
+  getAllStudyCourses(): StudyCourse[] {
+    const studyCourses: StudyCourse[] = [];
+    this.getAllStudyCourses$()
+      .subscribe(response => {
+        response.forEach(s => studyCourses.push(s));
+      });
+    return studyCourses;
   }
 
-  getStudyCourseByDisciplineID(disciplineId: number): StudyCourse[] {
-    this.http
+  getCurriculaByStudyCourse$(studyCourseID: number): Observable<Curricula[]> {
+    return this.http
       .get(
-        this.SERVER_URL + '/disciplines' + '/' + disciplineId + '/studyCourses'
+        this.SERVER_URL + '/' + studyCourseID + '/curricula'
       )
       .pipe(
         map((responseData) => {
@@ -56,15 +55,29 @@ export class StudyCourseService {
         catchError((errorResponse) => {
           return throwError(errorResponse);
         })
-      )
-      .subscribe((response) => {
-        response.slice(0, 1).forEach((s) => this.studyCourses.push(...s));
-      });
-    return this.studyCourses;
+      );
   }
 
-  // getStudyCourseNamesByDisciplineID(disciplineId: number){
-  //   this.getStudyCourseByDisciplineID(disciplineId);
+  getCurriculaByStudyCourse(studyCourseID: number): Curricula[] {
+    const curricula: Curricula[] = [];
+    this.getCurriculaByStudyCourse$(studyCourseID)
+      .subscribe((response) => {
+        // @ts-ignore
+        response.splice(0, 1).forEach((c) => curricula.push(...c));
+      });
+    return curricula;
+  }
+
+  // getStudyCourseID(name: string): number {
+  //   let id: number;
+  //   this.studyCourses.forEach((d) => {
+  //     if (d.name === name) {
+  //       id = d.id;
+  //     } else {
+  //       return null;
+  //     }
+  //   });
+  //   return id;
   // }
 
 }

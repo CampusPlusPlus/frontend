@@ -1,50 +1,45 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {catchError, map} from 'rxjs/operators';
-import {throwError} from 'rxjs';
+import {Observable, throwError} from 'rxjs';
+import {Discipline} from '../models/Discipline';
+import {Lecture} from '../models/Lecture';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LectureService {
-  SERVER_URL = 'http://localhost:9000';
+  SERVER_URL = 'http://localhost:9000/lectures';
   lectures = [];
 
   constructor(private http: HttpClient) {
   }
 
-  getLecturesByCurriculaID(curriculaID: number): any[] {
-    this.http
-      .get(
-        this.SERVER_URL + '/curricula' + '/' + curriculaID + '/lectures'
-      )
+  getLectures$(): Observable<Lecture[]> {
+    return this.http.get(this.SERVER_URL)
       .pipe(
         map((responseData) => {
-          const array = [];
+          const lectureArray = [];
           for (const key in responseData) {
-            array.push(responseData[key]);
+            lectureArray.push(responseData[key]);
           }
-          return array;
+          return lectureArray;
         }),
         catchError((errorResponse) => {
           return throwError(errorResponse);
         })
-      )
-      .subscribe((response) => {
-        response.slice(0, 1).forEach((s) => this.lectures.push(...s));
-      });
-    return this.lectures;
+      );
   }
 
-  getLectureId(name: string): number {
-    let id: number;
-    this.lectures.forEach((d) => {
-      if (d.name.toLowerCase() === name.toLowerCase()) {
-        id = d.id;
-      } else {
-        return new Error('no id could be found for the discipline ' + name);
-      }
-    });
-    return id;
+  getLectures(): Lecture[] {
+    const lectures: Lecture[] = [];
+    this.getLectures$()
+      .subscribe((response) => {
+        // @ts-ignore
+        response.slice(0, 1).forEach((l) => lectures.push(...l));
+      });
+    return lectures;
   }
+
+
 }
