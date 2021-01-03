@@ -5,7 +5,7 @@ import { DisciplineService } from '../shared/services/discipline.service';
 import { StudyCourseService } from '../shared/services/study-course.service';
 import { CurriculumService } from '../shared/services/curriculum.service';
 import { LectureService } from '../shared/services/lecture.service';
-import { FileService } from "../shared/services/file.service";
+import { FileService } from '../shared/services/file.service';
 
 @Component({
   selector: 'app-level-navigator',

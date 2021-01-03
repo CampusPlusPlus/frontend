@@ -4,6 +4,8 @@ import {catchError, map} from 'rxjs/operators';
 import {Observable, throwError} from 'rxjs';
 import {Discipline} from '../models/Discipline';
 import {StudyCourse} from '../models/StudyCourse';
+import {PageableResponse} from '../models/PageableResponse';
+import {Lecture} from '../models/Lecture';
 
 @Injectable({
   providedIn: 'root',
@@ -17,12 +19,8 @@ export class DisciplineService {
   getDisciplines$(): Observable<Discipline[]> {
     return this.http.get(this.SERVER_URL)
       .pipe(
-        map((responseData) => {
-          const disciplineArray = [];
-          for (const key in responseData) {
-            disciplineArray.push(responseData[key]);
-          }
-          return disciplineArray;
+        map((responseData: Discipline[]) => {
+          return responseData;
         }),
         catchError((errorResponse) => {
           return throwError(errorResponse);
@@ -41,16 +39,10 @@ export class DisciplineService {
 
   getStudyCoursesByDisciplineID$(disciplineId: number): Observable<StudyCourse[]> {
     return this.http
-      .get(
-        this.SERVER_URL + '/' + disciplineId + '/studyCourses'
-      )
+      .get(this.SERVER_URL + '/' + disciplineId + '/studyCourses')
       .pipe(
-        map((responseData) => {
-          const array = [];
-          for (const key in responseData) {
-            array.push(responseData[key]);
-          }
-          return array;
+        map((responseData: PageableResponse<StudyCourse>) => {
+          return responseData.content;
         }),
         catchError((errorResponse) => {
           return throwError(errorResponse);
@@ -62,8 +54,7 @@ export class DisciplineService {
     const studyCourses: StudyCourse[] = [];
     this.getStudyCoursesByDisciplineID$(disciplineId)
       .subscribe((response) => {
-        // @ts-ignore
-        response.slice(0, 1).forEach((s) => studyCourses.push(...s));
+        response.forEach((s) => studyCourses.push(s));
       });
     return studyCourses;
   }
