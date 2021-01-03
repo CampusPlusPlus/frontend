@@ -13,10 +13,11 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'upload', component: FileUploadFormComponent },
   { path: 'discipline', component: LevelNavigatorComponent },
-  { path: 'discipline/:studyCourseID', component: LevelNavigatorComponent },
-  { path: 'discipline/:studyCourseID/:curriculumID', component: LevelNavigatorComponent },
-  { path: 'discipline/:studyCourseID/:curriculumID/:lectureID', component: LevelNavigatorComponent },
-  { path: 'discipline/:studyCourseID/:curriculumID/:lectureID/:fileID', component: FileDetailComponent },
+  { path: 'discipline/:disciplineID', component: LevelNavigatorComponent },
+  { path: 'discipline/:disciplineID/:studyCourseID', component: LevelNavigatorComponent },
+  { path: 'discipline/:disciplineID/:studyCourseID/:curriculaID', component: LevelNavigatorComponent },
+  { path: 'discipline/:disciplineID/:studyCourseID/:curriculaID/:lectureID', component: LevelNavigatorComponent },
+  { path: 'discipline/:disciplineID/:studyCourseID/:curriculaID/:lectureID/:fileID', component: FileDetailComponent },
   // {
   //   matcher: (segments: UrlSegment[], group: UrlSegmentGroup, route: Route) => {
   //     // console.log('segments', segments);

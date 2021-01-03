@@ -1,11 +1,11 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {catchError, map} from 'rxjs/operators';
-import {Observable, throwError} from 'rxjs';
-import {Discipline} from '../models/Discipline';
-import {Lecture} from '../models/Lecture';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { catchError, map } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { Discipline } from '../models/Discipline';
+import { Lecture } from '../models/Lecture';
 import { File } from '../models/File';
-import {PageableResponse} from '../models/PageableResponse';
+import { PageableResponse } from '../models/PageableResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -49,5 +49,12 @@ export class LectureService {
       );
   }
 
+  getFilesByLectureID(id: number): File[] {
+    let files: File[];
+    this.getFilesByLectureID$(id).subscribe((response) => {
+      files = [...response];
+    });
+    return files;
+  }
 
 }

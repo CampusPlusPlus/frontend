@@ -12,6 +12,7 @@ import { UploadFormComponent } from './file-upload-form/upload-form/upload-form.
 import { LevelNavigatorComponent } from './level-navigator/level-navigator.component';
 import { FileDetailComponent } from './file-detail/file-detail.component';
 import { HelloWorldComponent } from './hello-world/hello-world.component';
+import { LevelListComponent } from './level-navigator/level-list/level-list.component';
 
 
 
@@ -24,7 +25,8 @@ import { HelloWorldComponent } from './hello-world/hello-world.component';
     FileDetailComponent,
     HelloWorldComponent,
     TagsFormComponent,
-    UploadFormComponent
+    UploadFormComponent,
+    LevelListComponent,
   ],
   imports: [
     BrowserModule,

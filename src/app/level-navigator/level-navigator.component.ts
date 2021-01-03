@@ -6,6 +6,8 @@ import { StudyCourseService } from '../shared/services/study-course.service';
 import { CurriculumService } from '../shared/services/curriculum.service';
 import { LectureService } from '../shared/services/lecture.service';
 import { FileService } from '../shared/services/file.service';
+import { Lecture } from "../shared/models/Lecture";
+import { tap } from "rxjs/operators";
 
 @Component({
   selector: 'app-level-navigator',
@@ -62,7 +64,7 @@ export class LevelNavigatorComponent implements OnInit {
         this.id = Number(this.route.snapshot.url[3].path);
         this.title = 'Lecture';
         this.level = 4;
-        this.data = this.curriculumService.getLecturesByCurriculaID(this.id);
+        this.data = this.curriculumService.getLecturesByCurriculaIDGroupedByRelativeSemester(this.id);
         break;
       case 5:
         this.id = Number(this.route.snapshot.url[4].path);
@@ -84,7 +86,6 @@ export class LevelNavigatorComponent implements OnInit {
   }
 
   loadData(id): void {
-    this.router.navigateByUrl(this.location.path() + '/' + id);
-    this.navigate();
+    this.router.navigateByUrl(this.location.path() + '/' + id).then(r => this.navigate());
   }
 }
