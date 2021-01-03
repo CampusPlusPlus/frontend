@@ -1,4 +1,4 @@
-export type File = {
+export type SimpleFile = {
       id: number,
       originalName: string,
       size: number,

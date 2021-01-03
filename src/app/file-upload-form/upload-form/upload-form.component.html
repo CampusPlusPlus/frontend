@@ -1,6 +1,6 @@
 <div [formGroup]="form">
   <mat-form-field style="width: 100%" appearance="fill">
-    <mat-label>Selected File</mat-label>
+    <mat-label>Selected SimpleFile</mat-label>
     <input
       type="text"
       matInput
@@ -9,7 +9,7 @@
       formControlName="file"
     />
   </mat-form-field>
-  <button type="button" mat-raised-button (click)="fileInput.click()">Choose File</button>
+  <button type="button" mat-raised-button (click)="fileInput.click()">Choose SimpleFile</button>
   <input
     hidden (change)="onFileSelect($event)"
     #fileInput

@@ -16,7 +16,7 @@ export class StudyCourseService {
   constructor(private http: HttpClient) {
   }
 
-  getAllStudyCourses$(): Observable<StudyCourse[]> {
+  private getAllStudyCourses$(): Observable<StudyCourse[]> {
     return this.http.get(this.SERVER_URL).pipe(
       map((responseData) => {
         const studyCourseArray = [];
@@ -40,7 +40,7 @@ export class StudyCourseService {
     return studyCourses;
   }
 
-  getCurriculaByStudyCourse$(studyCourseID: number): Observable<Curricula[]> {
+  private getCurriculaByStudyCourse$(studyCourseID: number): Observable<Curricula[]> {
     return this.http
       .get(
         this.SERVER_URL + '/' + studyCourseID + '/curricula'
