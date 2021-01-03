@@ -7,7 +7,8 @@ import { CurriculumService } from '../shared/services/curriculum.service';
 import { LectureService } from '../shared/services/lecture.service';
 import { FileService } from '../shared/services/file.service';
 import { Lecture } from "../shared/models/Lecture";
-import { tap } from "rxjs/operators";
+import { MatDialog } from "@angular/material/dialog";
+import { DialogAddGenericComponent } from "./dialog-add-generic/dialog-add-generic.component";
 
 @Component({
   selector: 'app-level-navigator',
@@ -21,6 +22,9 @@ export class LevelNavigatorComponent implements OnInit {
   level = -1;
   title = '';
 
+  newElementName: string;
+  // newElementSemester: number;
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -29,7 +33,8 @@ export class LevelNavigatorComponent implements OnInit {
     private studyCourseService: StudyCourseService,
     private curriculumService: CurriculumService,
     private lectureService: LectureService,
-    private fileService: FileService
+    private fileService: FileService,
+    public dialog: MatDialog
   ) {
   }
 
@@ -84,11 +89,20 @@ export class LevelNavigatorComponent implements OnInit {
     this.data.splice(0, length);
   }
 
-  backButton(): void {
-    this.location.back();
-  }
-
   loadData(id): void {
     this.router.navigateByUrl(this.location.path() + '/' + id).then(r => this.navigate());
+  }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(DialogAddGenericComponent, {
+      width: '250px',
+      data: {name: this.newElementName}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.newElementName = result;
+      // TODO: make request and send it to backend
+    });
   }
 }

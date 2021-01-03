@@ -1,5 +1,9 @@
+<section>
+  <div class="button-row">
+    <button mat-flat-button color="primary" (click)="openDialog()">+</button>
+  </div>
+</section>
 <mat-list>
-  <button (click)="backButton()">back</button>
   <div mat-subheader>{{title}}</div>
   <div *ngIf="level === 4; else simple">
     <div *ngFor="let d of data; let i = index">
