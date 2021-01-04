@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
-import { Route, RouterModule, Routes, UrlSegment, UrlSegmentGroup } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { LevelNavigatorComponent } from './level-navigator/level-navigator.component';
 import { FileDetailComponent } from './file-detail/file-detail.component';
-import { HelloWorldComponent } from './hello-world/hello-world.component';
 import { FileUploadFormComponent } from './file-upload-form/file-upload-form.component';
 
 const routes: Routes = [

@@ -1,11 +1,11 @@
-import {Injectable} from '@angular/core';
-import {Observable, throwError} from 'rxjs';
-import {catchError, map, tap} from 'rxjs/operators';
-import {HttpClient} from '@angular/common/http';
-import {StudyCourse} from '../models/StudyCourse';
-import {Discipline} from '../models/Discipline';
-import {Curricula} from '../models/Curriculum';
-import {PageableResponse} from '../models/PageableResponse';
+import { Injectable } from '@angular/core';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { StudyCourse } from '../models/StudyCourse';
+import { Discipline } from '../models/Discipline';
+import { Curricula } from '../models/Curriculum';
+import { PageableResponse } from '../models/PageableResponse';
 
 @Injectable({
   providedIn: 'root',
@@ -77,4 +77,7 @@ export class StudyCourseService {
   //   return id;
   // }
 
+  createStudyCourse(data: object): Observable<any> {
+    return this.http.post(this.SERVER_URL, data);
+  }
 }

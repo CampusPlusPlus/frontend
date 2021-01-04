@@ -14,6 +14,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
+import {MatDialogModule} from '@angular/material/dialog';
 
 import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';
 // import { InMemoryDataService } from './services/in-memory-data.service';
@@ -21,6 +22,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {HttpClientModule} from '@angular/common/http';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatSelectModule } from '@angular/material/select';
 
 const modules = [
   CommonModule,
@@ -41,6 +43,8 @@ const modules = [
   ReactiveFormsModule,
   MatAutocompleteModule,
   HttpClientModule,
+  MatDialogModule,
+  MatSelectModule
 ];
 
 

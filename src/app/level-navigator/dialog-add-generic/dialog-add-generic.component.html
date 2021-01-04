@@ -3,6 +3,18 @@
     <mat-label>New Field Name</mat-label>
     <input matInput [(ngModel)]="data.name">
   </mat-form-field>
+  <mat-form-field *ngIf="data.relativeSemester > 0">
+    <!--<mat-form-field *ngIf="data.relativeSemester > 0">-->
+    <mat-label>Relative Semester</mat-label>
+    <mat-select>
+      <mat-option value="1">Semester 1</mat-option>
+      <mat-option value="2">Semester 2</mat-option>
+      <mat-option value="3">Semester 3</mat-option>
+      <mat-option value="4">Semester 4</mat-option>
+      <mat-option value="5">Semester 5</mat-option>
+      <mat-option value="6">Semester 6</mat-option>
+    </mat-select>
+  </mat-form-field>
 </div>
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">No Thanks</button>

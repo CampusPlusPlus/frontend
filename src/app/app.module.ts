@@ -16,9 +16,10 @@ import { LevelListComponent } from './level-navigator/level-list/level-list.comp
 import { FileElementComponent } from './file-detail/file-element/file-element.component';
 import { CommentComponent } from './comment/comment.component';
 import { DialogAddGenericComponent } from './level-navigator/dialog-add-generic/dialog-add-generic.component';
-import { MatDialogModule } from "@angular/material/dialog";
-import { FormsModule } from "@angular/forms";
-
+import { MatDialogModule } from '@angular/material/dialog';
+import { FormsModule } from '@angular/forms';
+import { CreateLevelFormComponent } from './level-navigator/create-level-form/create-level-form.component';
+import { CreateLevelLectureFormComponent } from './level-navigator/create-level-lecture-form/create-level-lecture-form.component';
 
 
 @NgModule({
@@ -35,6 +36,8 @@ import { FormsModule } from "@angular/forms";
     FileElementComponent,
     CommentComponent,
     DialogAddGenericComponent,
+    CreateLevelFormComponent,
+    CreateLevelLectureFormComponent,
   ],
   imports: [
     BrowserModule,
@@ -45,6 +48,7 @@ import { FormsModule } from "@angular/forms";
     FormsModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {
+}

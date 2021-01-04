@@ -75,4 +75,7 @@ export class CurriculumService {
   //   return id;
   // }
 
+  createCurriculum(data: object): Observable<any> {
+    return this.http.post(this.SERVER_URL, data);
+  }
 }

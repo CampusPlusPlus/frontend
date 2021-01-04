@@ -6,9 +6,10 @@ import { StudyCourseService } from '../shared/services/study-course.service';
 import { CurriculumService } from '../shared/services/curriculum.service';
 import { LectureService } from '../shared/services/lecture.service';
 import { FileService } from '../shared/services/file.service';
-import { Lecture } from "../shared/models/Lecture";
-import { MatDialog } from "@angular/material/dialog";
-import { DialogAddGenericComponent } from "./dialog-add-generic/dialog-add-generic.component";
+import { Lecture } from '../shared/models/Lecture';
+import { MatDialog } from '@angular/material/dialog';
+import { CreateLevelFormComponent } from './create-level-form/create-level-form.component';
+import { CreateLevelLectureFormComponent } from './create-level-lecture-form/create-level-lecture-form.component';
 
 @Component({
   selector: 'app-level-navigator',
@@ -21,9 +22,6 @@ export class LevelNavigatorComponent implements OnInit {
   id = -1;
   level = -1;
   title = '';
-
-  newElementName: string;
-  // newElementSemester: number;
 
   constructor(
     private route: ActivatedRoute,
@@ -94,15 +92,37 @@ export class LevelNavigatorComponent implements OnInit {
   }
 
   openDialog(): void {
-    const dialogRef = this.dialog.open(DialogAddGenericComponent, {
-      width: '250px',
-      data: {name: this.newElementName}
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      this.newElementName = result;
-      // TODO: make request and send it to backend
+    const form = this.level === 4 ? CreateLevelLectureFormComponent : CreateLevelFormComponent;
+    this.dialog.open(form).afterClosed().subscribe(x => {
+      if ((x && x.length > 0) || (x && x.name && x.relativeSemester)) {
+        switch (this.level) {
+          case 1:
+            this.disciplineService.createDiscipline({ name: x }).subscribe({
+              next: _ => this.data = this.disciplineService.getDisciplines(),
+            });
+            break;
+          case 2:
+            this.studyCourseService.createStudyCourse({ name: x, disciplineId: this.id }).subscribe({
+              next: _ => this.data = this.disciplineService.getStudyCoursesByDisciplineID(this.id),
+            });
+            break;
+          case 3:
+            this.curriculumService.createCurriculum({ name: x, studyCourseId: this.id }).subscribe({
+              next: _ => this.data = this.studyCourseService.getCurriculaByStudyCourse(this.id),
+            });
+            break;
+          case 4:
+            this.lectureService.createLecture({ name: x.name, relativeSemester: x.relativeSemester, curriculumId: this.id }).subscribe({
+              next: _ => this.data = this.curriculumService.getLecturesByCurriculaIDGroupedByRelativeSemester(this.id),
+            });
+            break;
+          default:
+            console.log("ERR: unknown error");
+            break;
+        }
+      }
+    }, error => {
+      console.log('ERR:', error);
     });
   }
 }

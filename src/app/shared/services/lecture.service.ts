@@ -2,10 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
-import { Discipline } from '../models/Discipline';
 import { Lecture } from '../models/Lecture';
 import { SimpleFile } from '../models/SimpleFile';
 import { PageableResponse } from '../models/PageableResponse';
+
+interface LectureBody {
+  name: string;
+  relativeSemester: number;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -50,11 +54,14 @@ export class LectureService {
   }
 
   getFilesByLectureID(id: number): SimpleFile[] {
-    let files: SimpleFile[] = [];
+    const files: SimpleFile[] = [];
     this.getFilesByLectureID$(id).subscribe((response) => {
       response.forEach((l) => files.push(l));
     });
     return files;
   }
 
+  createLecture(data: object): Observable<any> {
+    return this.http.post(this.SERVER_URL, data);
+  }
 }
