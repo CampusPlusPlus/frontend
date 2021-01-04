@@ -23,7 +23,7 @@ export class FileDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.id = Number(this.route.snapshot.url[5].path);
+    this.id = this.route.snapshot.url.length === 5 ? Number(this.route.snapshot.url[5].path) : Number(this.route.snapshot.url[1].path);
     this.fileService.getFileByID$(this.id).subscribe(value => this.data = value);
   }
 

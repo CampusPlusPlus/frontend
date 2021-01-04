@@ -17,6 +17,7 @@ const routes: Routes = [
   { path: 'discipline/:disciplineID/:studyCourseID/:curriculaID', component: LevelNavigatorComponent },
   { path: 'discipline/:disciplineID/:studyCourseID/:curriculaID/:lectureID', component: LevelNavigatorComponent },
   { path: 'discipline/:disciplineID/:studyCourseID/:curriculaID/:lectureID/:fileID', component: FileDetailComponent },
+  { path: 'file/:fileID', component: FileDetailComponent },
   // {
   //   matcher: (segments: UrlSegment[], group: UrlSegmentGroup, route: Route) => {
   //     // console.log('segments', segments);
