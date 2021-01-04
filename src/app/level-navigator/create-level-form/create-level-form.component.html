@@ -1,9 +1,10 @@
 <form (ngSubmit)="onSubmit()">
-  <div class="form-group">
-    <label for="name">Name of new Element</label>
-    <input type="text" class="form-control" id="name"
-           required
-           [(ngModel)]="name" name="name">
-  </div>
-  <button type="submit" class="btn btn-success" (click)="onSubmit()">Submit</button>
+    <mat-form-field style="width:100%">
+      <mat-label>Element Name</mat-label>
+      <input matInput type="text" class="form-control" id="name"
+             required
+             [(ngModel)]="name" name="name">
+    </mat-form-field>
+  <button mat-raised-button color="primary" type="submit" (click)="onSubmit()">Submit</button>
+  <button mat-button type="submit" (click)="onClose()">Close</button>
 </form>

@@ -7,7 +7,7 @@ import { CurriculumService } from '../shared/services/curriculum.service';
 import { LectureService } from '../shared/services/lecture.service';
 import { FileService } from '../shared/services/file.service';
 import { Lecture } from '../shared/models/Lecture';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CreateLevelFormComponent } from './create-level-form/create-level-form.component';
 import { CreateLevelLectureFormComponent } from './create-level-lecture-form/create-level-lecture-form.component';
 
@@ -93,7 +93,9 @@ export class LevelNavigatorComponent implements OnInit {
 
   openDialog(): void {
     const form = this.level === 4 ? CreateLevelLectureFormComponent : CreateLevelFormComponent;
-    this.dialog.open(form).afterClosed().subscribe(x => {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '60%';
+    this.dialog.open(form, dialogConfig).afterClosed().subscribe(x => {
       if ((x && x.length > 0) || (x && x.name && x.relativeSemester)) {
         switch (this.level) {
           case 1:
@@ -112,12 +114,16 @@ export class LevelNavigatorComponent implements OnInit {
             });
             break;
           case 4:
-            this.lectureService.createLecture({ name: x.name, relativeSemester: x.relativeSemester, curriculumId: this.id }).subscribe({
+            this.lectureService.createLecture({
+              name: x.name,
+              relativeSemester: x.relativeSemester,
+              curriculumId: this.id
+            }).subscribe({
               next: _ => this.data = this.curriculumService.getLecturesByCurriculaIDGroupedByRelativeSemester(this.id),
             });
             break;
           default:
-            console.log("ERR: unknown error");
+            console.log('ERR: unknown error');
             break;
         }
       }
