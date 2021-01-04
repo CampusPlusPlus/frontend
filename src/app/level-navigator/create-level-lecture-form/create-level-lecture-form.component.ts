@@ -25,7 +25,7 @@ export class CreateLevelLectureFormComponent implements OnInit {
   }
 
   onClose(): void {
-    this.dialogRef.close({ name: this.name, relativeSemester: 1 });
+    this.dialogRef.close({ name: this.name, relativeSemester: this.relativeSemester });
   }
 
 }
