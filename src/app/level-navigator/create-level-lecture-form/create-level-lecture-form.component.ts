@@ -1,5 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+
+export interface DialogLectureFormData {
+  name: string;
+  relativeSemester: 1 | 2 | 3 | 4 | 5 | 6;
+}
 
 @Component({
   selector: 'app-create-level-lecture-form',
@@ -8,11 +13,9 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class CreateLevelLectureFormComponent implements OnInit {
 
-  name: string;
-  relativeSemester: number;
-
   constructor(
-    public dialogRef: MatDialogRef<CreateLevelLectureFormComponent>
+    public dialogRef: MatDialogRef<CreateLevelLectureFormComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogLectureFormData
   ) {
   }
 
@@ -20,12 +23,11 @@ export class CreateLevelLectureFormComponent implements OnInit {
   }
 
   onSubmit(): void {
-    console.log('submit');
     this.onClose();
   }
 
   onClose(): void {
-    this.dialogRef.close({ name: this.name, relativeSemester: this.relativeSemester });
+    this.dialogRef.close(this.data);
   }
 
 }

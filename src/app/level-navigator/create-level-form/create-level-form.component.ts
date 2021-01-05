@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+
+export interface DialogFormData {
+  name: string;
+}
 
 @Component({
   selector: 'app-create-level-form',
@@ -8,10 +12,9 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class CreateLevelFormComponent implements OnInit {
 
-  name: string;
-
   constructor(
-    public dialogRef: MatDialogRef<CreateLevelFormComponent>
+    public dialogRef: MatDialogRef<CreateLevelFormComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogFormData
   ) {
   }
 
@@ -24,7 +27,7 @@ export class CreateLevelFormComponent implements OnInit {
   }
 
   onClose(): void {
-    this.dialogRef.close(this.name);
+    this.dialogRef.close(this.data.name);
   }
 
 }

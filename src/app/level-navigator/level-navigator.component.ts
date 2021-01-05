@@ -8,8 +8,11 @@ import { LectureService } from '../shared/services/lecture.service';
 import { FileService } from '../shared/services/file.service';
 import { Lecture } from '../shared/models/Lecture';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { CreateLevelFormComponent } from './create-level-form/create-level-form.component';
-import { CreateLevelLectureFormComponent } from './create-level-lecture-form/create-level-lecture-form.component';
+import { CreateLevelFormComponent, DialogFormData } from './create-level-form/create-level-form.component';
+import {
+  CreateLevelLectureFormComponent,
+  DialogLectureFormData
+} from './create-level-lecture-form/create-level-lecture-form.component';
 import {
   DialogConfirmationComponent,
   DialogConfirmationData
@@ -110,7 +113,53 @@ export class LevelNavigatorComponent implements OnInit {
         this.actionToggle = '';
       });
     } else {
-      // edit
+      const form = this.level === 4 ? CreateLevelLectureFormComponent : CreateLevelFormComponent;
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.width = '60%';
+      dialogConfig.data = this.level === 4 ? {
+        name: obj.name,
+        id: obj.id,
+        relativeSemester: obj.relativeSemester
+      } as DialogLectureFormData : {
+        name: obj.name,
+        id: obj.id,
+      } as DialogFormData;
+      this.dialog.open(form, dialogConfig).afterClosed().subscribe(x => {
+        if ((x && x.length > 0) || (x && x.name && x.relativeSemester)) {
+          switch (this.level) {
+            case 1:
+              this.disciplineService.updateDisciplineByID(obj.id, { name: x }).subscribe({
+                next: _ => this.data = this.disciplineService.getDisciplines(),
+              });
+              break;
+            case 2:
+              this.studyCourseService.updateStudyCourseByID(obj.id, { name: x, disciplineId: this.id }).subscribe({
+                next: _ => this.data = this.disciplineService.getStudyCoursesByDisciplineID(this.id),
+              });
+              break;
+            case 3:
+              this.curriculumService.updateCurriculumByID(obj.id, { name: x, studyCourseId: this.id }).subscribe({
+                next: _ => this.data = this.studyCourseService.getCurriculaByStudyCourse(this.id),
+              });
+              break;
+            case 4:
+              this.lectureService.updateLectureByID(obj.id, {
+                name: x.name,
+                relativeSemester: x.relativeSemester,
+                curriculumId: this.id
+              }).subscribe({
+                next: _ => this.data = this.curriculumService.getLecturesByCurriculaIDGroupedByRelativeSemester(this.id),
+              });
+              break;
+            default:
+              console.log('ERR: unknown error');
+              break;
+          }
+        }
+        this.actionToggle = '';
+      }, error => {
+        console.log('ERR:', error);
+      });
     }
   }
 

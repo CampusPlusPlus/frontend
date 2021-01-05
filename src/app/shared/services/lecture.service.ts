@@ -68,4 +68,8 @@ export class LectureService {
   deleteLecture(id: number): Observable<any> {
     return this.http.delete(`${this.SERVER_URL}/${id}`);
   }
+
+  updateLectureByID(id: number, data: { name: any; relativeSemester: any; curriculumId: number }): Observable<any> {
+    return this.http.put(`${this.SERVER_URL}/${id}`, data);
+  }
 }

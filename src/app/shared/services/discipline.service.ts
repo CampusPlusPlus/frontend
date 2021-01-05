@@ -75,4 +75,8 @@ export class DisciplineService {
   deleteDiscipline(id: number): Observable<any> {
     return this.http.delete(`${this.SERVER_URL}/${id}`);
   }
+
+  updateDisciplineByID(id: number, data: { name: any }): Observable<any> {
+    return this.http.put(`${this.SERVER_URL}/${id}`, data);
+  }
 }
