@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TagsFormComponent } from './tags-form.component';
+import { CreateLevelFormComponent } from './create-level-form.component';
 
-describe('TagsComponent', () => {
-  let component: TagsFormComponent;
-  let fixture: ComponentFixture<TagsFormComponent>;
+describe('CreateLevelFormComponent', () => {
+  let component: CreateLevelFormComponent;
+  let fixture: ComponentFixture<CreateLevelFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TagsFormComponent ]
+      declarations: [ CreateLevelFormComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TagsFormComponent);
+    fixture = TestBed.createComponent(CreateLevelFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

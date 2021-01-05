@@ -22,22 +22,10 @@ import {PageableResponse} from '../shared/models/PageableResponse';
 })
 export class FileUploadFormComponent implements OnInit {
   @ViewChild('fileUpload', {static: false}) fileUpload: ElementRef<HTMLInputElement>;
-  @ViewChild('fruitInput', {static: false}) tagInput: ElementRef<HTMLInputElement>;
   uploadForm: FormGroup;
-  chip: FormGroup;
   lectures: Lecture[] = [];
   submit = false;
-  tagName: string;
-  tagType: string;
-  visible = true;
-  selectable = true;
-  removable = true;
-  separatorKeysCodes: number[] = [ENTER, COMMA];
-  tagCtrl = new FormControl();
-  filteredTags: Observable<Tag[]>;
   tags: string[] = [];
-  // backendTags: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry'];
-  backendTags: Tag[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -45,56 +33,15 @@ export class FileUploadFormComponent implements OnInit {
     private lectureService: LectureService,
     private curriculumService: CurriculumService,
     private tagService: TagService,
-    private http: HttpClient
   ) {
     this.uploadForm = this.formBuilder.group({
       uploads: [],
       fileUploadLocations: [],
-      tags: [],
     });
   }
 
-  add(event: MatChipInputEvent): void {
-    const input = event.input;
-    const value = event.value;
-
-    // Add our fruit
-    if ((value || '').trim()) {
-      this.tags.push(value.trim());
-    }
-
-    // Reset the input value
-    if (input) {
-      input.value = '';
-    }
-
-    this.tagService.createTag$(value).subscribe();
-    this.tagCtrl.setValue(null);
-  }
-
-  remove(tag: string): void {
-    const index = this.tags.indexOf(tag);
-
-    if (index >= 0) {
-      this.tags.splice(index, 1);
-    }
-  }
-
-  selected(event: MatAutocompleteSelectedEvent): void {
-    this.tags.push(event.option.viewValue);
-    this.tagInput.nativeElement.value = '';
-    this.tagCtrl.setValue(null);
-  }
-
-
   ngOnInit(): void {
     this.lectures = this.lectureService.getLectures();
-    this.initTags();
-    // this.filteredTags = this.tagCtrl.valueChanges
-    //   .pipe(
-    //     startWith(''),
-    //     map(value => this._filter(value))
-    //   );
   }
 
 
@@ -102,16 +49,12 @@ export class FileUploadFormComponent implements OnInit {
     try {
       this.upload();
     } catch (e) {
-      console.log(e);
       console.log('upload error');
       return;
     }
-    // this.addTags();
-    // this.submit = true;
   }
 
   private upload(): void {
-    this.initTags();
 
     const formData = new FormData();
     const lectureName: string = this.uploadForm.get('fileUploadLocations').value.lectures;
@@ -122,28 +65,18 @@ export class FileUploadFormComponent implements OnInit {
 
     forkJoin(
       {
-        file: this.http.post('http://localhost:9000/files',
-          formData, {
-            observe: 'response'
-          }
-        ),
-        tag: this.http.get('http://localhost:9000/tags',
-        ).pipe(
-          map((responseData: PageableResponse<Tag>) => {
-            return responseData.content;
-          }))
+        file: this.fileService.uploadFile$(formData),
+        tag: this.tagService.getAllTags$()
       }
     ).subscribe(response => {
       // const fileID: SimpleFile = response.file.body.id;
       const temp: SimpleFile = response.file.body as SimpleFile;
       const fileID: number = temp.id;
-      console.log('temp: ', fileID);
-      console.log('response.tag: ', response);
       const tempTags: Tag[] = response.tag;
-      tempTags.forEach(temptag => this.tags.forEach(htmlTags => {
-        if (htmlTags === temptag.tagValue) {
-          console.log('add tag to file');
-          this.fileService.addTagToFile(fileID, temptag.id);
+      tempTags.forEach(tempTag => this.tags.forEach(htmlTags => {
+        if (htmlTags === tempTag.tagValue) {
+          console.log(tempTag.tagValue);
+          this.fileService.addTagToFile(fileID, tempTag.id);
         }
       }));
     });
@@ -165,8 +98,5 @@ export class FileUploadFormComponent implements OnInit {
     this.uploadForm.reset();
   }
 
-  private initTags(): void {
-    this.backendTags = this.tagService.getAllTags();
-  }
 
 }

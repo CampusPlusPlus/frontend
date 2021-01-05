@@ -8,36 +8,8 @@
           formControlName="fileUploadLocations"
         ></app-autocomplete-form>
         <br />
-        <app-tags-form formControlName="tags"></app-tags-form>
+        <app-tags [tags]="tags"></app-tags>
       </div>
-      <mat-form-field>
-        <mat-label>Favorite Fruits</mat-label>
-        <mat-chip-list #chipList aria-label="Fruit selection">
-          <mat-chip
-            *ngFor="let tag of tags"
-            [selectable]="selectable"
-            [removable]="removable"
-            (removed)="remove(tag)">
-            {{tag}}
-            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-          </mat-chip>
-          <input
-            placeholder="New tag..."
-            #fruitInput
-            [formControl]="tagCtrl"
-            [matAutocomplete]="auto"
-            [matChipInputFor]="chipList"
-            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-            (matChipInputTokenEnd)="add($event)">
-        </mat-chip-list>
-        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-<!--
-          <mat-option *ngFor="let tag of backendTags | async" [value]="tag">
-            {{tag}}
-          </mat-option>
--->
-        </mat-autocomplete>
-      </mat-form-field>
       <div style="margin-top: 20px">
         <button mat-raised-button color="primary" type="submit">Submit</button>
         <button

@@ -1,11 +1,12 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {FormControl} from '@angular/forms';
+import {FormControl, FormGroup} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {MatAutocomplete, MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import {map, startWith} from 'rxjs/operators';
 import {MatChipInputEvent} from '@angular/material/chips';
 import {TagService} from '../../shared/services/tag.service';
+import {Tag} from '../../shared/models/Tag';
 
 @Component({
   selector: 'app-tags',
@@ -13,43 +14,47 @@ import {TagService} from '../../shared/services/tag.service';
   styleUrls: ['./tags.component.scss']
 })
 export class TagsComponent implements OnInit {
+  @ViewChild('tagInput', {static: false}) tagInput: ElementRef<HTMLInputElement>;
+  @Input() tags: string[];
+  chip: FormGroup;
+  tagName: string;
+  tagType: string;
   visible = true;
   selectable = true;
   removable = true;
   separatorKeysCodes: number[] = [ENTER, COMMA];
   tagCtrl = new FormControl();
-  filteredTags: Observable<string[]>;
-  tags = [];
-  allTags = [];
-
-  @ViewChild('tagInput') tagInput: ElementRef<HTMLInputElement>;
-  @ViewChild('auto') matAutocomplete: MatAutocomplete;
+  filteredTags: Observable<Tag[]>;
+  // backendTags: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry'];
+  backendTags: Tag[] = [];
 
   constructor(private tagService: TagService) {
-    this.filteredTags = this.tagCtrl.valueChanges.pipe(
-      startWith(null),
-      map((tag: string | null) => tag ? this._filter(tag) : this.allTags.slice())
-    );
+  }
+
+  ngOnInit(): void {
+    this.initTags();
   }
 
   add(event: MatChipInputEvent): void {
     const input = event.input;
     const value = event.value;
+
     // Add our fruit
     if ((value || '').trim()) {
       this.tags.push(value.trim());
     }
 
-// Reset the input value
+    // Reset the input value
     if (input) {
       input.value = '';
     }
 
+    this.tagService.createTag$(value).subscribe();
     this.tagCtrl.setValue(null);
   }
 
-  remove(fruit: string): void {
-    const index = this.tags.indexOf(fruit);
+  remove(tag: string): void {
+    const index = this.tags.indexOf(tag);
 
     if (index >= 0) {
       this.tags.splice(index, 1);
@@ -62,72 +67,8 @@ export class TagsComponent implements OnInit {
     this.tagCtrl.setValue(null);
   }
 
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-
-    return this.allTags.filter(fruit => fruit.toLowerCase().indexOf(filterValue) === 0);
-  }
-
-  /*
-    private initTags(): void {
-    }
-
-
-    autocompleteTagTypes(): void {
-      this.filteredTagTypes = this.form.get('tagTypes').valueChanges.pipe(
-        startWith(''),
-        map((value) => {
-          if (!!value) {
-            const name = this.tagTypes.find(x => x.toLocaleLowerCase() === value.toLocaleLowerCase());
-            if (!!name) {
-              this.initTagNames(name);
-            }
-          }
-          return this._tagTypeFilter(value);
-        })
-      );
-    }
-
-    private _tagTypeFilter(value: string): string[] {
-      const filterValue = value.toLowerCase();
-      this.tags.forEach(l => {
-        this.tagTypes.indexOf(l.tagType) === -1 ? this.tagTypes.push(l.tagType) : console.log();
-      });
-      return this.tagTypes.filter((tagType) =>
-        tagType.toLowerCase().includes(filterValue)
-      );
-    }
-
-    private initTagNames(name): void {
-      this.tagNames = [];
-      this.form.get('tagNames').reset();
-      this.tags.forEach(t => {
-        if (t.tagType === name) {
-          this.tagNames.push(t.tagValue);
-        }
-      });
-    }
-
-    autocompleteTagNames(): void {
-      this.filteredTagNames = this.form.get('tagNames').valueChanges.pipe(
-        startWith(''),
-        map((value) => {
-          return this._tagNameFilter(value);
-        })
-      );
-    }
-
-
-    private _tagNameFilter(value: string): string[] {
-      const filterValue = value.toLowerCase();
-      return this.tagNames.filter((tagName) =>
-        tagName.toLowerCase().includes(filterValue)
-      );
-    }
-  */
-
-  ngOnInit(): void {
-    this.allTags = this.tagService.getAllTags();
+  private initTags(): void {
+    this.backendTags = this.tagService.getAllTags();
   }
 
 }

@@ -10,6 +10,7 @@
       [matAutocomplete]="auto"
       (focus)="autocompleteDisciplines()"
       #disciplineValue
+      required
     />
     <mat-autocomplete #auto="matAutocomplete">
       <mat-option
@@ -30,6 +31,7 @@
       [matAutocomplete]="auto2"
       (focus)="autocompleteStudyCourses()"
       #studyCourseValue
+      required
     />
     <mat-autocomplete #auto2="matAutocomplete">
       <mat-option
@@ -50,6 +52,7 @@
       [matAutocomplete]="auto3"
       (focus)="autocompleteCurricula()"
       #curriculaValue
+      required
     />
     <mat-autocomplete #auto3="matAutocomplete">
       <mat-option
@@ -68,6 +71,7 @@
            [formGroup]="form"
            [matAutocomplete]="auto4"
            (focus)="autocompleteLectures()"
+           required
     />
     <mat-autocomplete #auto4="matAutocomplete">
       <mat-option
@@ -78,42 +82,4 @@
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>
-<!--
-  <mat-form-field style="width: 100%" appearance="fill">
-    <mat-label>Existing Tag Types</mat-label>
-    <input type="text"
-           matInput
-           formControlName="tagTypes"
-           [formGroup]="form"
-           [matAutocomplete]="auto5"
-           (focus)="autocompleteTagTypes()"
-    />
-    <mat-autocomplete #auto5="matAutocomplete">
-      <mat-option
-        *ngFor="let tagType of filteredTagTypes | async"
-        [value]="tagType"
-      >
-        {{ tagType }}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
-  <mat-form-field style="width: 100%" appearance="fill">
-    <mat-label>Existing Tag Names</mat-label>
-    <input type="text"
-           matInput
-           formControlName="tagNames"
-           [formGroup]="form"
-           [matAutocomplete]="auto6"
-           (focus)="autocompleteTagNames()"
-    />
-    <mat-autocomplete #auto6="matAutocomplete">
-      <mat-option
-        *ngFor="let tagName of filteredTagNames | async"
-        [value]="tagName"
-      >
-        {{ tagName }}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
--->
 </div>

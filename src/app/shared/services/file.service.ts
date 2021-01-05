@@ -52,7 +52,6 @@ export class FileService {
 
   addTagToFile(fileId: number, tagId: number): void {
     this.addTagToFile$(fileId, tagId).subscribe(
-      res => console.log(res),
       err => console.log(err)
     );
   }

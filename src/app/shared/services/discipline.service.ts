@@ -68,4 +68,7 @@ export class DisciplineService {
   //   return studyCourseNames;
   // }
 
+  createDiscipline(data: object): Observable<any> {
+    return this.http.post(this.SERVER_URL, data);
+  }
 }

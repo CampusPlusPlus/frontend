@@ -1,0 +1,23 @@
+<form (ngSubmit)="onSubmit()">
+  <mat-grid-list [cols]="1" rowHeight="70px">
+    <mat-grid-tile>
+      <mat-form-field style="width:100%">
+        <mat-label>Element Name</mat-label>
+        <input matInput type="text" class="form-control" id="name"
+               required
+               [(ngModel)]="name" name="name">
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <mat-form-field style="width:100%">
+        <mat-select id="relativeSemester" placeholder="Semester" required [(value)]="relativeSemester">
+          <ng-container *ngFor="let i of [1,2,3,4,5,6]">
+            <mat-option value="{{i}}">{{i}} Semester</mat-option>
+          </ng-container>
+        </mat-select>
+      </mat-form-field>
+    </mat-grid-tile>
+  </mat-grid-list>
+  <button mat-raised-button color="primary" type="submit" (click)="onSubmit()">Submit</button>
+  <button mat-button type="submit" (click)="onClose()">Close</button>
+</form>
