@@ -104,6 +104,7 @@ export class LevelNavigatorComponent implements OnInit {
         data: {
           name: obj.name,
           action: this.actionToggle,
+          type: this.title,
           confirmed: false
         }
       }).afterClosed().subscribe(x => {
