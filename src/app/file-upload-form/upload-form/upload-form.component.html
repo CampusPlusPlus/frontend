@@ -1,12 +1,13 @@
 <div [formGroup]="form">
   <mat-form-field style="width: 100%" appearance="fill">
-    <mat-label>Selected SimpleFile</mat-label>
+    <mat-label>Please select the file you want to upload</mat-label>
     <input
       type="text"
       matInput
       readonly
       [formGroup]="form"
       formControlName="file"
+      required
     />
   </mat-form-field>
   <button type="button" mat-raised-button (click)="fileInput.click()">Choose File</button>

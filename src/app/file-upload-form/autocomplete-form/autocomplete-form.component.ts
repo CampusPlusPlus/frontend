@@ -1,7 +1,7 @@
 import {
   Component,
   ElementRef,
-  forwardRef,
+  forwardRef, Input,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -67,14 +67,13 @@ export class AutocompleteFormComponent
   filteredCurricular: Observable<string[]>;
   filteredLectures: Observable<string[]>;
   disciplines: Discipline[] = [];
-  disciplineNames: string[] = [];
+  @Input() disciplineNames: string[] = [];
   studyCourses: StudyCourse[] = [];
-  studyCourseNames: string[] = [];
+  @Input() studyCourseNames: string[] = [];
   curricula: Curricula[] = [];
-  curriculaNames: string[] = [];
+  @Input() curriculaNames: string[] = [];
   lectures: Lecture[] = [];
-  lectureNames: string[] = [];
-  tags: Tag[] = [];
+  @Input() lectureNames: string[] = [];
 
   get value(): AutocompleteFormValues {
     return this.form.value;
@@ -109,7 +108,6 @@ export class AutocompleteFormComponent
 
   ngOnInit(): void {
     this.initDisciplines();
-    // this.initTags();
   }
 
   private initDisciplines(): void {

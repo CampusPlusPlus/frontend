@@ -1,19 +1,13 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {FileService} from '../shared/services/file.service';
 import {LectureService} from '../shared/services/lecture.service';
 import {TagService} from '../shared/services/tag.service';
 import {CurriculumService} from '../shared/services/curriculum.service';
 import {Lecture} from '../shared/models/Lecture';
-import {forkJoin, Observable} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {MatChipInputEvent} from '@angular/material/chips';
-import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import {forkJoin} from 'rxjs';
 import {Tag} from '../shared/models/Tag';
-import {map} from 'rxjs/operators';
 import {SimpleFile} from '../shared/models/SimpleFile';
-import {PageableResponse} from '../shared/models/PageableResponse';
 
 @Component({
   selector: 'app-file-upload-form',
@@ -26,6 +20,10 @@ export class FileUploadFormComponent implements OnInit {
   lectures: Lecture[] = [];
   submit = false;
   tags: string[] = [];
+  @Input() disciplineNames: string[] = [];
+  @Input() studyCourseNames: string[] = [];
+  @Input() curriculaNames: string[] = [];
+  @Input() lectureNames: string[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -35,8 +33,8 @@ export class FileUploadFormComponent implements OnInit {
     private tagService: TagService,
   ) {
     this.uploadForm = this.formBuilder.group({
-      uploads: [],
-      fileUploadLocations: [],
+      uploads: ['', Validators.required],
+      fileUploadLocations: ['', Validators.required],
     });
   }
 
@@ -95,6 +93,11 @@ export class FileUploadFormComponent implements OnInit {
 
   onReset(): void {
     console.log('reset');
+    this.disciplineNames = [];
+    this.studyCourseNames = [];
+    this.curriculaNames = [];
+    this.lectureNames = [];
+    this.tags = [];
     this.uploadForm.reset();
   }
 

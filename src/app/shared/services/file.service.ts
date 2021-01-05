@@ -41,19 +41,26 @@ export class FileService {
       formData, {
         observe: 'response'
       }
-    );
+    )
+      .pipe(
+        catchError((errorResponse) => {
+          return throwError(errorResponse);
+        })
+      );
   }
-
 
 
   addTagToFile$(fileId: number, tagId: number): Observable<any> {
-    return this.http.patch(this.SERVER_URL + '/' + fileId + '/tags/' + tagId, null);
+    return this.http.patch(this.SERVER_URL + '/' + fileId + '/tags/' + tagId, null)
+      .pipe(
+        catchError((errorResponse) => {
+          return throwError(errorResponse);
+        })
+      );
   }
 
   addTagToFile(fileId: number, tagId: number): void {
-    this.addTagToFile$(fileId, tagId).subscribe(
-      err => console.log(err)
-    );
+    this.addTagToFile$(fileId, tagId).subscribe();
   }
 
   getFileByID$(id: number): Observable<SimpleFile> {

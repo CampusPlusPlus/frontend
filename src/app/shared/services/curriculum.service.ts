@@ -35,7 +35,6 @@ export class CurriculumService {
     const lectures: Lecture[] = [];
     this.getLecturesByCurriculaID$(curriculaID)
       .subscribe((response) => {
-        // @ts-ignore
         response.forEach((s) => lectures.push(s));
       });
     return lectures;
@@ -54,26 +53,6 @@ export class CurriculumService {
       });
     return lectures;
   }
-
-
-  // getCurriculaNameFromObjectArray(): string[] {
-  //   const curriculaName: string[] = [];
-  //   this.errorService.arrayIsEmpty(this.curricula);
-  //   this.curricula.forEach(c => curriculaName.push(c.name));
-  //   return curriculaName;
-  // }
-  //
-  // getCurriculaIDByName(name: string): number {
-  //   let id: number;
-  //   this.curricula.forEach((c) => {
-  //     if (c.name === name) {
-  //       id = c.id;
-  //     } else {
-  //       return new Error('no id could be found for the curricula ' + name);
-  //     }
-  //   });
-  //   return id;
-  // }
 
   createCurriculum(data: object): Observable<any> {
     return this.http.post(this.SERVER_URL, data);

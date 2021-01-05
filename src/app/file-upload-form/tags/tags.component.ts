@@ -17,18 +17,30 @@ export class TagsComponent implements OnInit {
   @ViewChild('tagInput', {static: false}) tagInput: ElementRef<HTMLInputElement>;
   @Input() tags: string[];
   chip: FormGroup;
-  tagName: string;
-  tagType: string;
-  visible = true;
+  tagNames: string[] = [];
   selectable = true;
   removable = true;
   separatorKeysCodes: number[] = [ENTER, COMMA];
   tagCtrl = new FormControl();
-  filteredTags: Observable<Tag[]>;
-  // backendTags: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry'];
+  filteredTags: Observable<string[]>;
   backendTags: Tag[] = [];
 
   constructor(private tagService: TagService) {
+    this.filteredTags = this.tagCtrl.valueChanges.pipe(
+      startWith(null),
+      map((tag: string | null) => tag ? this._filter(tag) : this.tagNames.slice()));
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+    this.backendTags.forEach(t => {
+      if (this.tagNames.length < this.backendTags.length) {
+        this.tagNames.push(t.tagValue);
+        console.log(t);
+      }
+    });
+    return this.tagNames.filter(tag =>
+      tag.toLowerCase().indexOf(filterValue) === 0);
   }
 
   ngOnInit(): void {
@@ -49,12 +61,22 @@ export class TagsComponent implements OnInit {
       input.value = '';
     }
 
-    this.tagService.createTag$(value).subscribe();
+    // this.tagService.createTag$(value).subscribe();
     this.tagCtrl.setValue(null);
+    this.initTags();
   }
 
   remove(tag: string): void {
     const index = this.tags.indexOf(tag);
+    // this.tagService.getAllTags$().subscribe(
+    //   response => {
+    //     response.forEach(t => {
+    //       if (t.tagValue === tag) {
+    //         this.tagService.deleteTag(t.id);
+    //       }
+    //     });
+    //   }
+    // );
 
     if (index >= 0) {
       this.tags.splice(index, 1);
@@ -62,6 +84,7 @@ export class TagsComponent implements OnInit {
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
+    this.initTags();
     this.tags.push(event.option.viewValue);
     this.tagInput.nativeElement.value = '';
     this.tagCtrl.setValue(null);
@@ -70,5 +93,6 @@ export class TagsComponent implements OnInit {
   private initTags(): void {
     this.backendTags = this.tagService.getAllTags();
   }
+
 
 }

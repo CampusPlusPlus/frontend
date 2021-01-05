@@ -1,9 +1,8 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {catchError, map} from 'rxjs/operators';
 import {Observable, throwError} from 'rxjs';
 import {Tag} from '../models/Tag';
-import {Lecture} from '../models/Lecture';
 import {PageableResponse} from '../models/PageableResponse';
 
 @Injectable({
@@ -11,7 +10,6 @@ import {PageableResponse} from '../models/PageableResponse';
 })
 export class TagService {
   SERVER_URL = 'http://localhost:9000/tags';
-  tags = [];
 
   constructor(private http: HttpClient) {
   }
@@ -39,7 +37,7 @@ export class TagService {
   }
 
   // tagType not used => null
-  createTag$(tagName: string, tagType: string = null) {
+  createTag$(tagName: string, tagType: string = 'notImplemented'): Observable<any> {
     return this.http.post(this.SERVER_URL, {
         'tagValue': tagName,
         'tagType': tagType,
@@ -47,6 +45,17 @@ export class TagService {
         observe: 'response'
       }
     );
+  }
+
+  deleteTag$(tagId: number): Observable<any> {
+    const id: string = String(tagId);
+    return this.http.delete(this.SERVER_URL + '/' + id, {
+      observe: 'response'
+    });
+  }
+
+  deleteTag(tagId: number): void {
+    this.deleteTag$(tagId).subscribe();
   }
 
 }
