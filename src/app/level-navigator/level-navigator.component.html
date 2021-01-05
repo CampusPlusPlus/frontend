@@ -10,7 +10,7 @@
   <div *ngIf="level === 4; else simple">
     <div *ngFor="let d of data; let i = index">
       <div mat-subheader>{{"Semester " + (i + 1)}}</div>
-      <app-level-list [data]="d" [level]="level" (executeAction)="action($event)">{{d.relativeSemester}}</app-level-list>
+      <app-level-list [data]="d" [level]="level" (executeAction)="action($event)" [toggleAction]="actionToggle">{{d.relativeSemester}}</app-level-list>
     </div>
   </div>
   <ng-template #simple>

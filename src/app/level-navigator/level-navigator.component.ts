@@ -107,6 +107,7 @@ export class LevelNavigatorComponent implements OnInit {
         if (x) {
           this.deleteAction(obj.id);
         }
+        this.actionToggle = '';
       });
     } else {
       // edit
