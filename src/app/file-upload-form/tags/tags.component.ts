@@ -16,7 +16,6 @@ import {Tag} from '../../shared/models/Tag';
 export class TagsComponent implements OnInit {
   @ViewChild('tagInput', {static: false}) tagInput: ElementRef<HTMLInputElement>;
   @Input() tags: string[];
-  chip: FormGroup;
   tagNames: string[] = [];
   selectable = true;
   removable = true;
@@ -61,7 +60,7 @@ export class TagsComponent implements OnInit {
       input.value = '';
     }
 
-    // this.tagService.createTag$(value).subscribe();
+    this.tagService.createTag$(value).subscribe();
     this.tagCtrl.setValue(null);
     this.initTags();
   }

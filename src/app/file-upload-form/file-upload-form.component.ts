@@ -1,5 +1,5 @@
 import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, NgForm, Validators} from '@angular/forms';
 import {FileService} from '../shared/services/file.service';
 import {LectureService} from '../shared/services/lecture.service';
 import {TagService} from '../shared/services/tag.service';
@@ -15,8 +15,8 @@ import {SimpleFile} from '../shared/models/SimpleFile';
   styleUrls: ['./file-upload-form.component.scss'],
 })
 export class FileUploadFormComponent implements OnInit {
-  @ViewChild('fileUpload', {static: false}) fileUpload: ElementRef<HTMLInputElement>;
   uploadForm: FormGroup;
+  @ViewChild('f') tagForm: NgForm;
   lectures: Lecture[] = [];
   submit = false;
   tags: string[] = [];

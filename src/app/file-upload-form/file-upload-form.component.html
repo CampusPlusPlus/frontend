@@ -12,12 +12,14 @@
           [lectureNames]="lectureNames"
         ></app-autocomplete-form>
         <br/>
-        <app-tags [tags]="tags"></app-tags>
+        <form #f="ngForm">
+          <app-tags [tags]="tags"></app-tags>
+        </form>
       </div>
       <br/>
       <div style="margin-top: 20px">
         <button
-          [disabled]="!this.uploadForm.valid"
+          [disabled]="!this.uploadForm.valid && f.valid"
           mat-raised-button
           color="primary"
           type="submit"
