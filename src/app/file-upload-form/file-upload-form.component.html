@@ -8,7 +8,7 @@
           formControlName="fileUploadLocations"
         ></app-autocomplete-form>
         <br />
-        <app-tags-form formControlName="tags"></app-tags-form>
+        <app-tags [tags]="tags"></app-tags>
       </div>
       <div style="margin-top: 20px">
         <button mat-raised-button color="primary" type="submit">Submit</button>

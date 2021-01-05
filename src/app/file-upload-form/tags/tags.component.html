@@ -1,0 +1,30 @@
+<mat-form-field>
+  <mat-label>Add a Tag</mat-label>
+  <mat-chip-list #chipList aria-label="Tag selection">
+    <mat-chip
+      *ngFor="let tag of tags"
+      [selectable]="selectable"
+      [removable]="removable"
+      (removed)="remove(tag)">
+      {{tag}}
+      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+    </mat-chip>
+    <input
+      placeholder="New tag..."
+      required="required"
+      #tagInput
+      [formControl]="tagCtrl"
+      [matAutocomplete]="auto"
+      [matChipInputFor]="chipList"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+      (matChipInputTokenEnd)="add($event)">
+  </mat-chip-list>
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+    <!--
+              <mat-option *ngFor="let tag of backendTags | async" [value]="tag">
+                {{tag}}
+              </mat-option>
+    -->
+  </mat-autocomplete>
+  <mat-hint>After you found a good tag name press enter to create it</mat-hint>
+</mat-form-field>

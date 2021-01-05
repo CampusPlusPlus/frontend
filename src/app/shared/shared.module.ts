@@ -1,7 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ShellComponent} from './shell/shell.component';
-
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {RouterModule} from '@angular/router';
 import {MatToolbarModule} from '@angular/material/toolbar';
@@ -14,15 +13,13 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
+import {MatChipsModule} from '@angular/material/chips';
 import {MatDialogModule} from '@angular/material/dialog';
-
-import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';
-// import { InMemoryDataService } from './services/in-memory-data.service';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {HttpClientModule} from '@angular/common/http';
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatSelectModule } from '@angular/material/select';
+import {MatGridListModule} from '@angular/material/grid-list';
+import {MatSelectModule} from '@angular/material/select';
 
 const modules = [
   CommonModule,
@@ -40,6 +37,7 @@ const modules = [
   MatInputModule,
   MatSnackBarModule,
   MatGridListModule,
+  MatChipsModule,
   ReactiveFormsModule,
   MatAutocompleteModule,
   HttpClientModule,
