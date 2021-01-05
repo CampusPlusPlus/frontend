@@ -14,6 +14,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
+import {MatChipsModule} from '@angular/material/chips';
 
 import {HttpClientInMemoryWebApiModule} from 'angular-in-memory-web-api';
 // import { InMemoryDataService } from './services/in-memory-data.service';
@@ -38,6 +39,7 @@ const modules = [
   MatInputModule,
   MatSnackBarModule,
   MatGridListModule,
+  MatChipsModule,
   ReactiveFormsModule,
   MatAutocompleteModule,
   HttpClientModule,

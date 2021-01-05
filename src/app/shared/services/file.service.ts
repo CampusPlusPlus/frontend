@@ -20,7 +20,6 @@ export class FileService {
     return this.http.get(this.SERVER_URL + '/?page=0&size=10000')
       .pipe(
         map((responseData: PageableResponse<SimpleFile>) => {
-          console.log(responseData);
           return responseData.content;
         }),
         catchError((errorResponse) => {
@@ -48,7 +47,7 @@ export class FileService {
 
 
   addTagToFile$(fileId: number, tagId: number): Observable<any> {
-    return this.http.patch(this.SERVER_URL + fileId + tagId, null);
+    return this.http.patch(this.SERVER_URL + '/' + fileId + '/tags/' + tagId, null);
   }
 
   addTagToFile(fileId: number, tagId: number): void {
@@ -62,7 +61,6 @@ export class FileService {
     return this.http.get(`${this.SERVER_URL}/${id}`)
       .pipe(
         map((responseData: SimpleFile) => {
-          console.log("reeee", responseData);
           return responseData;
         }),
         catchError((errorResponse) => {

@@ -103,8 +103,8 @@ export class AutocompleteFormComponent
       studyCourses: [],
       curriculum: [],
       lectures: [],
-      tagTypes: [],
-      tagNames: [],
+      // tagTypes: [],
+      // tagNames: [],
     });
 
     this.subscriptions.push(
@@ -117,7 +117,7 @@ export class AutocompleteFormComponent
 
   ngOnInit(): void {
     this.initDisciplines();
-    this.initTags();
+    // this.initTags();
   }
 
   private initDisciplines(): void {
@@ -251,6 +251,7 @@ export class AutocompleteFormComponent
     );
   }
 
+/*
   private initTags(): void {
     this.tags = this.tagService.getAllTags();
   }
@@ -307,6 +308,7 @@ export class AutocompleteFormComponent
       tagName.toLowerCase().includes(filterValue)
     );
   }
+*/
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((s) => s.unsubscribe());

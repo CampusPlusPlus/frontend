@@ -38,7 +38,8 @@ export class TagService {
     return tags;
   }
 
-  createTag$(tagName: string, tagType: string) {
+  // tagType not used => null
+  createTag$(tagName: string, tagType: string = null) {
     return this.http.post(this.SERVER_URL, {
         'tagValue': tagName,
         'tagType': tagType,

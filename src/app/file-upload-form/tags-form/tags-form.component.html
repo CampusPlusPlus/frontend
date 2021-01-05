@@ -3,6 +3,8 @@
   <mat-label>Add a Tag</mat-label>
   <br>
   <div formArrayName="tags">
+    <app-tags></app-tags>
+<!--
     <div *ngFor="let tag of tags().controls; let i = index">
       <div [formGroupName]="i">
         <ng-container>
@@ -37,4 +39,5 @@
     </div>
   </div>
   <mat-icon style="cursor: pointer" matSuffix (click)="onAddTag()">add_box</mat-icon>
+-->
 </div>

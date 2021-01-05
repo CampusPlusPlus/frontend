@@ -16,8 +16,10 @@ import { LevelListComponent } from './level-navigator/level-list/level-list.comp
 import { FileElementComponent } from './file-detail/file-element/file-element.component';
 import { CommentComponent } from './comment/comment.component';
 import { DialogAddGenericComponent } from './level-navigator/dialog-add-generic/dialog-add-generic.component';
-import { MatDialogModule } from "@angular/material/dialog";
-import { FormsModule } from "@angular/forms";
+import { MatDialogModule } from '@angular/material/dialog';
+import { FormsModule } from '@angular/forms';
+import {TagsComponent} from './file-upload-form/tags/tags.component';
+
 
 
 
@@ -35,6 +37,7 @@ import { FormsModule } from "@angular/forms";
     FileElementComponent,
     CommentComponent,
     DialogAddGenericComponent,
+    TagsComponent,
   ],
   imports: [
     BrowserModule,

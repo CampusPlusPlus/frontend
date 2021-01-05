@@ -1,15 +1,19 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {FileService} from '../shared/services/file.service';
-import {DisciplineService} from '../shared/services/discipline.service';
 import {LectureService} from '../shared/services/lecture.service';
 import {TagService} from '../shared/services/tag.service';
 import {CurriculumService} from '../shared/services/curriculum.service';
 import {Lecture} from '../shared/models/Lecture';
-import {forkJoin, throwError} from 'rxjs';
-import {catchError} from 'rxjs/operators';
-import {SimpleFile} from '../shared/models/SimpleFile';
+import {forkJoin, Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import {MatChipInputEvent} from '@angular/material/chips';
+import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import {Tag} from '../shared/models/Tag';
+import {map} from 'rxjs/operators';
+import {SimpleFile} from '../shared/models/SimpleFile';
+import {PageableResponse} from '../shared/models/PageableResponse';
 
 @Component({
   selector: 'app-file-upload-form',
@@ -17,12 +21,23 @@ import {HttpClient} from '@angular/common/http';
   styleUrls: ['./file-upload-form.component.scss'],
 })
 export class FileUploadFormComponent implements OnInit {
-  @ViewChild('fileUpload', {static: false}) fileUpload: ElementRef;
+  @ViewChild('fileUpload', {static: false}) fileUpload: ElementRef<HTMLInputElement>;
+  @ViewChild('fruitInput', {static: false}) tagInput: ElementRef<HTMLInputElement>;
   uploadForm: FormGroup;
+  chip: FormGroup;
   lectures: Lecture[] = [];
   submit = false;
   tagName: string;
   tagType: string;
+  visible = true;
+  selectable = true;
+  removable = true;
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+  tagCtrl = new FormControl();
+  filteredTags: Observable<Tag[]>;
+  tags: string[] = [];
+  // backendTags: string[] = ['Apple', 'Lemon', 'Lime', 'Orange', 'Strawberry'];
+  backendTags: Tag[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -39,9 +54,49 @@ export class FileUploadFormComponent implements OnInit {
     });
   }
 
+  add(event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+
+    // Add our fruit
+    if ((value || '').trim()) {
+      this.tags.push(value.trim());
+    }
+
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
+
+    this.tagService.createTag$(value).subscribe();
+    this.tagCtrl.setValue(null);
+  }
+
+  remove(tag: string): void {
+    const index = this.tags.indexOf(tag);
+
+    if (index >= 0) {
+      this.tags.splice(index, 1);
+    }
+  }
+
+  selected(event: MatAutocompleteSelectedEvent): void {
+    this.tags.push(event.option.viewValue);
+    this.tagInput.nativeElement.value = '';
+    this.tagCtrl.setValue(null);
+  }
+
+
   ngOnInit(): void {
     this.lectures = this.lectureService.getLectures();
+    this.initTags();
+    // this.filteredTags = this.tagCtrl.valueChanges
+    //   .pipe(
+    //     startWith(''),
+    //     map(value => this._filter(value))
+    //   );
   }
+
 
   onSubmit(): void {
     try {
@@ -56,20 +111,15 @@ export class FileUploadFormComponent implements OnInit {
   }
 
   private upload(): void {
+    this.initTags();
+
     const formData = new FormData();
-    const name: string = this.uploadForm.get('fileUploadLocations').value.lectures;
-    const id: string = String(this.getLectureIdByName(name));
-    formData.append('lectureId', id);
+    const lectureName: string = this.uploadForm.get('fileUploadLocations').value.lectures;
+    const lectureId: string = String(this.getLectureIdByName(lectureName));
+
+    formData.append('lectureId', lectureId);
     formData.append('file', this.uploadForm.get('uploads').value.dummyFile);
-    if (this.uploadForm.get('tags').value !== null) {
-      this.uploadForm.get('tags').value.tags.forEach(
-        t => {
-          if (t.tagType !== null || t.tagName !== null) {
-            this.tagName = t.tagName;
-            this.tagType = t.tagType;
-          }
-        });
-    }
+
     forkJoin(
       {
         file: this.http.post('http://localhost:9000/files',
@@ -77,56 +127,27 @@ export class FileUploadFormComponent implements OnInit {
             observe: 'response'
           }
         ),
-        tag: this.http.post('http://localhost:9000/tags', {
-            'tagValue': this.tagName,
-            'tagType': this.tagType,
-          }, {
-            observe: 'response'
-          }
-        )
+        tag: this.http.get('http://localhost:9000/tags',
+        ).pipe(
+          map((responseData: PageableResponse<Tag>) => {
+            return responseData.content;
+          }))
       }
     ).subscribe(response => {
-      console.log(response.file.headers.get('location'));
-      console.log(response.tag.headers.get('location'));
+      // const fileID: SimpleFile = response.file.body.id;
+      const temp: SimpleFile = response.file.body as SimpleFile;
+      const fileID: number = temp.id;
+      console.log('temp: ', fileID);
+      console.log('response.tag: ', response);
+      const tempTags: Tag[] = response.tag;
+      tempTags.forEach(temptag => this.tags.forEach(htmlTags => {
+        if (htmlTags === temptag.tagValue) {
+          console.log('add tag to file');
+          this.fileService.addTagToFile(fileID, temptag.id);
+        }
+      }));
     });
-    // this.fileService.uploadFile$(formData).subscribe(
-    //   res => {
-    //     if (this.uploadForm.get('tags').value !== null) {
-    //       this.uploadForm.get('tags').value.tags.forEach(
-    //         t => {
-    //           if (t.tagType !== null || t.tagName !== null) {
-    //             const tagName: string = t.tagName;
-    //             const tagType: string = t.tagType;
-    //             this.tagService.createTag$(tagName, tagType)
-    //               .subscribe(response => {
-    //                 const tempTag: string = res.headers.get('location');
-    //                 const lastIndex = tempTag.lastIndexOf('/');
-    //                 const tagId = +tempTag.substring(lastIndex + 1);
-    //                 this.fileService.addTagToFile$(0, tagId);
-    //               });
-    //           }
-    //         });
-    //     }
-    //     const temp: string = res.headers.get('location');
-    //     const n = temp.lastIndexOf('/');
-    //     const fileId = temp.substring(n + 1);
-    //   },
-    //   err => console.log(err)
-    // );
   }
-
-  // createTags(): void {
-  //   if (this.uploadForm.get('tags').value !== null) {
-  //     this.uploadForm.get('tags').value.tags.forEach(
-  //       n => {
-  //         if (n.tagType !== null || n.tagName !== null) {
-  //           const name: string = n.tagName;
-  //           const type: string = n.tagType;
-  //           this.tagService.createTag(name, type);
-  //         }
-  //       });
-  //   }
-  // }
 
   getLectureIdByName(name: string): number {
     let id: number;
@@ -139,16 +160,13 @@ export class FileUploadFormComponent implements OnInit {
     return id;
   }
 
-  getIdOfUploadedFile(): number {
-    let id = 0;
-    if (this.uploadForm.get('uploads').value !== null) {
-      const name = this.uploadForm.get('uploads').value.dummyFile.name;
-    }
-    return id;
-  }
-
   onReset(): void {
     console.log('reset');
     this.uploadForm.reset();
   }
+
+  private initTags(): void {
+    this.backendTags = this.tagService.getAllTags();
+  }
+
 }
