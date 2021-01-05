@@ -6,9 +6,10 @@ section {
 
 .button-row {
   display: table-cell;
-  width: 490px;
+  width: 100vh;
 }
 
 button {
   margin-right: 30px;
+  float:right;
 }

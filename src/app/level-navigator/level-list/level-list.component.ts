@@ -9,15 +9,16 @@ export class LevelListComponent implements OnInit {
 
   @Input() data: any[];
   @Input() level: number;
-  @Output() navigateTo: EventEmitter<any> = new EventEmitter();
+  @Output() executeAction: EventEmitter<any> = new EventEmitter();
+  @Input() toggleAction: 'edit'|'delete'|'';
 
   constructor() {}
 
   ngOnInit(): void {
   }
 
-  navigate(id: number): void {
-    this.navigateTo.emit(id);
+  action(id: number): void {
+    this.executeAction.emit(id);
   }
 
 }

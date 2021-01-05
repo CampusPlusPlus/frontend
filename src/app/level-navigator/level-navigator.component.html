@@ -1,7 +1,8 @@
 <section *ngIf="level !== 5">
   <div class="button-row">
-    <button mat-flat-button color="primary" (click)="openCreationDialog()">+</button>
-    <button mat-flat-button color="warn" (click)="openCreationDialog()">-</button>
+    <button mat-flat-button color="primary" (click)="openCreationDialog()">➕</button>
+    <button mat-flat-button color="warn" (click)="setDelete()">➖</button>
+    <button mat-flat-button color="accent" (click)="setEdit()">🖊️</button>
   </div>
 </section>
 <mat-list>
@@ -9,10 +10,10 @@
   <div *ngIf="level === 4; else simple">
     <div *ngFor="let d of data; let i = index">
       <div mat-subheader>{{"Semester " + (i + 1)}}</div>
-      <app-level-list [data]="d" [level]="level" (navigateTo)="loadData($event)">{{d.relativeSemester}}</app-level-list>
+      <app-level-list [data]="d" [level]="level" (executeAction)="action($event)">{{d.relativeSemester}}</app-level-list>
     </div>
   </div>
   <ng-template #simple>
-    <app-level-list [data]="data" [level]="level" (navigateTo)="loadData($event)"></app-level-list>
+    <app-level-list [data]="data" [level]="level" (executeAction)="action($event)" [toggleAction]="actionToggle"></app-level-list>
   </ng-template>
 </mat-list>

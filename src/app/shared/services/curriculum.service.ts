@@ -78,4 +78,8 @@ export class CurriculumService {
   createCurriculum(data: object): Observable<any> {
     return this.http.post(this.SERVER_URL, data);
   }
+
+  deleteCurriculum(id: number): Observable<any> {
+    return this.http.delete(`${this.SERVER_URL}/${id}`);
+  }
 }

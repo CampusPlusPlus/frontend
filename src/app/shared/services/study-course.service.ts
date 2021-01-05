@@ -80,4 +80,8 @@ export class StudyCourseService {
   createStudyCourse(data: object): Observable<any> {
     return this.http.post(this.SERVER_URL, data);
   }
+
+  deleteStudyCourse(id: number): Observable<any> {
+    return this.http.delete(`${this.SERVER_URL}/${id}`);
+  }
 }

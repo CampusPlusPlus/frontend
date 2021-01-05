@@ -22,6 +22,7 @@ export class LevelNavigatorComponent implements OnInit {
   id = -1;
   level = -1;
   title = '';
+  actionToggle: 'delete' | 'edit' | '' = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -87,8 +88,12 @@ export class LevelNavigatorComponent implements OnInit {
     this.data.splice(0, length);
   }
 
-  loadData(id): void {
-    this.router.navigateByUrl(this.location.path() + '/' + id).then(r => this.navigate());
+  action(id): void {
+    if (this.actionToggle === '') {
+      this.router.navigateByUrl(this.location.path() + '/' + id).then(r => this.navigate());
+    } else if(this.actionToggle === 'delete') {
+      this.deleteAction(id);
+    }
   }
 
   openCreationDialog(): void {
@@ -130,5 +135,41 @@ export class LevelNavigatorComponent implements OnInit {
     }, error => {
       console.log('ERR:', error);
     });
+  }
+
+  deleteAction(id: number): void {
+    switch (this.level) {
+      case 1:
+        this.disciplineService.deleteDiscipline(id).subscribe({
+          next: _ => this.data = this.disciplineService.getDisciplines(),
+        });
+        break;
+      case 2:
+        this.studyCourseService.deleteStudyCourse(id).subscribe({
+          next: _ => this.data = this.disciplineService.getStudyCoursesByDisciplineID(this.id),
+        });
+        break;
+      case 3:
+        this.curriculumService.deleteCurriculum(id).subscribe({
+          next: _ => this.data = this.studyCourseService.getCurriculaByStudyCourse(this.id),
+        });
+        break;
+      case 4:
+        this.lectureService.deleteLecture(id).subscribe({
+          next: _ => this.data = this.curriculumService.getLecturesByCurriculaIDGroupedByRelativeSemester(this.id),
+        });
+        break;
+      default:
+        console.log('ERR: unknown error');
+        break;
+    }
+  }
+
+  setDelete(): void {
+    this.actionToggle = this.actionToggle === 'delete' ? '' : 'delete';
+  }
+
+  setEdit(): void {
+    this.actionToggle = this.actionToggle === 'edit' ? '' : 'edit';
   }
 }
