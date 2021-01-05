@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { BasicDTO } from '../../shared/models/BasicDTO';
 
 @Component({
   selector: 'app-level-list',
@@ -17,8 +18,8 @@ export class LevelListComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  action(id: number): void {
-    this.executeAction.emit(id);
+  action(d: BasicDTO): void {
+    this.executeAction.emit(d);
   }
 
 }

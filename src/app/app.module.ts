@@ -21,6 +21,7 @@ import { FormsModule } from '@angular/forms';
 import { CreateLevelFormComponent } from './level-navigator/create-level-form/create-level-form.component';
 import { CreateLevelLectureFormComponent } from './level-navigator/create-level-lecture-form/create-level-lecture-form.component';
 import { DialogDeleteGenericComponent } from './level-navigator/dialog-delete-generic/dialog-delete-generic.component';
+import { DialogConfirmationComponent } from './level-navigator/dialog-confirmation/dialog-confirmation.component';
 
 
 @NgModule({
@@ -40,6 +41,7 @@ import { DialogDeleteGenericComponent } from './level-navigator/dialog-delete-ge
     CreateLevelFormComponent,
     CreateLevelLectureFormComponent,
     DialogDeleteGenericComponent,
+    DialogConfirmationComponent,
   ],
   imports: [
     BrowserModule,

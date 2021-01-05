@@ -10,6 +10,11 @@ import { Lecture } from '../shared/models/Lecture';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CreateLevelFormComponent } from './create-level-form/create-level-form.component';
 import { CreateLevelLectureFormComponent } from './create-level-lecture-form/create-level-lecture-form.component';
+import {
+  DialogConfirmationComponent,
+  DialogConfirmationData
+} from './dialog-confirmation/dialog-confirmation.component';
+import { BasicDTO } from '../shared/models/BasicDTO';
 
 @Component({
   selector: 'app-level-navigator',
@@ -88,11 +93,23 @@ export class LevelNavigatorComponent implements OnInit {
     this.data.splice(0, length);
   }
 
-  action(id): void {
+  action(obj: BasicDTO): void {
     if (this.actionToggle === '') {
-      this.router.navigateByUrl(this.location.path() + '/' + id).then(r => this.navigate());
-    } else if(this.actionToggle === 'delete') {
-      this.deleteAction(id);
+      this.router.navigateByUrl(this.location.path() + '/' + obj.id).then(r => this.navigate());
+    } else if (this.actionToggle === 'delete') {
+      this.dialog.open(DialogConfirmationComponent, {
+        data: {
+          name: obj.name,
+          action: this.actionToggle,
+          confirmed: false
+        }
+      }).afterClosed().subscribe(x => {
+        if (x) {
+          this.deleteAction(obj.id);
+        }
+      });
+    } else {
+      // edit
     }
   }
 
