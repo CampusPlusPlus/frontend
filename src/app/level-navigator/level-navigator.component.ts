@@ -167,6 +167,12 @@ export class LevelNavigatorComponent implements OnInit {
     const form = this.level === 4 ? CreateLevelLectureFormComponent : CreateLevelFormComponent;
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '60%';
+    dialogConfig.data = this.level === 4 ? {
+      name: '',
+      relativeSemester: 1
+    } as DialogLectureFormData : {
+      name: '',
+    } as DialogFormData;
     this.dialog.open(form, dialogConfig).afterClosed().subscribe(x => {
       if ((x && x.length > 0) || (x && x.name && x.relativeSemester)) {
         switch (this.level) {
