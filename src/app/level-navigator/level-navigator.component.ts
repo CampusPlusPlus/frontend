@@ -91,7 +91,7 @@ export class LevelNavigatorComponent implements OnInit {
     this.router.navigateByUrl(this.location.path() + '/' + id).then(r => this.navigate());
   }
 
-  openDialog(): void {
+  openCreationDialog(): void {
     const form = this.level === 4 ? CreateLevelLectureFormComponent : CreateLevelFormComponent;
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '60%';
