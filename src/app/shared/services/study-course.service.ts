@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
-import { HttpClient } from '@angular/common/http';
+import { catchError, map} from 'rxjs/operators';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { StudyCourse } from '../models/StudyCourse';
-import { Discipline } from '../models/Discipline';
 import { Curricula } from '../models/Curriculum';
 import { PageableResponse } from '../models/PageableResponse';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +13,7 @@ import { PageableResponse } from '../models/PageableResponse';
 export class StudyCourseService {
   SERVER_URL = 'http://localhost:9000/studyCourses';
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private snackbarService: MatSnackBar) {
   }
 
   private getAllStudyCourses$(): Observable<StudyCourse[]> {
@@ -26,6 +26,7 @@ export class StudyCourseService {
         return studyCourseArray;
       }),
       catchError((errorResponse) => {
+        this.snackbarService.open(errorResponse.message);
         return throwError(errorResponse);
       })
     );
@@ -50,6 +51,7 @@ export class StudyCourseService {
           return responseData.content;
         }),
         catchError((errorResponse) => {
+          this.snackbarService.open(errorResponse.message);
           return throwError(errorResponse);
         })
       );
@@ -59,33 +61,35 @@ export class StudyCourseService {
     const curricula: Curricula[] = [];
     this.getCurriculaByStudyCourse$(studyCourseID)
       .subscribe((response) => {
-        // @ts-ignore
         response.forEach((c) => curricula.push(c));
       });
     return curricula;
   }
 
-  // getStudyCourseID(name: string): number {
-  //   let id: number;
-  //   this.studyCourses.forEach((d) => {
-  //     if (d.name === name) {
-  //       id = d.id;
-  //     } else {
-  //       return null;
-  //     }
-  //   });
-  //   return id;
-  // }
-
   createStudyCourse(data: object): Observable<any> {
-    return this.http.post(this.SERVER_URL, data);
+    return this.http.post(this.SERVER_URL, data).pipe(
+      catchError((errorResponse: HttpErrorResponse) => {
+        this.snackbarService.open(errorResponse.message);
+        return throwError(errorResponse);
+      })
+    );
   }
 
   deleteStudyCourse(id: number): Observable<any> {
-    return this.http.delete(`${this.SERVER_URL}/${id}`);
+    return this.http.delete(`${this.SERVER_URL}/${id}`).pipe(
+      catchError((errorResponse: HttpErrorResponse) => {
+        this.snackbarService.open(errorResponse.message);
+        return throwError(errorResponse);
+      })
+    );
   }
 
   updateStudyCourseByID(id: number, data: { name: any; disciplineId: number }): Observable<any> {
-    return this.http.put(`${this.SERVER_URL}/${id}`, data);
+    return this.http.put(`${this.SERVER_URL}/${id}`, data).pipe(
+      catchError((errorResponse: HttpErrorResponse) => {
+        this.snackbarService.open(errorResponse.message);
+        return throwError(errorResponse);
+      })
+    );
   }
 }

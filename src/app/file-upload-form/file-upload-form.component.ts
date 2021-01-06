@@ -37,7 +37,6 @@ export class FileUploadFormComponent implements OnInit {
     this.uploadForm = this.formBuilder.group({
       uploads: ['', Validators.required],
       fileUploadLocations: ['', Validators.required],
-      tags: ['']
     });
   }
 

@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {catchError, map} from 'rxjs/operators';
 import {Observable, throwError} from 'rxjs';
 import {Discipline} from '../models/Discipline';
 import {StudyCourse} from '../models/StudyCourse';
 import {PageableResponse} from '../models/PageableResponse';
-import {Lecture} from '../models/Lecture';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +13,7 @@ import {Lecture} from '../models/Lecture';
 export class DisciplineService {
   SERVER_URL = 'http://localhost:9000/disciplines';
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private snackbarService: MatSnackBar) {
   }
 
   private getDisciplines$(): Observable<Discipline[]> {
@@ -23,6 +23,7 @@ export class DisciplineService {
           return responseData;
         }),
         catchError((errorResponse) => {
+          this.snackbarService.open(errorResponse.message);
           return throwError(errorResponse);
         })
       );
@@ -45,6 +46,7 @@ export class DisciplineService {
           return responseData.content;
         }),
         catchError((errorResponse) => {
+          this.snackbarService.open(errorResponse.message);
           return throwError(errorResponse);
         })
       );
@@ -59,24 +61,30 @@ export class DisciplineService {
     return studyCourses;
   }
 
-  // getStudyCourseNamesByDisciplineID(disciplineId: number): string[] {
-  //   const studyCourseNames: string[] = [];
-  //   this.getStudyCoursesByDisciplineID$(disciplineId)
-  //     .subscribe((response) => {
-  //       response.slice(0, 1).forEach((s) => studyCourseNames.push(...s.name));
-  //     });
-  //   return studyCourseNames;
-  // }
-
   createDiscipline(data: object): Observable<any> {
-    return this.http.post(this.SERVER_URL, data);
+    return this.http.post(this.SERVER_URL, data).pipe(
+      catchError((errorResponse: HttpErrorResponse) => {
+        this.snackbarService.open(errorResponse.message);
+        return throwError(errorResponse);
+      })
+    );
   }
 
   deleteDiscipline(id: number): Observable<any> {
-    return this.http.delete(`${this.SERVER_URL}/${id}`);
+    return this.http.delete(`${this.SERVER_URL}/${id}`).pipe(
+      catchError((errorResponse: HttpErrorResponse) => {
+        this.snackbarService.open(errorResponse.message);
+        return throwError(errorResponse);
+      })
+    );
   }
 
   updateDisciplineByID(id: number, data: { name: any }): Observable<any> {
-    return this.http.put(`${this.SERVER_URL}/${id}`, data);
+    return this.http.put(`${this.SERVER_URL}/${id}`, data).pipe(
+      catchError((errorResponse: HttpErrorResponse) => {
+        this.snackbarService.open(errorResponse.message);
+        return throwError(errorResponse);
+      })
+    );
   }
 }

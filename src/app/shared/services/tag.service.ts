@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {catchError, map} from 'rxjs/operators';
 import {Observable, throwError} from 'rxjs';
 import {Tag} from '../models/Tag';
 import {PageableResponse} from '../models/PageableResponse';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
@@ -11,17 +12,18 @@ import {PageableResponse} from '../models/PageableResponse';
 export class TagService {
   SERVER_URL = 'http://localhost:9000/tags';
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private snackbarService: MatSnackBar) {
   }
 
 
   getAllTags$(): Observable<Tag[]> {
-    return this.http.get(this.SERVER_URL + '/?page=0&size=10000')
+    return this.http.get(this.SERVER_URL)
       .pipe(
         map((responseData: PageableResponse<Tag>) => {
           return responseData.content;
         }),
-        catchError((errorResponse) => {
+        catchError((errorResponse: HttpErrorResponse) => {
+          this.snackbarService.open(errorResponse.message);
           return throwError(errorResponse);
         })
       );
@@ -38,12 +40,23 @@ export class TagService {
 
   // tagType not used => null
   createTag$(tagName: string, tagType: string = 'notImplemented'): Observable<any> {
+    const normalizedTagName = tagName.toLowerCase();
     return this.http.post(this.SERVER_URL, {
-        'tagValue': tagName,
-        'tagType': tagType,
+        tagValue: normalizedTagName,
+        tagType: tagType,
       }, {
         observe: 'response'
       }
+    ).pipe(
+      catchError((errorResponse: HttpErrorResponse) => {
+        if (errorResponse.status === 409) {
+          this.snackbarService.open('This Tag already exists');
+        } else {
+          this.snackbarService.open(errorResponse.message);
+        }
+        console.log(errorResponse);
+        return throwError(errorResponse);
+      })
     );
   }
 
@@ -51,7 +64,12 @@ export class TagService {
     const id: string = String(tagId);
     return this.http.delete(this.SERVER_URL + '/' + id, {
       observe: 'response'
-    });
+    }).pipe(
+      catchError((errorResponse: HttpErrorResponse) => {
+        this.snackbarService.open(errorResponse.message);
+        return throwError(errorResponse);
+      })
+    );
   }
 
   deleteTag(tagId: number): void {

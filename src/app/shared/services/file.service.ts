@@ -1,12 +1,10 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {SimpleFile} from '../models/SimpleFile';
-import {FullFile} from '../models/FullFile';
 import {catchError, map} from 'rxjs/operators';
 import {PageableResponse} from '../models/PageableResponse';
-import {Lecture} from '../models/Lecture';
-import {MatSnackBar} from "@angular/material/snack-bar";
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
@@ -23,8 +21,8 @@ export class FileService {
         map((responseData: PageableResponse<SimpleFile>) => {
           return responseData.content;
         }),
-        catchError((errorResponse) => {
-          this.snackbarService.open('There was a problem with getting your files');
+        catchError((errorResponse: HttpErrorResponse) => {
+          this.snackbarService.open(errorResponse.message);
           return throwError(errorResponse);
         })
       );
@@ -46,7 +44,7 @@ export class FileService {
     )
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
-          this.snackbarService.open(errorResponse.error.error);
+          this.snackbarService.open(errorResponse.message);
           return throwError(errorResponse);
         })
       );
@@ -57,7 +55,7 @@ export class FileService {
     return this.http.patch(this.SERVER_URL + '/' + fileId + '/tags/' + tagId, null)
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
-          this.snackbarService.open(errorResponse.error.error);
+          this.snackbarService.open(errorResponse.message);
           return throwError(errorResponse);
         })
       );
@@ -74,7 +72,7 @@ export class FileService {
           return responseData;
         }),
         catchError((errorResponse: HttpErrorResponse) => {
-          this.snackbarService.open(errorResponse.error.error);
+          this.snackbarService.open(errorResponse.message);
           return throwError(errorResponse);
         })
       );
