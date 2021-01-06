@@ -8,6 +8,7 @@ import {Lecture} from '../shared/models/Lecture';
 import {forkJoin} from 'rxjs';
 import {Tag} from '../shared/models/Tag';
 import {SimpleFile} from '../shared/models/SimpleFile';
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-file-upload-form',
@@ -31,10 +32,12 @@ export class FileUploadFormComponent implements OnInit {
     private lectureService: LectureService,
     private curriculumService: CurriculumService,
     private tagService: TagService,
+    private snackBar: MatSnackBar
   ) {
     this.uploadForm = this.formBuilder.group({
       uploads: ['', Validators.required],
       fileUploadLocations: ['', Validators.required],
+      tags: ['']
     });
   }
 
@@ -47,6 +50,7 @@ export class FileUploadFormComponent implements OnInit {
     try {
       this.upload();
     } catch (e) {
+      this.snackBar.open('There was an problem with uploading your file');
       console.log('upload error');
       return;
     }

@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, map} from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
-import { ErrorService } from './error.service';
 import { Lecture } from '../models/Lecture';
 import { PageableResponse } from '../models/PageableResponse';
 
@@ -12,7 +11,7 @@ import { PageableResponse } from '../models/PageableResponse';
 export class CurriculumService {
   SERVER_URL = 'http://localhost:9000/curricula';
 
-  constructor(private http: HttpClient, private errorService: ErrorService) {
+  constructor(private http: HttpClient) {
   }
 
 

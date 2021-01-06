@@ -1,11 +1,12 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {SimpleFile} from '../models/SimpleFile';
 import {FullFile} from '../models/FullFile';
 import {catchError, map} from 'rxjs/operators';
 import {PageableResponse} from '../models/PageableResponse';
 import {Lecture} from '../models/Lecture';
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ import {Lecture} from '../models/Lecture';
 export class FileService {
   SERVER_URL = 'http://localhost:9000/files';
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private snackbarService: MatSnackBar) {
   }
 
   getAllFiles$(): Observable<SimpleFile[]> {
@@ -23,6 +24,7 @@ export class FileService {
           return responseData.content;
         }),
         catchError((errorResponse) => {
+          this.snackbarService.open('There was a problem with getting your files');
           return throwError(errorResponse);
         })
       );
@@ -36,14 +38,15 @@ export class FileService {
     return files;
   }
 
-  uploadFile$(formData) {
+  uploadFile$(formData): Observable<any> {
     return this.http.post(this.SERVER_URL,
       formData, {
         observe: 'response'
       }
     )
       .pipe(
-        catchError((errorResponse) => {
+        catchError((errorResponse: HttpErrorResponse) => {
+          this.snackbarService.open(errorResponse.error.error);
           return throwError(errorResponse);
         })
       );
@@ -53,7 +56,8 @@ export class FileService {
   addTagToFile$(fileId: number, tagId: number): Observable<any> {
     return this.http.patch(this.SERVER_URL + '/' + fileId + '/tags/' + tagId, null)
       .pipe(
-        catchError((errorResponse) => {
+        catchError((errorResponse: HttpErrorResponse) => {
+          this.snackbarService.open(errorResponse.error.error);
           return throwError(errorResponse);
         })
       );
@@ -69,7 +73,8 @@ export class FileService {
         map((responseData: SimpleFile) => {
           return responseData;
         }),
-        catchError((errorResponse) => {
+        catchError((errorResponse: HttpErrorResponse) => {
+          this.snackbarService.open(errorResponse.error.error);
           return throwError(errorResponse);
         })
       );
