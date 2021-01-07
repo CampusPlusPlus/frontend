@@ -10,11 +10,9 @@ export class FileElementComponent implements OnInit {
 
   @Input() data: SimpleFile;
 
-  constructor() {
-  }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   download(id: number): void {
     window.open(`http://localhost:9000/files/${id}/download`, '_blank');
