@@ -4,6 +4,7 @@ import { Location } from '@angular/common';
 import { FullFile } from '../shared/models/FullFile';
 import { FileService } from '../shared/services/file.service';
 import { Comment } from '../shared/models/Comment';
+import {log} from "util";
 
 @Component({
   selector: 'app-file-detail',
@@ -29,7 +30,9 @@ export class FileDetailComponent implements OnInit {
   }
 
   private fetchFile(): void {
-    this.fileService.getFileByID$(this.id).subscribe(value => this.data = value);
+    this.fileService.getFileByID$(this.id).subscribe(value => {
+      this.data = value;
+    }, (error => console.log(error)));
   }
 
   delete(id: number): void {

@@ -34,7 +34,7 @@ export class FileService {
     const files: FullFile[] = [];
     this.getAllFiles$().subscribe(response => {
       response.forEach(f => files.push(f));
-    });
+    }, error => this.errorService.errorSnackbar(error));
     return files;
   }
 
@@ -47,7 +47,7 @@ export class FileService {
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           this.errorService.errorSnackbar(errorResponse);
-          return throwError(errorResponse);
+          return new Observable();
         })
       );
   }
@@ -58,7 +58,7 @@ export class FileService {
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           this.errorService.errorSnackbar(errorResponse);
-          return throwError(errorResponse);
+          return new Observable();
         })
       );
   }
@@ -84,7 +84,7 @@ export class FileService {
     let file: FullFile;
     this.getFileByID$(id).subscribe(value => {
       file = value;
-    });
+    }, (error => this.errorService.errorSnackbar(error)));
     return file;
   }
 
@@ -93,7 +93,7 @@ export class FileService {
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           this.errorService.errorSnackbar(errorResponse);
-          return throwError(errorResponse);
+          return new Observable();
         })
       );
   }
@@ -104,7 +104,7 @@ export class FileService {
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           this.errorService.errorSnackbar(errorResponse);
-          return throwError(errorResponse);
+          return new Observable();
         })
       );
   }
@@ -115,18 +115,30 @@ export class FileService {
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           this.errorService.errorSnackbar(errorResponse);
-          return throwError(errorResponse);
+          return new Observable();
         })
       );
   }
 
   addCommentToFileByID(id: number, text: string): Observable<any> {
-    return this.http.post(`${this.SERVER_URL}/${id}/comment`, { text });
+    return this.http.post(`${this.SERVER_URL}/${id}/comment`, {text}).pipe()
+      .pipe(
+        catchError((errorResponse: HttpErrorResponse) => {
+          this.errorService.errorSnackbar(errorResponse);
+          return new Observable();
+        })
+      );
   }
 
   deleteComment(comment: Comment): Observable<any> {
     // TODO: Could not be tested in development (w/o authorization).
-    return this.http.delete(`${this.SERVER_URL}/${comment.fileId}/comment/${comment.id}`);
+    return this.http.delete(`${this.SERVER_URL}/${comment.fileId}/comment/${comment.id}`)
+      .pipe(
+        catchError((errorResponse: HttpErrorResponse) => {
+          this.errorService.errorSnackbar(errorResponse);
+          return new Observable();
+        })
+      );
   }
 }
 

@@ -37,7 +37,7 @@ export class CurriculumService {
     this.getLecturesByCurriculaID$(curriculaID)
       .subscribe((response) => {
         response.forEach((s) => lectures.push(s));
-      });
+      }, (error => this.errorService.errorSnackbar(error)));
     return lectures;
   }
 
@@ -51,7 +51,7 @@ export class CurriculumService {
           }
           lectures[s.relativeSemester - 1].push(s);
         });
-      });
+      }, (error => this.errorService.errorSnackbar(error)));
     return lectures;
   }
 
@@ -59,7 +59,7 @@ export class CurriculumService {
     return this.http.post(this.SERVER_URL, data).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
         this.errorService.errorSnackbar(errorResponse);
-        return throwError(errorResponse);
+        return new Observable();
       })
     );
   }
@@ -68,7 +68,7 @@ export class CurriculumService {
     return this.http.delete(`${this.SERVER_URL}/${id}`).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
         this.errorService.errorSnackbar(errorResponse);
-        return throwError(errorResponse);
+        return new Observable();
       })
     );
   }
@@ -77,7 +77,7 @@ export class CurriculumService {
     return this.http.put(`${this.SERVER_URL}/${id}`, data).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
         this.errorService.errorSnackbar(errorResponse);
-        return throwError(errorResponse);
+        return new Observable();
       })
     );
   }
