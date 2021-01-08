@@ -1,1 +1,12 @@
-<app-file-element [data]="data"></app-file-element>
+<app-file-element [data]="data" (executeAction)="delete($event)"></app-file-element>
+<mat-grid-list [cols]="6">
+  <mat-grid-tile [colspan]="4">
+    <!-- TODO: bitte Tags hier einfügen -->
+    Tags
+  </mat-grid-tile>
+  <mat-grid-tile [colspan]="2">
+    <app-rate [data]="data" (executeAction)="rate(data.id, $event)"></app-rate>
+  </mat-grid-tile>
+</mat-grid-list>
+<!-- TODO: Implement the comment stuff -->
+<app-comment></app-comment>

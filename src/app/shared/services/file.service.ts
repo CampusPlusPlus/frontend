@@ -86,5 +86,18 @@ export class FileService {
     return file;
   }
 
+  deleteByID(id: number): Observable<any> {
+    return this.http.delete(`${this.SERVER_URL}/${id}`);
+  }
+
+  upvote(id: number): Observable<any> {
+    console.log("3", "upvote", id);
+    return this.http.patch(`${this.SERVER_URL}/${id}/upvote`, {});
+  }
+
+  downvote(id: number): Observable<any> {
+    console.log("3", "downvote", id);
+    return this.http.patch(`${this.SERVER_URL}/${id}/downvote`, {});
+  }
 }
 
