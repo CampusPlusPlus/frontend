@@ -49,7 +49,8 @@ export class FileUploadFormComponent implements OnInit {
   onSubmit(): void {
     try {
       this.upload();
-      this.router.navigate(['discipline']);
+      window.history.back();
+      // this.router.navigate(['discipline']);
     } catch (e) {
       this.snackBar.open('There was an problem with uploading your file');
       return;
