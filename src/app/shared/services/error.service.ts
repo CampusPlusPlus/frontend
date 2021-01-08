@@ -12,11 +12,11 @@ export class ErrorService {
 
   errorSnackbar(errorResponse: HttpErrorResponse): void {
     if (errorResponse.statusText === 'Unknown Error') {
-      this.snackbarService.open(errorResponse.statusText, 'Undo', {
+      this.snackbarService.open(errorResponse.statusText, 'Close', {
         duration: 3000
       });
     } else {
-      this.snackbarService.open(errorResponse.error.error, 'Undo', {
+      this.snackbarService.open(errorResponse.error.error, 'Close', {
         duration: 3000
       });
     }
