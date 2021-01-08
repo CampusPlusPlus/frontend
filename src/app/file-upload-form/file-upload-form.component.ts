@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, NgForm, Validators} from '@angular/forms';
 import {FileService} from '../shared/services/file.service';
 import {LectureService} from '../shared/services/lecture.service';
@@ -7,8 +7,9 @@ import {CurriculumService} from '../shared/services/curriculum.service';
 import {Lecture} from '../shared/models/Lecture';
 import {forkJoin} from 'rxjs';
 import {Tag} from '../shared/models/Tag';
-import {FullFile} from '../shared/models/FullFile';
-import {MatSnackBar} from "@angular/material/snack-bar";
+import {SimpleFile} from '../shared/models/SimpleFile';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-file-upload-form',
@@ -28,9 +29,9 @@ export class FileUploadFormComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
+    private router: Router,
     private fileService: FileService,
     private lectureService: LectureService,
-    private curriculumService: CurriculumService,
     private tagService: TagService,
     private snackBar: MatSnackBar
   ) {
@@ -48,9 +49,9 @@ export class FileUploadFormComponent implements OnInit {
   onSubmit(): void {
     try {
       this.upload();
+      this.router.navigate(['discipline']);
     } catch (e) {
       this.snackBar.open('There was an problem with uploading your file');
-      console.log('upload error');
       return;
     }
   }
@@ -71,7 +72,7 @@ export class FileUploadFormComponent implements OnInit {
       }
     ).subscribe(response => {
       // const fileID: SimpleFile = response.file.body.id;
-      const temp: FullFile = response.file.body as FullFile;
+      const temp: SimpleFile = response.file.body as SimpleFile;
       const fileID: number = temp.id;
       const tempTags: Tag[] = response.tag;
       tempTags.forEach(tempTag => this.tags.forEach(htmlTags => {

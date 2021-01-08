@@ -6,6 +6,7 @@ import {catchError, map} from 'rxjs/operators';
 import {PageableResponse} from '../models/PageableResponse';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Comment} from '../models/Comment';
+import {ErrorService} from './error.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ import {Comment} from '../models/Comment';
 export class FileService {
   SERVER_URL = 'http://localhost:9000/files';
 
-  constructor(private http: HttpClient, private snackbarService: MatSnackBar) {
+  constructor(private http: HttpClient, private errorService: ErrorService) {
   }
 
   getAllFiles$(): Observable<FullFile[]> {
@@ -23,7 +24,7 @@ export class FileService {
           return responseData.content;
         }),
         catchError((errorResponse: HttpErrorResponse) => {
-          this.snackbarService.open(errorResponse.message);
+          this.errorService.errorSnackbar(errorResponse);
           return throwError(errorResponse);
         })
       );
@@ -45,7 +46,7 @@ export class FileService {
     )
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
-          this.snackbarService.open(errorResponse.message);
+          this.errorService.errorSnackbar(errorResponse);
           return throwError(errorResponse);
         })
       );
@@ -56,7 +57,7 @@ export class FileService {
     return this.http.patch(this.SERVER_URL + '/' + fileId + '/tags/' + tagId, null)
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
-          this.snackbarService.open(errorResponse.message);
+          this.errorService.errorSnackbar(errorResponse);
           return throwError(errorResponse);
         })
       );
@@ -73,7 +74,7 @@ export class FileService {
           return responseData;
         }),
         catchError((errorResponse: HttpErrorResponse) => {
-          this.snackbarService.open(errorResponse.message);
+          this.errorService.errorSnackbar(errorResponse);
           return throwError(errorResponse);
         })
       );
@@ -88,17 +89,35 @@ export class FileService {
   }
 
   deleteByID(id: number): Observable<any> {
-    return this.http.delete(`${this.SERVER_URL}/${id}`);
+    return this.http.delete(`${this.SERVER_URL}/${id}`)
+      .pipe(
+        catchError((errorResponse: HttpErrorResponse) => {
+          this.errorService.errorSnackbar(errorResponse);
+          return throwError(errorResponse);
+        })
+      );
   }
 
   upvote(id: number): Observable<any> {
     console.log("3", "upvote", id);
-    return this.http.patch(`${this.SERVER_URL}/${id}/upvote`, {});
+    return this.http.patch(`${this.SERVER_URL}/${id}/upvote`, {})
+      .pipe(
+        catchError((errorResponse: HttpErrorResponse) => {
+          this.errorService.errorSnackbar(errorResponse);
+          return throwError(errorResponse);
+        })
+      );
   }
 
   downvote(id: number): Observable<any> {
     console.log("3", "downvote", id);
-    return this.http.patch(`${this.SERVER_URL}/${id}/downvote`, {});
+    return this.http.patch(`${this.SERVER_URL}/${id}/downvote`, {})
+      .pipe(
+        catchError((errorResponse: HttpErrorResponse) => {
+          this.errorService.errorSnackbar(errorResponse);
+          return throwError(errorResponse);
+        })
+      );
   }
 
   addCommentToFileByID(id: number, text: string): Observable<any> {

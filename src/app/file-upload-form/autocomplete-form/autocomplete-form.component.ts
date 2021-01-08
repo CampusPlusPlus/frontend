@@ -15,17 +15,14 @@ import {
   FormControl,
 } from '@angular/forms';
 import {Observable, Subscription} from 'rxjs';
-import {map, startWith, tap} from 'rxjs/operators';
+import {map, startWith} from 'rxjs/operators';
 import {DisciplineService} from '../../shared/services/discipline.service';
 import {StudyCourseService} from '../../shared/services/study-course.service';
 import {CurriculumService} from '../../shared/services/curriculum.service';
-import {LectureService} from '../../shared/services/lecture.service';
-import {TagService} from '../../shared/services/tag.service';
 import {Discipline} from '../../shared/models/Discipline';
 import {StudyCourse} from '../../shared/models/StudyCourse';
 import {Curricula} from '../../shared/models/Curriculum';
 import {Lecture} from '../../shared/models/Lecture';
-import {Tag} from '../../shared/models/Tag';
 
 export interface AutocompleteFormValues {
   discipline: string;

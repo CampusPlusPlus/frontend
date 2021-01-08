@@ -4,7 +4,7 @@ import {catchError, map} from 'rxjs/operators';
 import {Observable, throwError} from 'rxjs';
 import {Lecture} from '../models/Lecture';
 import {PageableResponse} from '../models/PageableResponse';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import {ErrorService} from './error.service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +12,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 export class CurriculumService {
   SERVER_URL = 'http://localhost:9000/curricula';
 
-  constructor(private http: HttpClient, private snackbarService: MatSnackBar) {
+  constructor(private http: HttpClient, private errorService: ErrorService) {
   }
 
 
@@ -26,7 +26,7 @@ export class CurriculumService {
           return responseData.content;
         }),
         catchError((errorResponse: HttpErrorResponse) => {
-          this.snackbarService.open(errorResponse.message);
+          this.errorService.errorSnackbar(errorResponse);
           return throwError(errorResponse);
         })
       );
@@ -58,7 +58,7 @@ export class CurriculumService {
   createCurriculum(data: object): Observable<any> {
     return this.http.post(this.SERVER_URL, data).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
-        this.snackbarService.open(errorResponse.message);
+        this.errorService.errorSnackbar(errorResponse);
         return throwError(errorResponse);
       })
     );
@@ -67,7 +67,7 @@ export class CurriculumService {
   deleteCurriculum(id: number): Observable<any> {
     return this.http.delete(`${this.SERVER_URL}/${id}`).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
-        this.snackbarService.open(errorResponse.message);
+        this.errorService.errorSnackbar(errorResponse);
         return throwError(errorResponse);
       })
     );
@@ -76,7 +76,7 @@ export class CurriculumService {
   updateCurriculumByID(id: number, data: { studyCourseId: number; name: any }): Observable<any> {
     return this.http.put(`${this.SERVER_URL}/${id}`, data).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
-        this.snackbarService.open(errorResponse.message);
+        this.errorService.errorSnackbar(errorResponse);
         return throwError(errorResponse);
       })
     );

@@ -5,7 +5,7 @@ import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { StudyCourse } from '../models/StudyCourse';
 import { Curricula } from '../models/Curriculum';
 import { PageableResponse } from '../models/PageableResponse';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import {ErrorService} from './error.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +13,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 export class StudyCourseService {
   SERVER_URL = 'http://localhost:9000/studyCourses';
 
-  constructor(private http: HttpClient, private snackbarService: MatSnackBar) {
+  constructor(private http: HttpClient, private errorService: ErrorService) {
   }
 
   private getAllStudyCourses$(): Observable<StudyCourse[]> {
@@ -26,7 +26,7 @@ export class StudyCourseService {
         return studyCourseArray;
       }),
       catchError((errorResponse) => {
-        this.snackbarService.open(errorResponse.message);
+        this.errorService.errorSnackbar(errorResponse);
         return throwError(errorResponse);
       })
     );
@@ -51,7 +51,7 @@ export class StudyCourseService {
           return responseData.content;
         }),
         catchError((errorResponse) => {
-          this.snackbarService.open(errorResponse.message);
+          this.errorService.errorSnackbar(errorResponse);
           return throwError(errorResponse);
         })
       );
@@ -69,7 +69,7 @@ export class StudyCourseService {
   createStudyCourse(data: object): Observable<any> {
     return this.http.post(this.SERVER_URL, data).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
-        this.snackbarService.open(errorResponse.message);
+        this.errorService.errorSnackbar(errorResponse);
         return throwError(errorResponse);
       })
     );
@@ -78,7 +78,7 @@ export class StudyCourseService {
   deleteStudyCourse(id: number): Observable<any> {
     return this.http.delete(`${this.SERVER_URL}/${id}`).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
-        this.snackbarService.open(errorResponse.message);
+        this.errorService.errorSnackbar(errorResponse);
         return throwError(errorResponse);
       })
     );
@@ -87,7 +87,7 @@ export class StudyCourseService {
   updateStudyCourseByID(id: number, data: { name: any; disciplineId: number }): Observable<any> {
     return this.http.put(`${this.SERVER_URL}/${id}`, data).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
-        this.snackbarService.open(errorResponse.message);
+        this.errorService.errorSnackbar(errorResponse);
         return throwError(errorResponse);
       })
     );
