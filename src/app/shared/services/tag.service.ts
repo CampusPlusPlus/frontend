@@ -4,7 +4,7 @@ import {catchError, map} from 'rxjs/operators';
 import {Observable, throwError} from 'rxjs';
 import {Tag} from '../models/Tag';
 import {PageableResponse} from '../models/PageableResponse';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import {ErrorService} from './error.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 export class TagService {
   SERVER_URL = 'http://localhost:9000/tags';
 
-  constructor(private http: HttpClient, private snackbarService: MatSnackBar) {
+  constructor(private http: HttpClient, private errorService: ErrorService) {
   }
 
 
@@ -23,7 +23,7 @@ export class TagService {
           return responseData.content;
         }),
         catchError((errorResponse: HttpErrorResponse) => {
-          this.snackbarService.open(errorResponse.message);
+          this.errorService.errorSnackbar(errorResponse);
           return throwError(errorResponse);
         })
       );
@@ -49,12 +49,7 @@ export class TagService {
       }
     ).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
-        if (errorResponse.status === 409) {
-          this.snackbarService.open('This Tag already exists');
-        } else {
-          this.snackbarService.open(errorResponse.message);
-        }
-        console.log(errorResponse);
+        this.errorService.errorSnackbar(errorResponse);
         return throwError(errorResponse);
       })
     );
@@ -66,7 +61,7 @@ export class TagService {
       observe: 'response'
     }).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
-        this.snackbarService.open(errorResponse.message);
+        this.errorService.errorSnackbar(errorResponse);
         return throwError(errorResponse);
       })
     );
