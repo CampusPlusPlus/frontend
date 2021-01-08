@@ -1,0 +1,14 @@
+<mat-card *ngIf="data">
+  <mat-card-header>
+    <mat-card-title>{{data.author}}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>
+      {{data.text}}
+    </p>
+  </mat-card-content>
+  <!-- TODO: show the following only admin -->
+  <mat-card-actions align="end">
+    <button mat-button color="warn" (click)="executeAction.emit(data)">🗑️</button>
+  </mat-card-actions>
+</mat-card>

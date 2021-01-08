@@ -1,19 +1,21 @@
+import { Tag } from './Tag';
+import { Comment } from './Comment';
+
 export type FullFile = {
   id: number,
-  originalName: string,
+  name: string,
   size: number,
-  tags: [],
-  upvotes: [],
-  downvotes: [],
+  tags: Tag[],
+  upvotes: any[],
+  downvotes: any[],
+  comments: Comment[],
   rating: number,
   author: string,
   lectureId: number,
-  _links: {
-    self: {
-      href: string
-    },
-    download: {
+  links: [
+    {
+      rel: string,
       href: string
     }
-  }
+  ]
 };

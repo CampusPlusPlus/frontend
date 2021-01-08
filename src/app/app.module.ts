@@ -22,6 +22,9 @@ import {CreateLevelLectureFormComponent} from './level-navigator/create-level-le
 import { DialogDeleteGenericComponent } from './level-navigator/dialog-delete-generic/dialog-delete-generic.component';
 import { DialogConfirmationComponent } from './level-navigator/dialog-confirmation/dialog-confirmation.component';
 import { RateComponent } from './file-detail/rate/rate.component';
+import { CommentListComponent } from './comment/comment-list/comment-list.component';
+import { CommentDetailComponent } from './comment/comment-list/comment-detail/comment-detail.component';
+import { CommentWriterComponent } from './comment/comment-writer/comment-writer.component';
 
 
 @NgModule({
@@ -43,6 +46,9 @@ import { RateComponent } from './file-detail/rate/rate.component';
     DialogDeleteGenericComponent,
     DialogConfirmationComponent,
     RateComponent,
+    CommentListComponent,
+    CommentDetailComponent,
+    CommentWriterComponent,
   ],
   imports: [
     BrowserModule,

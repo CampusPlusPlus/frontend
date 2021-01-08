@@ -7,7 +7,7 @@ import {CurriculumService} from '../shared/services/curriculum.service';
 import {Lecture} from '../shared/models/Lecture';
 import {forkJoin} from 'rxjs';
 import {Tag} from '../shared/models/Tag';
-import {SimpleFile} from '../shared/models/SimpleFile';
+import {FullFile} from '../shared/models/FullFile';
 import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
@@ -71,7 +71,7 @@ export class FileUploadFormComponent implements OnInit {
       }
     ).subscribe(response => {
       // const fileID: SimpleFile = response.file.body.id;
-      const temp: SimpleFile = response.file.body as SimpleFile;
+      const temp: FullFile = response.file.body as FullFile;
       const fileID: number = temp.id;
       const tempTags: Tag[] = response.tag;
       tempTags.forEach(tempTag => this.tags.forEach(htmlTags => {

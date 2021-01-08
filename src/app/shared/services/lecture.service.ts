@@ -3,9 +3,9 @@ import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 import { Lecture } from '../models/Lecture';
-import { SimpleFile } from '../models/SimpleFile';
 import { PageableResponse } from '../models/PageableResponse';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import { SimpleFile } from '../models/SimpleFile';
 
 interface LectureBody {
   name: string;

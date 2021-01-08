@@ -1,0 +1,7 @@
+<div class="container">
+  <ng-container *ngFor="let comment of comments">
+    <div class="row">
+      <app-comment-detail [data]="comment" (executeAction)="executeAction.emit($event);"></app-comment-detail>
+    </div>
+  </ng-container>
+</div>

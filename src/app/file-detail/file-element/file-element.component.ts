@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { SimpleFile } from '../../shared/models/SimpleFile';
+import { FullFile } from '../../shared/models/FullFile';
 import { DialogConfirmationComponent } from '../../level-navigator/dialog-confirmation/dialog-confirmation.component';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -10,7 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class FileElementComponent implements OnInit {
 
-  @Input() data: SimpleFile;
+  @Input() data: FullFile;
   @Output() executeAction: EventEmitter<any> = new EventEmitter();
 
   constructor(

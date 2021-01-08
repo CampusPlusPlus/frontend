@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Comment } from '../shared/models/Comment';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogConfirmationComponent } from '../level-navigator/dialog-confirmation/dialog-confirmation.component';
+import { FullFile } from '../shared/models/FullFile';
 
 @Component({
   selector: 'app-comment',
@@ -7,9 +11,31 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CommentComponent implements OnInit {
 
-  constructor() { }
+  @Input() data: FullFile;
+  @Output() executeAction: EventEmitter<any> = new EventEmitter();
+  @Output() sendCommentAction: EventEmitter<any> = new EventEmitter();
+
+  constructor(
+    public dialog: MatDialog
+  ) {
+  }
 
   ngOnInit(): void {
+  }
+
+  handleDelete(comment: Comment): void {
+    this.dialog.open(DialogConfirmationComponent, {
+      data: {
+        name: this.data.name,
+        action: 'delete',
+        type: 'a comment from ' + comment.author,
+        confirmed: false
+      }
+    }).afterClosed().subscribe(x => {
+      if (x) {
+        this.executeAction.emit(comment);
+      }
+    });
   }
 
 }

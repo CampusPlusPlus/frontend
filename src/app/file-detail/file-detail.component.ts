@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { SimpleFile } from '../shared/models/SimpleFile';
+import { FullFile } from '../shared/models/FullFile';
 import { FileService } from '../shared/services/file.service';
+import { Comment } from '../shared/models/Comment';
 
 @Component({
   selector: 'app-file-detail',
@@ -12,7 +13,7 @@ import { FileService } from '../shared/services/file.service';
 export class FileDetailComponent implements OnInit {
 
   id: number;
-  data: SimpleFile;
+  data: FullFile;
 
   constructor(
     private route: ActivatedRoute,
@@ -48,5 +49,18 @@ export class FileDetailComponent implements OnInit {
         this.fetchFile();
       });
     }
+  }
+
+  deleteComment(comment: Comment): void {
+    this.fileService.deleteComment(comment).subscribe((res) => {
+      this.fetchFile();
+    });
+  }
+
+  sendComment(text: string): void {
+    console.log("i got text", text);
+    this.fileService.addCommentToFileByID(this.id, text).subscribe((res) => {
+      this.fetchFile();
+    });
   }
 }
