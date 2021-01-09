@@ -26,7 +26,6 @@ export class ShellComponent {
 
 
   isModOrAdmin(): boolean {
-    console.log("moa", this.auth.isModOrAdmin);
     return this.auth ? this.auth.isModOrAdmin : false;
   }
 }
