@@ -43,7 +43,8 @@ export class FileService {
   uploadFile$(formData): Observable<any> {
     return this.http.post(this.SERVER_URL,
       formData, {
-        observe: 'response'
+        observe: 'response',
+        headers: this.auth.httpHeader
       })
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
@@ -52,7 +53,6 @@ export class FileService {
         })
       );
   }
-
 
   // TODO: null in body could be a problem !!
   addTagToFile$(file: FullFile | SimpleFile, tagId: number): Observable<any> {
@@ -124,7 +124,7 @@ export class FileService {
 
   upvote(id: number): Observable<any> {
     console.log('3', 'upvote', id);
-    return this.http.patch(`${this.SERVER_URL}/${id}/upvote`, {})
+    return this.http.patch(`${this.SERVER_URL}/${id}/upvote`, {}, { headers: this.auth.httpHeader })
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           this.errorService.errorHTTPSnackbar(errorResponse);
@@ -135,7 +135,7 @@ export class FileService {
 
   downvote(id: number): Observable<any> {
     console.log('3', 'downvote', id);
-    return this.http.patch(`${this.SERVER_URL}/${id}/downvote`, {})
+    return this.http.patch(`${this.SERVER_URL}/${id}/downvote`, {}, { headers: this.auth.httpHeader })
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           this.errorService.errorHTTPSnackbar(errorResponse);
@@ -144,8 +144,12 @@ export class FileService {
       );
   }
 
+  removevote(id: number): Observable<any> {
+    // TODO: implement
+    return new Observable<any>();
+  }
+
   addCommentToFileByID(id: number, text: string): Observable<any> {
-    console.log(this.auth.httpHeader);
     return this.http.post(`${this.SERVER_URL}/${id}/comment`, { text }, { headers: this.auth.httpHeader }).pipe()
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
@@ -156,12 +160,12 @@ export class FileService {
   }
 
   deleteComment(comment: Comment): Observable<any> {
+    // TODO: if a user should be able to delete his own comment
     if (!this.auth.isModOrAdmin && !this.auth.ownsFile(comment.author)) {
       this.errorService.errorUnauthorized();
       return new Observable<any>();
     }
-    // TODO: Could not be tested in development (w/o authorization).
-    return this.http.delete(`${this.SERVER_URL}/${comment.fileId}/comment/${comment.id}`)
+    return this.http.delete(`${this.SERVER_URL}/${comment.fileId}/comment/${comment.id}`, { headers: this.auth.httpHeader })
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           this.errorService.errorHTTPSnackbar(errorResponse);
