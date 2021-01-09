@@ -9,7 +9,8 @@ import {TagService} from '../shared/services/tag.service';
 import {Tag} from '../shared/models/Tag';
 import {FileService} from '../shared/services/file.service';
 import {FullFile} from '../shared/models/FullFile';
-import {AuthService} from "../shared/services/auth.service";
+import {AuthService} from '../shared/services/auth.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-tags',
@@ -28,11 +29,13 @@ export class TagsComponent implements OnInit {
   filteredTags: Observable<string[]>;
   allTags: Tag[] = [];
   id: number;
+  readonly: boolean;
 
 
   constructor(private tagService: TagService,
               private fileService: FileService,
-              private auth: AuthService) {
+              private auth: AuthService,
+              private router: Router) {
     this.fetchTags();
     this.filteredTags = this.tagCtrl.valueChanges.pipe(
       startWith(null),
@@ -40,10 +43,14 @@ export class TagsComponent implements OnInit {
   }
 
   isAuthorized(): boolean {
-    console.log(this.fullFile.authorId);
-    if (this.auth.isModOrAdmin || this.auth.ownsFile(this.fullFile.authorId)) {
+    if (this.router.url === '/upload') {
+      this.readonly = false;
+      return true;
+    } else if (this.auth.isModOrAdmin || this.auth.ownsFile(this.fullFile.authorId)) {
+      this.readonly = false;
       return true;
     } else {
+      this.readonly = true;
       return false;
     }
   }
