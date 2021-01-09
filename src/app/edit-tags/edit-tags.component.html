@@ -1,11 +1,13 @@
 <div class="container">
-  <h1>Edit or Delete all current Tags</h1>
+  <h1 style="font-size: 40px">Edit Tags</h1>
+  <br>
   <br>
   <div *ngFor="let tag of allTags, index as index">
     <p>
-      <span style="font-size: 18px">🏷️{{tag.tagValue}}</span>
-      <mat-icon style="cursor: pointer" (click)="onEdit(tag.id)">edit</mat-icon>
-      <mat-icon style="cursor: pointer" (click)="onDelete(tag.id)">delete</mat-icon>
+      <span style="font-size: 18px">🏷️  {{tag.tagValue}}</span>
+      <mat-icon style="cursor: pointer; margin-left: 10px" (click)="onEdit(tag.id)">edit</mat-icon>
+      <mat-icon style="cursor: pointer; margin-left: 10px" (click)="onDelete(tag.id)">delete</mat-icon>
     </p>
+    <hr>
   </div>
 </div>
