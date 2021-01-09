@@ -11,6 +11,7 @@ export type FullFile = {
   comments: Comment[],
   rating: number,
   author: string,
+  authorId: string,
   lectureId: number,
   links: [
     {

@@ -60,12 +60,11 @@ export class FileUploadFormComponent implements OnInit {
         tag: this.tagService.getAllTags$()
       }
     ).subscribe(response => {
-      const temp: SimpleFile = response.file.body as SimpleFile;
-      const fileID: number = temp.id;
+      const file: SimpleFile = response.file.body as SimpleFile;
       const tempTags: Tag[] = response.tag;
       tempTags.forEach(tempTag => this.tags.forEach(htmlTags => {
         if (htmlTags === tempTag.tagValue) {
-          this.fileService.addTagToFile(fileID, tempTag.id);
+          this.fileService.addTagToFile(file, tempTag.id);
         }
       }));
       this.snackBar.open('The upload was a success', 'Close', {
