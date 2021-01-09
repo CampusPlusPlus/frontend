@@ -37,8 +37,8 @@ export class FileDetailComponent implements OnInit {
     }, (error => console.log(error)));
   }
 
-  delete(id: number): void {
-    this.fileService.deleteByID(id).subscribe((res) => {
+  delete(): void {
+    this.fileService.deleteFile(this.data).subscribe(() => {
       this.location.back();
     });
   }

@@ -1,14 +1,14 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {FormControl} from '@angular/forms';
-import {Observable} from 'rxjs';
-import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
-import {map, startWith} from 'rxjs/operators';
-import {MatChipInputEvent} from '@angular/material/chips';
-import {TagService} from '../shared/services/tag.service';
-import {Tag} from '../shared/models/Tag';
-import {FileService} from '../shared/services/file.service';
-import {FullFile} from '../shared/models/FullFile';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { FormControl } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { map, startWith } from 'rxjs/operators';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { TagService } from '../shared/services/tag.service';
+import { Tag } from '../shared/models/Tag';
+import { FileService } from '../shared/services/file.service';
+import { FullFile } from '../shared/models/FullFile';
 
 @Component({
   selector: 'app-tags',
@@ -16,7 +16,7 @@ import {FullFile} from '../shared/models/FullFile';
   styleUrls: ['./tags.component.scss']
 })
 export class TagsComponent implements OnInit {
-  @ViewChild('tagInput', {static: false}) tagInput: ElementRef<HTMLInputElement>;
+  @ViewChild('tagInput', { static: false }) tagInput: ElementRef<HTMLInputElement>;
   @Input() tags: string[];
   @Input() fullFile: FullFile;
   tagNames: string[] = [];
@@ -52,18 +52,18 @@ export class TagsComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onClick() {
+  onClick(): void {
     console.log('inside on click');
     try {
       this.tagService.getAllTags$().subscribe(response => {
         response.forEach(tempTag => this.tags.forEach(htmlTags => {
           if (htmlTags === tempTag.tagValue) {
-            this.fileService.addTagToFile(this.fullFile.id, tempTag.id);
+            this.fileService.addTagToFile(this.fullFile, tempTag.id);
           }
         }));
       });
     } catch (e) {
-
+      // TODO: catch or remove the try/catch
     }
   }
 
@@ -86,7 +86,7 @@ export class TagsComponent implements OnInit {
       this.tagService.getAllTags$().subscribe(response => {
         response.forEach(tempTag => this.tags.forEach(htmlTags => {
           if (htmlTags === tempTag.tagValue) {
-            this.fileService.addTagToFile(this.fullFile.id, tempTag.id);
+            this.fileService.addTagToFile(this.fullFile, tempTag.id);
           }
         }));
       });
@@ -96,7 +96,7 @@ export class TagsComponent implements OnInit {
     if (this.allTags.map(x => x.tagValue).findIndex(x => x === value.toString()) === -1) {
       this.tagService.createTag$(value).subscribe(response => {
         try {
-          this.fileService.addTagToFile(this.fullFile.id, response.body.id);
+          this.fileService.addTagToFile(this.fullFile, response.body.id);
           console.log('inside try block');
         } catch (e) {
         }
@@ -115,7 +115,7 @@ export class TagsComponent implements OnInit {
           response.forEach(t => {
             if (t.tagValue === tag) {
               delete this.tags[this.tags.indexOf(tag)];
-              this.fileService.removeTagFromFile$(this.fullFile.id, t.id).subscribe();
+              this.fileService.removeTagFromFile$(this.fullFile, t.id).subscribe();
             }
           });
         }

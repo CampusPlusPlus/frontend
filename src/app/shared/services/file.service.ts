@@ -1,12 +1,14 @@
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {Observable, throwError} from 'rxjs';
-import {FullFile} from '../models/FullFile';
-import {catchError, map} from 'rxjs/operators';
-import {PageableResponse} from '../models/PageableResponse';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {Comment} from '../models/Comment';
-import {ErrorService} from './error.service';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { FullFile } from '../models/FullFile';
+import { catchError, map } from 'rxjs/operators';
+import { PageableResponse } from '../models/PageableResponse';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Comment } from '../models/Comment';
+import { ErrorService } from './error.service';
+import { AuthService } from './auth.service';
+import { SimpleFile } from '../models/SimpleFile';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +16,7 @@ import {ErrorService} from './error.service';
 export class FileService {
   SERVER_URL = 'http://localhost:9000/files';
 
-  constructor(private http: HttpClient, private errorService: ErrorService) {
+  constructor(private http: HttpClient, private errorService: ErrorService, private auth: AuthService) {
   }
 
   getAllFiles$(): Observable<FullFile[]> {
@@ -42,8 +44,7 @@ export class FileService {
     return this.http.post(this.SERVER_URL,
       formData, {
         observe: 'response'
-      }
-    )
+      })
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           // this.errorService.errorSnackbar(errorResponse);
@@ -54,8 +55,12 @@ export class FileService {
 
 
   // TODO: null in body could be a problem !!
-  addTagToFile$(fileId: number, tagId: number): Observable<any> {
-    return this.http.patch(this.SERVER_URL + '/' + fileId + '/tags/' + tagId, null)
+  addTagToFile$(file: FullFile | SimpleFile, tagId: number): Observable<any> {
+    if (!this.auth.isModOrAdmin && !this.auth.ownsFile(file.authorId)) {
+      this.errorService.errorUnauthorized();
+      return new Observable<any>();
+    }
+    return this.http.patch(this.SERVER_URL + '/' + file.id + '/tags/' + tagId, null)
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           this.errorService.errorHTTPSnackbar(errorResponse);
@@ -64,8 +69,12 @@ export class FileService {
       );
   }
 
-  removeTagFromFile$(fileId: number, tagId: number): Observable<any> {
-    return this.http.delete(this.SERVER_URL + '/' + fileId + '/tags/' + tagId )
+  removeTagFromFile$(file: FullFile, tagId: number): Observable<any> {
+    if (!this.auth.isModOrAdmin && !this.auth.ownsFile(file.authorId)) {
+      this.errorService.errorUnauthorized();
+      return new Observable<any>();
+    }
+    return this.http.delete(this.SERVER_URL + '/' + file.id + '/tags/' + tagId)
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           this.errorService.errorHTTPSnackbar(errorResponse);
@@ -74,8 +83,8 @@ export class FileService {
       );
   }
 
-  addTagToFile(fileId: number, tagId: number): void {
-    this.addTagToFile$(fileId, tagId).subscribe();
+  addTagToFile(file: SimpleFile, tagId: number): void {
+    this.addTagToFile$(file, tagId).subscribe();
   }
 
   getFileByID$(id: number): Observable<FullFile> {
@@ -99,8 +108,12 @@ export class FileService {
     return file;
   }
 
-  deleteByID(id: number): Observable<any> {
-    return this.http.delete(`${this.SERVER_URL}/${id}`)
+  deleteFile(file: FullFile | SimpleFile): Observable<any> {
+    if (!this.auth.isModOrAdmin && !this.auth.ownsFile(file.authorId)) {
+      this.errorService.errorUnauthorized();
+      return new Observable<any>();
+    }
+    return this.http.delete(`${this.SERVER_URL}/${file.id}`)
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           this.errorService.errorHTTPSnackbar(errorResponse);
@@ -110,7 +123,7 @@ export class FileService {
   }
 
   upvote(id: number): Observable<any> {
-    console.log("3", "upvote", id);
+    console.log('3', 'upvote', id);
     return this.http.patch(`${this.SERVER_URL}/${id}/upvote`, {})
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
@@ -121,7 +134,7 @@ export class FileService {
   }
 
   downvote(id: number): Observable<any> {
-    console.log("3", "downvote", id);
+    console.log('3', 'downvote', id);
     return this.http.patch(`${this.SERVER_URL}/${id}/downvote`, {})
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
@@ -132,7 +145,8 @@ export class FileService {
   }
 
   addCommentToFileByID(id: number, text: string): Observable<any> {
-    return this.http.post(`${this.SERVER_URL}/${id}/comment`, {text}).pipe()
+    console.log(this.auth.httpHeader);
+    return this.http.post(`${this.SERVER_URL}/${id}/comment`, { text }, { headers: this.auth.httpHeader }).pipe()
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           this.errorService.errorHTTPSnackbar(errorResponse);
@@ -142,6 +156,10 @@ export class FileService {
   }
 
   deleteComment(comment: Comment): Observable<any> {
+    if (!this.auth.isModOrAdmin && !this.auth.ownsFile(comment.author)) {
+      this.errorService.errorUnauthorized();
+      return new Observable<any>();
+    }
     // TODO: Could not be tested in development (w/o authorization).
     return this.http.delete(`${this.SERVER_URL}/${comment.fileId}/comment/${comment.id}`)
       .pipe(

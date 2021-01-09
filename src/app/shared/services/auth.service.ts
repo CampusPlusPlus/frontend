@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import jwt_decode from 'jwt-decode';
 import { BearerToken } from '../models/BearerToken';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { element } from 'protractor';
 
 @Injectable({
@@ -10,18 +10,28 @@ import { element } from 'protractor';
 export class AuthService {
 
   rawToken: string;
+  bearerToken: string;
   token: BearerToken;
   isModOrAdmin = false;
+  httpHeader: HttpHeaders;
   readonly refKeycloakLogin: string = 'http://keycloak:8080/auth/realms/CampusPlusPlus/protocol/openid-connect/auth?client_id=frontend&response_mode=fragment&response_type=token&login=true&redirect_uri=http://localhost:4200/login';
   readonly refKeycloakProfile: string = 'http://localhost:8080/auth/realms/CampusPlusPlus/account/';
   readonly refKeycloakLogout: string = 'http://keycloak:8080/auth/realms/CampusPlusPlus/protocol/openid-connect/logout?redirect_uri=http://localhost:4200';
 
   constructor(private http: HttpClient) {
+    this.httpHeader = new HttpHeaders();
+  }
+
+  helpMyJavaFriend(input: string): string {
+    const tmp = input.split('&');
+    return tmp.length >= 1 ? tmp[1].substring(tmp[1].indexOf('=') + 1) : '';
   }
 
   setToken(rawToken: string, res: { access_token: any; id_token: any; error: any }): void {
     this.rawToken = rawToken;
+    this.bearerToken = this.helpMyJavaFriend(this.rawToken);
     this.token = jwt_decode(res.access_token);
+    this.httpHeader = this.httpHeader.set('Authorization', `Bearer ${this.bearerToken}`);
     this.isModOrAdmin ||= !!this.token.resource_access.frontend.roles.find(elem => elem === 'moderator');
     this.isModOrAdmin ||= !!this.token.resource_access.frontend.roles.find(elem => elem === 'admin');
   }
@@ -41,13 +51,14 @@ export class AuthService {
   logout(): void {
     console.log(this.rawToken);
     this.isModOrAdmin = false;
+    this.httpHeader.delete('Authorization');
     window.location.href = this.refKeycloakLogout;
     // this.http.get(this.refKeycloackLogout + '?token=' + this.rawToken).subscribe((res) => {
     //   console.log('res', res);
     // });
   }
 
-  ownsFile(id: string): boolean {
-    return this.token ? this.token.sub === id : false;
+  ownsFile(userIDofElement: string): boolean {
+    return this.token ? this.token.sub === userIDofElement : false;
   }
 }
