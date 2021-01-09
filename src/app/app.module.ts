@@ -18,13 +18,15 @@ import {FormsModule} from '@angular/forms';
 import {TagsComponent} from './tags/tags.component';
 import {CreateLevelFormComponent} from './level-navigator/create-level-form/create-level-form.component';
 import {CreateLevelLectureFormComponent} from './level-navigator/create-level-lecture-form/create-level-lecture-form.component';
-import { DialogDeleteGenericComponent } from './level-navigator/dialog-delete-generic/dialog-delete-generic.component';
-import { DialogConfirmationComponent } from './level-navigator/dialog-confirmation/dialog-confirmation.component';
-import { RateComponent } from './file-detail/rate/rate.component';
-import { CommentListComponent } from './comment/comment-list/comment-list.component';
-import { CommentDetailComponent } from './comment/comment-list/comment-detail/comment-detail.component';
-import { CommentWriterComponent } from './comment/comment-writer/comment-writer.component';
-import { EditTagsComponent } from './tags/edit-tags/edit-tags.component';
+import {DialogDeleteGenericComponent} from './level-navigator/dialog-delete-generic/dialog-delete-generic.component';
+import {DialogConfirmationComponent} from './level-navigator/dialog-confirmation/dialog-confirmation.component';
+import {RateComponent} from './file-detail/rate/rate.component';
+import {CommentListComponent} from './comment/comment-list/comment-list.component';
+import {CommentDetailComponent} from './comment/comment-list/comment-detail/comment-detail.component';
+import {CommentWriterComponent} from './comment/comment-writer/comment-writer.component';
+import {KeycloakComponent} from './keycloak/keycloak.component';
+import {LogoutComponent} from './logout/logout.component';
+import {EditTagsComponent} from './tags/edit-tags/edit-tags.component';
 
 
 @NgModule({
@@ -48,6 +50,8 @@ import { EditTagsComponent } from './tags/edit-tags/edit-tags.component';
     CommentListComponent,
     CommentDetailComponent,
     CommentWriterComponent,
+    KeycloakComponent,
+    LogoutComponent,
     EditTagsComponent,
   ],
   imports: [
