@@ -18,6 +18,7 @@ import {
   DialogConfirmationData
 } from './dialog-confirmation/dialog-confirmation.component';
 import { BasicDTO } from '../shared/models/BasicDTO';
+import { AuthService } from '../shared/services/auth.service';
 
 @Component({
   selector: 'app-level-navigator',
@@ -41,6 +42,7 @@ export class LevelNavigatorComponent implements OnInit {
     private curriculumService: CurriculumService,
     private lectureService: LectureService,
     private fileService: FileService,
+    private auth: AuthService,
     public dialog: MatDialog
   ) {
   }
@@ -245,5 +247,9 @@ export class LevelNavigatorComponent implements OnInit {
 
   setEdit(): void {
     this.actionToggle = this.actionToggle === 'edit' ? '' : 'edit';
+  }
+
+  isModOrAdmin(): boolean {
+    return this.auth ? this.auth.isModOrAdmin : false;
   }
 }

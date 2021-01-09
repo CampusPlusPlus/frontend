@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FullFile } from '../../shared/models/FullFile';
 import { DialogConfirmationComponent } from '../../level-navigator/dialog-confirmation/dialog-confirmation.component';
 import { MatDialog } from '@angular/material/dialog';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-file-element',
@@ -14,7 +15,8 @@ export class FileElementComponent implements OnInit {
   @Output() executeAction: EventEmitter<any> = new EventEmitter();
 
   constructor(
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private auth: AuthService
   ) {}
 
   ngOnInit(): void {}
@@ -36,5 +38,9 @@ export class FileElementComponent implements OnInit {
         this.executeAction.emit(id);
       }
     });
+  }
+
+  isModOrAdmin() {
+    return this.auth ? this.auth.isModOrAdmin : false;
   }
 }

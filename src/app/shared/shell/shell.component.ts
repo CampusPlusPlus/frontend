@@ -17,11 +17,16 @@ export class ShellComponent {
       shareReplay()
     );
 
-  constructor(private breakpointObserver: BreakpointObserver, private auth: AuthService) {}
+  constructor(private breakpointObserver: BreakpointObserver, private auth: AuthService) {
+  }
 
   validToken(): boolean {
     return !!this.auth.token;
   }
 
 
+  isModOrAdmin(): boolean {
+    console.log("moa", this.auth.isModOrAdmin);
+    return this.auth ? this.auth.isModOrAdmin : false;
+  }
 }

@@ -44,6 +44,7 @@ export class LoginComponent implements OnInit {
     if (!this.auth.validToken()) {
       window.location.href = this.auth.refKeycloackLogin;
     }
+    console.log(this.auth.token);
   }
 
   getName(): string {

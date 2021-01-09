@@ -4,7 +4,7 @@
   </mat-grid-tile>
   <mat-grid-tile [colspan]="1" [rowspan]="1">
     <button (click)="download(data.id)" mat-raised-button color="primary">📥</button>
-    <button (click)="delete(data.id)" mat-raised-button color="warn">🗑️</button>
+    <button *ngIf="isModOrAdmin()" (click)="delete(data.id)" mat-raised-button color="warn">🗑️</button>
   </mat-grid-tile>
 </mat-grid-list>
 
