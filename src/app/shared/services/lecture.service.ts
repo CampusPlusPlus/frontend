@@ -40,7 +40,7 @@ export class LectureService {
     this.getLectures$()
       .subscribe((response) => {
         response.forEach((l) => lectures.push(l));
-      });
+      }, (error => this.errorService.errorSnackbar(error)));
     return lectures;
   }
 
@@ -61,7 +61,7 @@ export class LectureService {
     const files: SimpleFile[] = [];
     this.getFilesByLectureID$(id).subscribe((response) => {
       response.forEach((l) => files.push(l));
-    });
+    }, (error => this.errorService.errorSnackbar(error)));
     return files;
   }
 
@@ -69,7 +69,7 @@ export class LectureService {
     return this.http.post(this.SERVER_URL, data).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
         this.errorService.errorSnackbar(errorResponse);
-        return throwError(errorResponse);
+        return new Observable();
       })
     );
   }
@@ -78,7 +78,7 @@ export class LectureService {
     return this.http.delete(`${this.SERVER_URL}/${id}`).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
         this.errorService.errorSnackbar(errorResponse);
-        return throwError(errorResponse);
+        return new Observable();
       })
     );
   }
@@ -87,7 +87,7 @@ export class LectureService {
     return this.http.put(`${this.SERVER_URL}/${id}`, data).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
         this.errorService.errorSnackbar(errorResponse);
-        return throwError(errorResponse);
+        return new Observable();
       })
     );
   }

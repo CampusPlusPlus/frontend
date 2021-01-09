@@ -34,7 +34,7 @@ export class TagService {
     this.getAllTags$()
       .subscribe((response) => {
         response.forEach((t) => tags.push(t));
-      });
+      }, (error => this.errorService.errorSnackbar(error)));
     return tags;
   }
 
@@ -50,7 +50,7 @@ export class TagService {
     ).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
         this.errorService.errorSnackbar(errorResponse);
-        return throwError(errorResponse);
+        return new Observable();
       })
     );
   }
@@ -62,7 +62,7 @@ export class TagService {
     }).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
         this.errorService.errorSnackbar(errorResponse);
-        return throwError(errorResponse);
+        return new Observable();
       })
     );
   }

@@ -34,7 +34,7 @@ export class DisciplineService {
     this.getDisciplines$()
       .subscribe((response) => {
         response.forEach((d) => disciplines.push(d));
-      });
+      }, (error => this.errorService.errorSnackbar(error)));
     return disciplines;
   }
 
@@ -57,7 +57,7 @@ export class DisciplineService {
     this.getStudyCoursesByDisciplineID$(disciplineId)
       .subscribe((response) => {
         response.forEach((s) => studyCourses.push(s));
-      });
+      }, (error => this.errorService.errorSnackbar(error)));
     return studyCourses;
   }
 
@@ -65,7 +65,7 @@ export class DisciplineService {
     return this.http.post(this.SERVER_URL, data).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
         this.errorService.errorSnackbar(errorResponse);
-        return throwError(errorResponse);
+        return new Observable();
       })
     );
   }
@@ -74,7 +74,7 @@ export class DisciplineService {
     return this.http.delete(`${this.SERVER_URL}/${id}`).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
         this.errorService.errorSnackbar(errorResponse);
-        return throwError(errorResponse);
+        return new Observable();
       })
     );
   }
@@ -83,7 +83,7 @@ export class DisciplineService {
     return this.http.put(`${this.SERVER_URL}/${id}`, data).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
         this.errorService.errorSnackbar(errorResponse);
-        return throwError(errorResponse);
+        return new Observable();
       })
     );
   }

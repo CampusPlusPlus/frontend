@@ -3,13 +3,12 @@ import {FormBuilder, FormGroup, NgForm, Validators} from '@angular/forms';
 import {FileService} from '../shared/services/file.service';
 import {LectureService} from '../shared/services/lecture.service';
 import {TagService} from '../shared/services/tag.service';
-import {CurriculumService} from '../shared/services/curriculum.service';
 import {Lecture} from '../shared/models/Lecture';
 import {forkJoin} from 'rxjs';
 import {Tag} from '../shared/models/Tag';
 import {SimpleFile} from '../shared/models/SimpleFile';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {Router} from "@angular/router";
+import {HttpErrorResponse} from '@angular/common/http';
+import {ErrorService} from '../shared/services/error.service';
 
 @Component({
   selector: 'app-file-upload-form',
@@ -29,11 +28,10 @@ export class FileUploadFormComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private router: Router,
     private fileService: FileService,
     private lectureService: LectureService,
     private tagService: TagService,
-    private snackBar: MatSnackBar
+    private errorService: ErrorService
   ) {
     this.uploadForm = this.formBuilder.group({
       uploads: ['', Validators.required],
@@ -47,17 +45,6 @@ export class FileUploadFormComponent implements OnInit {
 
 
   onSubmit(): void {
-    try {
-      this.upload();
-      this.router.navigate(['discipline']);
-    } catch (e) {
-      this.snackBar.open('There was an problem with uploading your file');
-      return;
-    }
-  }
-
-  private upload(): void {
-
     const formData = new FormData();
     const lectureName: string = this.uploadForm.get('fileUploadLocations').value.lectures;
     const lectureId: string = String(this.getLectureIdByName(lectureName));
@@ -71,16 +58,17 @@ export class FileUploadFormComponent implements OnInit {
         tag: this.tagService.getAllTags$()
       }
     ).subscribe(response => {
-      // const fileID: SimpleFile = response.file.body.id;
       const temp: SimpleFile = response.file.body as SimpleFile;
       const fileID: number = temp.id;
       const tempTags: Tag[] = response.tag;
       tempTags.forEach(tempTag => this.tags.forEach(htmlTags => {
         if (htmlTags === tempTag.tagValue) {
-          console.log(tempTag.tagValue);
           this.fileService.addTagToFile(fileID, tempTag.id);
         }
       }));
+      window.history.back();
+    }, (error: HttpErrorResponse) => {
+      this.errorService.errorSnackbar(error);
     });
   }
 
@@ -96,7 +84,6 @@ export class FileUploadFormComponent implements OnInit {
   }
 
   onReset(): void {
-    console.log('reset');
     this.disciplineNames = [];
     this.studyCourseNames = [];
     this.curriculaNames = [];
@@ -104,6 +91,4 @@ export class FileUploadFormComponent implements OnInit {
     this.tags = [];
     this.uploadForm.reset();
   }
-
-
 }
