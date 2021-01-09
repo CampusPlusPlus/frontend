@@ -23,7 +23,6 @@ export class TagService {
     return lowerCasedTag.replace(regex, '-');
   }
 
-
   getAllTags$(): Observable<Tag[]> {
     return this.http.get(this.SERVER_URL)
       .pipe(
@@ -53,7 +52,8 @@ export class TagService {
         tagValue: normalizedTagName,
         tagType: tagType,
       }, {
-        observe: 'response'
+        observe: 'response',
+        headers: this.auth.httpHeader
       }
     ).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
@@ -70,10 +70,9 @@ export class TagService {
       tagValue: normalizedTagName,
       tagType: tagType,
     }, {
-      observe: 'response'
-
+      observe: 'response',
+      headers: this.auth.httpHeader
     });
-
   }
 
   deleteTag$(tagId: number): Observable<any> {
@@ -83,7 +82,8 @@ export class TagService {
     }
     const id: string = String(tagId);
     return this.http.delete(this.SERVER_URL + '/' + id, {
-      observe: 'response'
+      observe: 'response',
+      headers: this.auth.httpHeader
     }).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
         this.errorService.errorHTTPSnackbar(errorResponse);

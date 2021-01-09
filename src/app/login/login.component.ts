@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../shared/services/auth.service';
-import { ActivatedRoute } from '@angular/router';
-import { map } from 'rxjs/operators';
+import { ActivatedRoute, Router, RoutesRecognized } from '@angular/router';
+import { filter, map, pairwise } from 'rxjs/operators';
+import { interval } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -10,10 +11,21 @@ import { map } from 'rxjs/operators';
 })
 export class LoginComponent implements OnInit {
 
+  previousURL: string;
+  progressbarValue = 0;
+  curSec = 0;
+
   constructor(
     private auth: AuthService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
+    if (window.localStorage.getItem('previous')) {
+      console.log('history', window.localStorage.getItem('previous'));
+      this.previousURL = window.localStorage.getItem('previous');
+    } else {
+      console.log('no history');
+    }
   }
 
   ngOnInit(): void {
@@ -44,11 +56,31 @@ export class LoginComponent implements OnInit {
     if (!this.auth.validToken()) {
       window.location.href = this.auth.refKeycloakLogin;
     }
+    if (window.localStorage.getItem('previous')) {
+      this.startTimer(5);
+      setTimeout(() => {
+        this.router.navigate([window.localStorage.getItem('previous')]);
+      }, 5000);
+    }
     // TODO: for DEBUG purposes
-    console.log(this.auth.token);
+    console.log('p', this.auth.token);
   }
 
   getName(): string {
     return this.auth.token ? this.auth.token.name : '';
+  }
+
+  startTimer(seconds: number): void {
+    const time = seconds;
+    const timer$ = interval(1000);
+
+    const sub = timer$.subscribe((sec) => {
+      this.progressbarValue += sec * 100 / seconds;
+      this.curSec = sec;
+
+      if (this.curSec === seconds) {
+        sub.unsubscribe();
+      }
+    });
   }
 }
