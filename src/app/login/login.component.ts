@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     let fromRedirect = false;
     this.route.fragment.subscribe((x) => {
-      if (x.toString().length > 0) {
+      if (x && x.toString().length > 0) {
         fromRedirect = true;
       }
     });
@@ -44,10 +44,11 @@ export class LoginComponent implements OnInit {
     if (!this.auth.validToken()) {
       window.location.href = this.auth.refKeycloakLogin;
     }
+    // TODO: for DEBUG purposes
     console.log(this.auth.token);
   }
 
   getName(): string {
-    return this.auth ? this.auth.token.name : '';
+    return this.auth.token ? this.auth.token.name : '';
   }
 }
