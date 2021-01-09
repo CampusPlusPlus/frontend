@@ -37,7 +37,7 @@ export class FileUploadFormComponent implements OnInit {
     private snackBar: MatSnackBar,
     private auth: AuthService
   ) {
-    if (!this.auth.isModOrAdmin) {
+    if (!this.auth.isModOrAdmin || this.auth.validToken()) {
       window.location.href = '/login';
     }
     this.uploadForm = this.formBuilder.group({

@@ -42,11 +42,11 @@ export class TagsComponent implements OnInit {
       map((userInput: string | null) => userInput ? this._filter(userInput) : this.tagNames.slice()));
   }
 
-  isAuthorized(): boolean {
+  isAuthorized(fullFile: FullFile): boolean {
     if (this.router.url === '/upload') {
       this.readonly = false;
       return true;
-    } else if (this.auth.isModOrAdmin
+    } else if (!!fullFile && this.auth.isModOrAdmin
       || this.auth.ownsFile(this.fullFile.authorId)) {
       this.readonly = false;
       return true;

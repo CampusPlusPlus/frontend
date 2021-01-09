@@ -1,5 +1,5 @@
 <mat-form-field style="width: 100%">
-  <mat-label *ngIf="!!this.fullFile && isAuthorized()">Please add at least one tag</mat-label>
+  <mat-label *ngIf="isAuthorized(this.fullFile)">Please add at least one tag</mat-label>
   <mat-chip-list #chipList aria-label="Tag selection">
     <mat-chip
       *ngFor="let tag of tags"
@@ -7,11 +7,11 @@
       [removable]="removable"
       (removed)="remove(tag)">
       {{tag}}
-      <mat-icon matChipRemove *ngIf="removable && isAuthorized()">cancel</mat-icon>
+      <mat-icon matChipRemove *ngIf="removable && isAuthorized(this.fullFile)">cancel</mat-icon>
     </mat-chip>
     <label>
       <input
-        *ngIf="!!this.fullFile && isAuthorized()"
+        *ngIf="isAuthorized(this.fullFile)"
         placeholder="New tag..."
         required="required"
         #tagInput
@@ -27,6 +27,6 @@
       {{tag}}
     </mat-option>
   </mat-autocomplete>
-  <mat-hint *ngIf="!!this.fullFile && isAuthorized()">After you found a good tag name press enter to create it
+  <mat-hint *ngIf="isAuthorized(this.fullFile)">After you found a good tag name press enter to create it
   </mat-hint>
 </mat-form-field>
