@@ -46,7 +46,8 @@ export class TagsComponent implements OnInit {
     if (this.router.url === '/upload') {
       this.readonly = false;
       return true;
-    } else if (this.auth.isModOrAdmin || this.auth.ownsFile(this.fullFile.authorId)) {
+    } else if (this.auth.isModOrAdmin
+      || this.auth.ownsFile(this.fullFile.authorId)) {
       this.readonly = false;
       return true;
     } else {
