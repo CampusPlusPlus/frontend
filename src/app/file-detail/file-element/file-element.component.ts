@@ -45,7 +45,6 @@ export class FileElementComponent implements OnInit {
   isAuthorized(): boolean {
     const a = this.auth ? this.auth.isModOrAdmin : false;
     const b = !!this.data && this.auth.ownsFile(this.data?.authorId);
-    console.log("ab", a || b, a, b, this.data);
     return a || b;
   }
 }

@@ -40,7 +40,6 @@ export class AuthService {
   setToken(rawToken: string, res: { access_token: any; id_token: any; error: any }): void {
     this.rawToken = rawToken;
     this.bearerToken = this.helpMyJavaFriend(this.rawToken);
-    console.log('bbb', this.bearerToken);
     window.localStorage.setItem('access_token', res.access_token);
     this.token = jwt_decode(res.access_token);
     window.localStorage.setItem('rawToken', this.rawToken);
@@ -64,7 +63,6 @@ export class AuthService {
   }
 
   logout(): void {
-    console.log(this.rawToken);
     this.isModOrAdmin = false;
     this.httpHeader.delete('Authorization');
     window.localStorage.removeItem('previous');
@@ -77,7 +75,6 @@ export class AuthService {
   }
 
   ownsFile(userIDofElement: string): boolean {
-    console.log("sub", this.token.sub, userIDofElement)
     return this.token ? this.token.sub === userIDofElement : false;
   }
 }
