@@ -12,9 +12,9 @@ export class AuthService {
   rawToken: string;
   token: BearerToken;
   isModOrAdmin = false;
-  readonly refKeycloackLogin: string = 'http://keycloak:8080/auth/realms/CampusPlusPlus/protocol/openid-connect/auth?client_id=frontend&response_mode=fragment&response_type=token&login=true&redirect_uri=http://localhost:4200/login';
-  readonly refKeycloackProfile: string = 'http://localhost:8080/auth/realms/CampusPlusPlus/account/';
-  readonly refKeycloackLogout: string = 'http://keycloak:8080/auth/realms/CampusPlusPlus/protocol/openid-connect/logout?redirect_uri=http://localhost:4200';
+  readonly refKeycloakLogin: string = 'http://keycloak:8080/auth/realms/CampusPlusPlus/protocol/openid-connect/auth?client_id=frontend&response_mode=fragment&response_type=token&login=true&redirect_uri=http://localhost:4200/login';
+  readonly refKeycloakProfile: string = 'http://localhost:8080/auth/realms/CampusPlusPlus/account/';
+  readonly refKeycloakLogout: string = 'http://keycloak:8080/auth/realms/CampusPlusPlus/protocol/openid-connect/logout?redirect_uri=http://localhost:4200';
 
   constructor(private http: HttpClient) {
   }
@@ -41,7 +41,7 @@ export class AuthService {
   logout(): void {
     console.log(this.rawToken);
     this.isModOrAdmin = false;
-    window.location.href = this.refKeycloackLogout;
+    window.location.href = this.refKeycloakLogout;
     // this.http.get(this.refKeycloackLogout + '?token=' + this.rawToken).subscribe((res) => {
     //   console.log('res', res);
     // });

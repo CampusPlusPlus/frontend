@@ -13,7 +13,7 @@ export class KeycloakComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    window.open(this.auth.refKeycloackProfile, '_blank');
+    window.open(this.auth.refKeycloakProfile, '_blank');
   }
 
   refresh(): void {

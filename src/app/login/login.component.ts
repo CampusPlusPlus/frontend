@@ -39,10 +39,10 @@ export class LoginComponent implements OnInit {
       ).subscribe(res => this.auth.setToken(res.raw, res.parsed));
     }
     if (!this.auth) {
-      window.location.href = this.auth.refKeycloackLogin;
+      window.location.href = this.auth.refKeycloakLogin;
     }
     if (!this.auth.validToken()) {
-      window.location.href = this.auth.refKeycloackLogin;
+      window.location.href = this.auth.refKeycloakLogin;
     }
     console.log(this.auth.token);
   }
