@@ -1,14 +1,14 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { FullFile } from '../models/FullFile';
-import { catchError, map } from 'rxjs/operators';
-import { PageableResponse } from '../models/PageableResponse';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Comment } from '../models/Comment';
-import { ErrorService } from './error.service';
-import { AuthService } from './auth.service';
-import { SimpleFile } from '../models/SimpleFile';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {Observable, throwError} from 'rxjs';
+import {FullFile} from '../models/FullFile';
+import {catchError, map} from 'rxjs/operators';
+import {PageableResponse} from '../models/PageableResponse';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {Comment} from '../models/Comment';
+import {ErrorService} from './error.service';
+import {AuthService} from './auth.service';
+import {SimpleFile} from '../models/SimpleFile';
 
 @Injectable({
   providedIn: 'root'
@@ -60,7 +60,9 @@ export class FileService {
       this.errorService.errorUnauthorized();
       return new Observable<any>();
     }
-    return this.http.patch(this.SERVER_URL + '/' + file.id + '/tags/' + tagId, null)
+    return this.http.patch(this.SERVER_URL + '/' + file.id + '/tags/' + tagId, {}, {
+      headers: this.auth.httpHeader
+    })
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           this.errorService.errorHTTPSnackbar(errorResponse);
@@ -124,7 +126,7 @@ export class FileService {
 
   upvote(id: number): Observable<any> {
     console.log('3', 'upvote', id);
-    return this.http.patch(`${this.SERVER_URL}/${id}/upvote`, {}, { headers: this.auth.httpHeader })
+    return this.http.patch(`${this.SERVER_URL}/${id}/upvote`, {}, {headers: this.auth.httpHeader})
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           this.errorService.errorHTTPSnackbar(errorResponse);
@@ -135,7 +137,7 @@ export class FileService {
 
   downvote(id: number): Observable<any> {
     console.log('3', 'downvote', id);
-    return this.http.patch(`${this.SERVER_URL}/${id}/downvote`, {}, { headers: this.auth.httpHeader })
+    return this.http.patch(`${this.SERVER_URL}/${id}/downvote`, {}, {headers: this.auth.httpHeader})
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           this.errorService.errorHTTPSnackbar(errorResponse);
@@ -150,7 +152,7 @@ export class FileService {
   }
 
   addCommentToFileByID(id: number, text: string): Observable<any> {
-    return this.http.post(`${this.SERVER_URL}/${id}/comment`, { text }, { headers: this.auth.httpHeader }).pipe()
+    return this.http.post(`${this.SERVER_URL}/${id}/comment`, {text}, {headers: this.auth.httpHeader}).pipe()
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           this.errorService.errorHTTPSnackbar(errorResponse);
@@ -165,7 +167,7 @@ export class FileService {
       this.errorService.errorUnauthorized();
       return new Observable<any>();
     }
-    return this.http.delete(`${this.SERVER_URL}/${comment.fileId}/comment/${comment.id}`, { headers: this.auth.httpHeader })
+    return this.http.delete(`${this.SERVER_URL}/${comment.fileId}/comment/${comment.id}`, {headers: this.auth.httpHeader})
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           this.errorService.errorHTTPSnackbar(errorResponse);

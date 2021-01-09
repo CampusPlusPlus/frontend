@@ -1,5 +1,5 @@
 <mat-form-field style="width: 100%">
-  <mat-label>Please add at least one tag</mat-label>
+  <mat-label *ngIf="!!this.fullFile && isAuthorized()">Please add at least one tag</mat-label>
   <mat-chip-list #chipList aria-label="Tag selection">
     <mat-chip
       *ngFor="let tag of tags"
@@ -27,5 +27,6 @@
       {{tag}}
     </mat-option>
   </mat-autocomplete>
-  <mat-hint>After you found a good tag name press enter to create it</mat-hint>
+  <mat-hint *ngIf="!!this.fullFile && isAuthorized()">After you found a good tag name press enter to create it
+  </mat-hint>
 </mat-form-field>
