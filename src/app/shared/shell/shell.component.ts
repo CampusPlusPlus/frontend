@@ -20,7 +20,6 @@ export class ShellComponent {
   constructor(private breakpointObserver: BreakpointObserver, private auth: AuthService) {}
 
   validToken(): boolean {
-    console.log("!!", !!this.auth.token);
     return !!this.auth.token;
   }
 
