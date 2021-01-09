@@ -29,7 +29,7 @@ export class TagsComponent implements OnInit {
   filteredTags: Observable<string[]>;
   allTags: Tag[] = [];
   id: number;
-  readonly: boolean;
+  readonly = false;
 
 
   constructor(private tagService: TagService,

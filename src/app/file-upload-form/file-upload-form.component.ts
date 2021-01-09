@@ -10,6 +10,7 @@ import {SimpleFile} from '../shared/models/SimpleFile';
 import {HttpErrorResponse} from '@angular/common/http';
 import {ErrorService} from '../shared/services/error.service';
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {AuthService} from "../shared/services/auth.service";
 
 @Component({
   selector: 'app-file-upload-form',
@@ -33,8 +34,12 @@ export class FileUploadFormComponent implements OnInit {
     private lectureService: LectureService,
     private tagService: TagService,
     private errorService: ErrorService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private auth: AuthService
   ) {
+    if (!this.auth.isModOrAdmin) {
+      window.location.href = '/login';
+    }
     this.uploadForm = this.formBuilder.group({
       uploads: ['', Validators.required],
       fileUploadLocations: ['', Validators.required],
