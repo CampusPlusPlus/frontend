@@ -68,12 +68,10 @@ export class FileUploadFormComponent implements OnInit {
     ).subscribe(response => {
       const file: SimpleFile = response.file.body as SimpleFile;
       const tempTags: Tag[] = response.tag;
-      tempTags.forEach(tempTag => this.tags.forEach(htmlTags => {
-        if (htmlTags === tempTag.tagValue) {
-          console.log('addTagToFile');
-          this.fileService.addTagToFile(file, tempTag.id);
-        }
-      }));
+      this.tags.forEach(textTag => {
+        const tmp = tempTags.find(value => textTag === value.tagValue);
+        this.fileService.addTagToFile(file, tmp.id);
+      });
       this.snackBar.open('The upload was a success', 'Close', {
         duration: 3000
       });
