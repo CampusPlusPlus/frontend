@@ -1,16 +1,16 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {FormControl} from '@angular/forms';
-import {Observable} from 'rxjs';
-import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
-import {map, startWith} from 'rxjs/operators';
-import {MatChipInputEvent} from '@angular/material/chips';
-import {TagService} from '../shared/services/tag.service';
-import {Tag} from '../shared/models/Tag';
-import {FileService} from '../shared/services/file.service';
-import {FullFile} from '../shared/models/FullFile';
-import {AuthService} from '../shared/services/auth.service';
-import {Router} from '@angular/router';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { FormControl } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { map, startWith } from 'rxjs/operators';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { TagService } from '../shared/services/tag.service';
+import { Tag } from '../shared/models/Tag';
+import { FileService } from '../shared/services/file.service';
+import { FullFile } from '../shared/models/FullFile';
+import { AuthService } from '../shared/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tags',
@@ -18,7 +18,7 @@ import {Router} from '@angular/router';
   styleUrls: ['./tags.component.scss']
 })
 export class TagsComponent implements OnInit {
-  @ViewChild('tagInput', {static: false}) tagInput: ElementRef<HTMLInputElement>;
+  @ViewChild('tagInput', { static: false }) tagInput: ElementRef<HTMLInputElement>;
   @Input() tags: string[];
   @Input() fullFile: FullFile;
   tagNames: string[] = [];
@@ -100,14 +100,22 @@ export class TagsComponent implements OnInit {
       input.value = '';
     }
 
+    this.tags = this.tags.filter((v, index, self) => {
+      return self.indexOf(v) === index;
+    });
+
     try {
-      this.tagService.getAllTags$().subscribe(response => {
-        response.forEach(tempTag => this.tags.forEach(htmlTags => {
-          if (htmlTags === tempTag.tagValue) {
-            this.fileService.addTagToFile(this.fullFile, tempTag.id);
-          }
-        }));
+      this.tags.forEach(textTag => {
+        const tmp = this.allTags.find(v => textTag === v.tagValue);
+        this.fileService.addTagToFile(this.fullFile, tmp.id);
       });
+      // this.tagService.getAllTags$().subscribe(response => {
+      //   response.forEach(tempTag => this.tags.forEach(htmlTags => {
+      //     if (htmlTags === tempTag.tagValue) {
+      //       this.fileService.addTagToFile(this.fullFile, tempTag.id);
+      //     }
+      //   }));
+      // });
     } catch (e) {
     }
 
@@ -120,6 +128,7 @@ export class TagsComponent implements OnInit {
         }
       });
     }
+
     this.tagCtrl.setValue(null);
     this.fetchTags();
   }

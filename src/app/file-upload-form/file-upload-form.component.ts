@@ -49,6 +49,7 @@ export class FileUploadFormComponent implements OnInit {
 
 
   onSubmit(): void {
+    console.log("swagging")
     const formData = new FormData();
     const lectureName: string = this.uploadForm.get('fileUploadLocations').value.lectures;
     const lectureId: string = String(this.getLectureIdByName(lectureName));
