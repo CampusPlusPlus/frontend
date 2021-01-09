@@ -66,6 +66,7 @@ export class FileUploadFormComponent implements OnInit {
       const tempTags: Tag[] = response.tag;
       tempTags.forEach(tempTag => this.tags.forEach(htmlTags => {
         if (htmlTags === tempTag.tagValue) {
+          console.log('addTagToFile');
           this.fileService.addTagToFile(file, tempTag.id);
         }
       }));

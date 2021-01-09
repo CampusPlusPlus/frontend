@@ -41,6 +41,7 @@ export class FileService {
   }
 
   uploadFile$(formData): Observable<any> {
+    console.log('inside uploadFile: ', this.auth.httpHeader);
     return this.http.post(this.SERVER_URL,
       formData, {
         observe: 'response',
@@ -54,7 +55,6 @@ export class FileService {
       );
   }
 
-  // TODO: null in body could be a problem !!
   addTagToFile$(file: FullFile | SimpleFile, tagId: number): Observable<any> {
     if (!this.auth.isModOrAdmin && !this.auth.ownsFile(file.authorId)) {
       this.errorService.errorUnauthorized();
@@ -76,7 +76,9 @@ export class FileService {
       this.errorService.errorUnauthorized();
       return new Observable<any>();
     }
-    return this.http.delete(this.SERVER_URL + '/' + file.id + '/tags/' + tagId)
+    return this.http.delete(this.SERVER_URL + '/' + file.id + '/tags/' + tagId, {
+      headers: this.auth.httpHeader
+    })
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           this.errorService.errorHTTPSnackbar(errorResponse);
