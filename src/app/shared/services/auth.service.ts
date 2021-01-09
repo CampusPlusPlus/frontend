@@ -22,8 +22,8 @@ export class AuthService {
   setToken(rawToken: string, res: { access_token: any; id_token: any; error: any }): void {
     this.rawToken = rawToken;
     this.token = jwt_decode(res.access_token);
-    this.isModOrAdmin ||= this.token.resource_access.frontend.roles.find(elem => elem === 'moderator') !== '';
-    this.isModOrAdmin ||= this.token.resource_access.frontend.roles.find(elem => elem === 'admin') !== '';
+    this.isModOrAdmin ||= !!this.token.resource_access.frontend.roles.find(elem => elem === 'moderator');
+    this.isModOrAdmin ||= !!this.token.resource_access.frontend.roles.find(elem => elem === 'admin');
   }
 
   validToken(): boolean {
