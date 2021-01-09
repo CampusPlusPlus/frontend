@@ -56,7 +56,7 @@ export class FileService {
   }
 
   addTagToFile$(file: FullFile | SimpleFile, tagId: number): Observable<any> {
-    if (!this.auth.isModOrAdmin && !this.auth.ownsFile(file.authorId)) {
+    if (!this.auth.isModOrAdmin && !file && !this.auth.ownsFile(file.authorId)) {
       this.errorService.errorUnauthorized();
       return new Observable<any>();
     }
