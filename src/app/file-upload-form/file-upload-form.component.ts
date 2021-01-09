@@ -1,16 +1,16 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup, NgForm, Validators} from '@angular/forms';
-import {FileService} from '../shared/services/file.service';
-import {LectureService} from '../shared/services/lecture.service';
-import {TagService} from '../shared/services/tag.service';
-import {Lecture} from '../shared/models/Lecture';
-import {forkJoin} from 'rxjs';
-import {Tag} from '../shared/models/Tag';
-import {SimpleFile} from '../shared/models/SimpleFile';
-import {HttpErrorResponse} from '@angular/common/http';
-import {ErrorService} from '../shared/services/error.service';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {AuthService} from '../shared/services/auth.service';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+import { FileService } from '../shared/services/file.service';
+import { LectureService } from '../shared/services/lecture.service';
+import { TagService } from '../shared/services/tag.service';
+import { Lecture } from '../shared/models/Lecture';
+import { forkJoin } from 'rxjs';
+import { Tag } from '../shared/models/Tag';
+import { SimpleFile } from '../shared/models/SimpleFile';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ErrorService } from '../shared/services/error.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from '../shared/services/auth.service';
 
 @Component({
   selector: 'app-file-upload-form',
@@ -55,6 +55,10 @@ export class FileUploadFormComponent implements OnInit {
 
     formData.append('lectureId', lectureId);
     formData.append('file', this.uploadForm.get('uploads').value.dummyFile);
+
+    this.tags = this.tags.filter((value, index, self) => {
+      return self.indexOf(value) === index;
+    });
 
     forkJoin(
       {
