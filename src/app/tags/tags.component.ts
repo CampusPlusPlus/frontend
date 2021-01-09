@@ -1,14 +1,15 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { FormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { map, startWith } from 'rxjs/operators';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { TagService } from '../shared/services/tag.service';
-import { Tag } from '../shared/models/Tag';
-import { FileService } from '../shared/services/file.service';
-import { FullFile } from '../shared/models/FullFile';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import {FormControl} from '@angular/forms';
+import {Observable} from 'rxjs';
+import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import {map, startWith} from 'rxjs/operators';
+import {MatChipInputEvent} from '@angular/material/chips';
+import {TagService} from '../shared/services/tag.service';
+import {Tag} from '../shared/models/Tag';
+import {FileService} from '../shared/services/file.service';
+import {FullFile} from '../shared/models/FullFile';
+import {AuthService} from "../shared/services/auth.service";
 
 @Component({
   selector: 'app-tags',
@@ -16,7 +17,7 @@ import { FullFile } from '../shared/models/FullFile';
   styleUrls: ['./tags.component.scss']
 })
 export class TagsComponent implements OnInit {
-  @ViewChild('tagInput', { static: false }) tagInput: ElementRef<HTMLInputElement>;
+  @ViewChild('tagInput', {static: false}) tagInput: ElementRef<HTMLInputElement>;
   @Input() tags: string[];
   @Input() fullFile: FullFile;
   tagNames: string[] = [];
@@ -30,11 +31,21 @@ export class TagsComponent implements OnInit {
 
 
   constructor(private tagService: TagService,
-              private fileService: FileService) {
+              private fileService: FileService,
+              private auth: AuthService) {
     this.fetchTags();
     this.filteredTags = this.tagCtrl.valueChanges.pipe(
       startWith(null),
       map((userInput: string | null) => userInput ? this._filter(userInput) : this.tagNames.slice()));
+  }
+
+  isAuthorized(): boolean {
+    console.log(this.fullFile.authorId);
+    if (this.auth.isModOrAdmin || this.auth.ownsFile(this.fullFile.authorId)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   private _filter(value: string): string[] {

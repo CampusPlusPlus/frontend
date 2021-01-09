@@ -4,7 +4,7 @@ import {Tag} from '../shared/models/Tag';
 import {MatDialog} from '@angular/material/dialog';
 import {EditDialogComponent} from './edit-dialog/edit-dialog.component';
 import {ErrorService} from '../shared/services/error.service';
-import {AuthService} from "../shared/services/auth.service";
+import {AuthService} from '../shared/services/auth.service';
 
 export interface DialogData {
   tagName: string;
