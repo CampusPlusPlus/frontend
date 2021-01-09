@@ -3,13 +3,12 @@ import {FormBuilder, FormGroup, NgForm, Validators} from '@angular/forms';
 import {FileService} from '../shared/services/file.service';
 import {LectureService} from '../shared/services/lecture.service';
 import {TagService} from '../shared/services/tag.service';
-import {CurriculumService} from '../shared/services/curriculum.service';
 import {Lecture} from '../shared/models/Lecture';
-import {forkJoin} from 'rxjs';
+import {forkJoin, throwError} from 'rxjs';
 import {Tag} from '../shared/models/Tag';
 import {SimpleFile} from '../shared/models/SimpleFile';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {Router} from "@angular/router";
+import {catchError} from "rxjs/operators";
 
 @Component({
   selector: 'app-file-upload-form',
@@ -29,7 +28,6 @@ export class FileUploadFormComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private router: Router,
     private fileService: FileService,
     private lectureService: LectureService,
     private tagService: TagService,
@@ -50,7 +48,6 @@ export class FileUploadFormComponent implements OnInit {
     try {
       this.upload();
       window.history.back();
-      // this.router.navigate(['discipline']);
     } catch (e) {
       this.snackBar.open('There was an problem with uploading your file');
       return;
@@ -78,10 +75,11 @@ export class FileUploadFormComponent implements OnInit {
       const tempTags: Tag[] = response.tag;
       tempTags.forEach(tempTag => this.tags.forEach(htmlTags => {
         if (htmlTags === tempTag.tagValue) {
-          console.log(tempTag.tagValue);
           this.fileService.addTagToFile(fileID, tempTag.id);
         }
       }));
+    }, (error) => {
+      throwError(error);
     });
   }
 

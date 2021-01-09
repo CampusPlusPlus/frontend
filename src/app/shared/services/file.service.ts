@@ -46,15 +46,26 @@ export class FileService {
     )
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
+          // this.errorService.errorSnackbar(errorResponse);
+          return throwError(errorResponse);
+        })
+      );
+  }
+
+
+  // TODO: null in body could be a problem !!
+  addTagToFile$(fileId: number, tagId: number): Observable<any> {
+    return this.http.patch(this.SERVER_URL + '/' + fileId + '/tags/' + tagId, null)
+      .pipe(
+        catchError((errorResponse: HttpErrorResponse) => {
           this.errorService.errorSnackbar(errorResponse);
           return new Observable();
         })
       );
   }
 
-
-  addTagToFile$(fileId: number, tagId: number): Observable<any> {
-    return this.http.patch(this.SERVER_URL + '/' + fileId + '/tags/' + tagId, null)
+  removeTagFromFile$(fileId: number, tagId: number): Observable<any> {
+    return this.http.delete(this.SERVER_URL + '/' + fileId + '/tags/' + tagId )
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           this.errorService.errorSnackbar(errorResponse);

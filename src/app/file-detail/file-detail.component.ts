@@ -15,6 +15,7 @@ export class FileDetailComponent implements OnInit {
 
   id: number;
   data: FullFile;
+  tags: string[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -32,6 +33,7 @@ export class FileDetailComponent implements OnInit {
   private fetchFile(): void {
     this.fileService.getFileByID$(this.id).subscribe(value => {
       this.data = value;
+      this.data.tags.forEach(x => this.tags.push(x.tagValue));
     }, (error => console.log(error)));
   }
 

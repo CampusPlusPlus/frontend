@@ -16,7 +16,7 @@ import {CommentComponent} from './comment/comment.component';
 import {DialogAddGenericComponent} from './level-navigator/dialog-add-generic/dialog-add-generic.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import {FormsModule} from '@angular/forms';
-import {TagsComponent} from './file-upload-form/tags/tags.component';
+import {TagsComponent} from './tags/tags.component';
 import {CreateLevelFormComponent} from './level-navigator/create-level-form/create-level-form.component';
 import {CreateLevelLectureFormComponent} from './level-navigator/create-level-lecture-form/create-level-lecture-form.component';
 import { DialogDeleteGenericComponent } from './level-navigator/dialog-delete-generic/dialog-delete-generic.component';
