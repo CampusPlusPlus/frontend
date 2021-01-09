@@ -114,14 +114,13 @@ export class TagsComponent implements OnInit {
         response => {
           response.forEach(t => {
             if (t.tagValue === tag) {
-              this.tags.splice(this.tags.indexOf(tag), 1);
+              delete this.tags[this.tags.indexOf(tag)];
               this.fileService.removeTagFromFile$(this.fullFile.id, t.id).subscribe();
             }
           });
         }
       );
     } catch (e) {
-      console.log(e);
     }
 
     if (index >= 0) {
