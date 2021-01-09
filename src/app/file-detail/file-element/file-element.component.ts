@@ -17,9 +17,11 @@ export class FileElementComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     private auth: AuthService
-  ) {}
+  ) {
+  }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   download(id: number): void {
     window.open(`http://localhost:9000/files/${id}/download`, '_blank');
@@ -40,7 +42,10 @@ export class FileElementComponent implements OnInit {
     });
   }
 
-  isModOrAdmin() {
-    return this.auth ? this.auth.isModOrAdmin : false;
+  isAuthorized(): boolean {
+    const a = this.auth ? this.auth.isModOrAdmin : false;
+    const b = !!this.data && this.auth.ownsFile(this.data?.authorId);
+    console.log("ab", a || b, a, b, this.data);
+    return a || b;
   }
 }

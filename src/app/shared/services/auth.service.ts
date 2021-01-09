@@ -23,11 +23,12 @@ export class AuthService {
     const rawToken = window.localStorage.getItem('rawToken');
     const parsedToken = window.localStorage.getItem('parsedToken');
     const bearerToken = window.localStorage.getItem('bearerToken');
-    if (rawToken && parsedToken && bearerToken) {
+    const accessToken = window.localStorage.getItem('access_token');
+    if (rawToken && parsedToken && bearerToken && accessToken) {
       this.rawToken = rawToken;
       this.token = JSON.parse(parsedToken);
       this.bearerToken = bearerToken;
-      console.log("ccc", this.bearerToken)
+      this.token = jwt_decode(accessToken);
     }
   }
 
@@ -40,6 +41,7 @@ export class AuthService {
     this.rawToken = rawToken;
     this.bearerToken = this.helpMyJavaFriend(this.rawToken);
     console.log('bbb', this.bearerToken);
+    window.localStorage.setItem('access_token', res.access_token);
     this.token = jwt_decode(res.access_token);
     window.localStorage.setItem('rawToken', this.rawToken);
     window.localStorage.setItem('parsedToken', JSON.stringify(res));
@@ -75,6 +77,7 @@ export class AuthService {
   }
 
   ownsFile(userIDofElement: string): boolean {
+    console.log("sub", this.token.sub, userIDofElement)
     return this.token ? this.token.sub === userIDofElement : false;
   }
 }
