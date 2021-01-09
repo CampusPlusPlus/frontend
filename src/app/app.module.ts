@@ -27,6 +27,7 @@ import {CommentWriterComponent} from './comment/comment-writer/comment-writer.co
 import {KeycloakComponent} from './keycloak/keycloak.component';
 import {LogoutComponent} from './logout/logout.component';
 import {EditTagsComponent} from './tags/edit-tags/edit-tags.component';
+import { LoginComponent } from './login/login.component';
 
 
 @NgModule({
@@ -52,6 +53,7 @@ import {EditTagsComponent} from './tags/edit-tags/edit-tags.component';
     CommentWriterComponent,
     KeycloakComponent,
     LogoutComponent,
+    LoginComponent,
     EditTagsComponent,
   ],
   imports: [

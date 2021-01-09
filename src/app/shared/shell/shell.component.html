@@ -37,7 +37,7 @@
         <a mat-button routerLink="/editTags">🏷️ Edit Tags</a>
         <a mat-button routerLink="/upload">📤 Upload</a>
         <a mat-button routerLink="/discipline">📗 Disciplines</a>
-        <a mat-button routerLink="/login" *ngIf="!validToken(); else userSettings2">🚪 Lopin</a>
+        <a mat-button routerLink="/login" *ngIf="!validToken(); else userSettings2">🚪 Login</a>
         <ng-template #userSettings2>
           <a mat-button routerLink="/keycloack">🔒 Settings</a>
           <a mat-button routerLink="/logout">🚪 Logout</a>
