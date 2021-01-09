@@ -67,7 +67,7 @@ export class DisciplineService {
       this.errorService.errorUnauthorized();
       return new Observable<any>();
     }
-    return this.http.post(this.SERVER_URL, data).pipe(
+    return this.http.post(this.SERVER_URL, data, { headers: this.auth.httpHeader }).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
         this.errorService.errorHTTPSnackbar(errorResponse);
         return new Observable();
@@ -80,7 +80,7 @@ export class DisciplineService {
       this.errorService.errorUnauthorized();
       return new Observable<any>();
     }
-    return this.http.delete(`${this.SERVER_URL}/${id}`).pipe(
+    return this.http.delete(`${this.SERVER_URL}/${id}`, { headers: this.auth.httpHeader }).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
         this.errorService.errorHTTPSnackbar(errorResponse);
         return new Observable();
@@ -93,7 +93,7 @@ export class DisciplineService {
       this.errorService.errorUnauthorized();
       return new Observable<any>();
     }
-    return this.http.put(`${this.SERVER_URL}/${id}`, data).pipe(
+    return this.http.put(`${this.SERVER_URL}/${id}`, data, { headers: this.auth.httpHeader }).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
         this.errorService.errorHTTPSnackbar(errorResponse);
         return new Observable();

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError, map} from 'rxjs/operators';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import { catchError, map } from 'rxjs/operators';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { StudyCourse } from '../models/StudyCourse';
 import { Curricula } from '../models/Curriculum';
 import { PageableResponse } from '../models/PageableResponse';
-import {ErrorService} from './error.service';
+import { ErrorService } from './error.service';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -72,7 +72,7 @@ export class StudyCourseService {
       this.errorService.errorUnauthorized();
       return new Observable<any>();
     }
-    return this.http.post(this.SERVER_URL, data).pipe(
+    return this.http.post(this.SERVER_URL, data, { headers: this.auth.httpHeader }).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
         this.errorService.errorHTTPSnackbar(errorResponse);
         return throwError(errorResponse);
@@ -85,7 +85,7 @@ export class StudyCourseService {
       this.errorService.errorUnauthorized();
       return new Observable<any>();
     }
-    return this.http.delete(`${this.SERVER_URL}/${id}`).pipe(
+    return this.http.delete(`${this.SERVER_URL}/${id}`, { headers: this.auth.httpHeader }).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
         this.errorService.errorHTTPSnackbar(errorResponse);
         return throwError(errorResponse);
@@ -98,7 +98,7 @@ export class StudyCourseService {
       this.errorService.errorUnauthorized();
       return new Observable<any>();
     }
-    return this.http.put(`${this.SERVER_URL}/${id}`, data).pipe(
+    return this.http.put(`${this.SERVER_URL}/${id}`, data, { headers: this.auth.httpHeader }).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
         this.errorService.errorHTTPSnackbar(errorResponse);
         return throwError(errorResponse);

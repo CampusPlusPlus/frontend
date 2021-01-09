@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 import { Lecture } from '../models/Lecture';
 import { PageableResponse } from '../models/PageableResponse';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { SimpleFile } from '../models/SimpleFile';
-import {ErrorService} from './error.service';
+import { ErrorService } from './error.service';
 import { AuthService } from './auth.service';
 
 interface LectureBody {
@@ -71,7 +71,7 @@ export class LectureService {
       this.errorService.errorUnauthorized();
       return new Observable<any>();
     }
-    return this.http.post(this.SERVER_URL, data).pipe(
+    return this.http.post(this.SERVER_URL, data, { headers: this.auth.httpHeader }).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
         this.errorService.errorHTTPSnackbar(errorResponse);
         return new Observable();
@@ -84,7 +84,7 @@ export class LectureService {
       this.errorService.errorUnauthorized();
       return new Observable<any>();
     }
-    return this.http.delete(`${this.SERVER_URL}/${id}`).pipe(
+    return this.http.delete(`${this.SERVER_URL}/${id}`, { headers: this.auth.httpHeader }).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
         this.errorService.errorHTTPSnackbar(errorResponse);
         return new Observable();
@@ -97,7 +97,7 @@ export class LectureService {
       this.errorService.errorUnauthorized();
       return new Observable<any>();
     }
-    return this.http.put(`${this.SERVER_URL}/${id}`, data).pipe(
+    return this.http.put(`${this.SERVER_URL}/${id}`, data, { headers: this.auth.httpHeader }).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
         this.errorService.errorHTTPSnackbar(errorResponse);
         return new Observable();
