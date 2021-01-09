@@ -22,8 +22,12 @@ export class AuthService {
     this.httpHeader = new HttpHeaders();
     const rawToken = window.localStorage.getItem('rawToken');
     const parsedToken = window.localStorage.getItem('parsedToken');
-    if (rawToken && parsedToken) {
-      this.setToken(window.localStorage.getItem('rawToken'), JSON.parse(parsedToken));
+    const bearerToken = window.localStorage.getItem('bearerToken');
+    if (rawToken && parsedToken && bearerToken) {
+      this.rawToken = rawToken;
+      this.token = JSON.parse(parsedToken);
+      this.bearerToken = bearerToken;
+      console.log("ccc", this.bearerToken)
     }
   }
 
@@ -35,9 +39,11 @@ export class AuthService {
   setToken(rawToken: string, res: { access_token: any; id_token: any; error: any }): void {
     this.rawToken = rawToken;
     this.bearerToken = this.helpMyJavaFriend(this.rawToken);
+    console.log('bbb', this.bearerToken);
     this.token = jwt_decode(res.access_token);
     window.localStorage.setItem('rawToken', this.rawToken);
     window.localStorage.setItem('parsedToken', JSON.stringify(res));
+    window.localStorage.setItem('bearerToken', this.bearerToken);
     this.httpHeader = this.httpHeader.set('Authorization', `Bearer ${this.bearerToken}`);
     this.isModOrAdmin ||= !!this.token.resource_access.frontend.roles.find(elem => elem === 'moderator');
     this.isModOrAdmin ||= !!this.token.resource_access.frontend.roles.find(elem => elem === 'admin');
