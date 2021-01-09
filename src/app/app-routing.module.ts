@@ -6,7 +6,7 @@ import {FileDetailComponent} from './file-detail/file-detail.component';
 import {FileUploadFormComponent} from './file-upload-form/file-upload-form.component';
 import {KeycloakComponent} from './keycloak/keycloak.component';
 import {LogoutComponent} from './logout/logout.component';
-import {EditTagsComponent} from './tags/edit-tags/edit-tags.component';
+import {EditTagsComponent} from './edit-tags/edit-tags.component';
 
 const routes: Routes = [
   // { path: '', pathMatch: 'full', component: LevelNavigatorComponent },

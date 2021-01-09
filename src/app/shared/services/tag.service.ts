@@ -14,6 +14,7 @@ export class TagService {
 
   constructor(private http: HttpClient, private errorService: ErrorService, private auth: AuthService) {
   }
+
   SERVER_URL = 'http://localhost:9000/tags';
 
   private static normalizeTagName(tagName: string): string {
@@ -60,6 +61,19 @@ export class TagService {
         return new Observable();
       })
     );
+  }
+
+  editTag$(tagId: number, newTagName: string, tagType: string = 'notImplemented'): Observable<any> {
+    const normalizedTagName = TagService.normalizeTagName(newTagName);
+    const id: string = String(tagId);
+    return this.http.put(this.SERVER_URL + '/' + id, {
+      tagValue: normalizedTagName,
+      tagType: tagType,
+    }, {
+      observe: 'response'
+
+    });
+
   }
 
   deleteTag$(tagId: number): Observable<any> {
