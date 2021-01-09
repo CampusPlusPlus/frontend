@@ -73,7 +73,7 @@ export class FileUploadFormComponent implements OnInit {
       });
       window.history.back();
     }, (error: HttpErrorResponse) => {
-      this.errorService.errorSnackbar(error);
+      this.errorService.errorHTTPSnackbar(error);
     });
   }
 

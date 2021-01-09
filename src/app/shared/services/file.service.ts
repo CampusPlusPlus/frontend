@@ -24,7 +24,7 @@ export class FileService {
           return responseData.content;
         }),
         catchError((errorResponse: HttpErrorResponse) => {
-          this.errorService.errorSnackbar(errorResponse);
+          this.errorService.errorHTTPSnackbar(errorResponse);
           return throwError(errorResponse);
         })
       );
@@ -34,7 +34,7 @@ export class FileService {
     const files: FullFile[] = [];
     this.getAllFiles$().subscribe(response => {
       response.forEach(f => files.push(f));
-    }, error => this.errorService.errorSnackbar(error));
+    }, error => this.errorService.errorHTTPSnackbar(error));
     return files;
   }
 
@@ -58,7 +58,7 @@ export class FileService {
     return this.http.patch(this.SERVER_URL + '/' + fileId + '/tags/' + tagId, null)
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
-          this.errorService.errorSnackbar(errorResponse);
+          this.errorService.errorHTTPSnackbar(errorResponse);
           return new Observable();
         })
       );
@@ -68,7 +68,7 @@ export class FileService {
     return this.http.delete(this.SERVER_URL + '/' + fileId + '/tags/' + tagId )
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
-          this.errorService.errorSnackbar(errorResponse);
+          this.errorService.errorHTTPSnackbar(errorResponse);
           return new Observable();
         })
       );
@@ -85,7 +85,7 @@ export class FileService {
           return responseData;
         }),
         catchError((errorResponse: HttpErrorResponse) => {
-          this.errorService.errorSnackbar(errorResponse);
+          this.errorService.errorHTTPSnackbar(errorResponse);
           return throwError(errorResponse);
         })
       );
@@ -95,7 +95,7 @@ export class FileService {
     let file: FullFile;
     this.getFileByID$(id).subscribe(value => {
       file = value;
-    }, (error => this.errorService.errorSnackbar(error)));
+    }, (error => this.errorService.errorHTTPSnackbar(error)));
     return file;
   }
 
@@ -103,7 +103,7 @@ export class FileService {
     return this.http.delete(`${this.SERVER_URL}/${id}`)
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
-          this.errorService.errorSnackbar(errorResponse);
+          this.errorService.errorHTTPSnackbar(errorResponse);
           return new Observable();
         })
       );
@@ -114,7 +114,7 @@ export class FileService {
     return this.http.patch(`${this.SERVER_URL}/${id}/upvote`, {})
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
-          this.errorService.errorSnackbar(errorResponse);
+          this.errorService.errorHTTPSnackbar(errorResponse);
           return new Observable();
         })
       );
@@ -125,7 +125,7 @@ export class FileService {
     return this.http.patch(`${this.SERVER_URL}/${id}/downvote`, {})
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
-          this.errorService.errorSnackbar(errorResponse);
+          this.errorService.errorHTTPSnackbar(errorResponse);
           return new Observable();
         })
       );
@@ -135,7 +135,7 @@ export class FileService {
     return this.http.post(`${this.SERVER_URL}/${id}/comment`, {text}).pipe()
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
-          this.errorService.errorSnackbar(errorResponse);
+          this.errorService.errorHTTPSnackbar(errorResponse);
           return new Observable();
         })
       );
@@ -146,7 +146,7 @@ export class FileService {
     return this.http.delete(`${this.SERVER_URL}/${comment.fileId}/comment/${comment.id}`)
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
-          this.errorService.errorSnackbar(errorResponse);
+          this.errorService.errorHTTPSnackbar(errorResponse);
           return new Observable();
         })
       );
