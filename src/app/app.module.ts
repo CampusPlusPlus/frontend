@@ -25,6 +25,8 @@ import { RateComponent } from './file-detail/rate/rate.component';
 import { CommentListComponent } from './comment/comment-list/comment-list.component';
 import { CommentDetailComponent } from './comment/comment-list/comment-detail/comment-detail.component';
 import { CommentWriterComponent } from './comment/comment-writer/comment-writer.component';
+import { KeycloakComponent } from './keycloak/keycloak.component';
+import { LogoutComponent } from './logout/logout.component';
 
 
 @NgModule({
@@ -49,6 +51,8 @@ import { CommentWriterComponent } from './comment/comment-writer/comment-writer.
     CommentListComponent,
     CommentDetailComponent,
     CommentWriterComponent,
+    KeycloakComponent,
+    LogoutComponent,
   ],
   imports: [
     BrowserModule,

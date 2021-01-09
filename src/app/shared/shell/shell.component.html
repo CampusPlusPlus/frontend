@@ -8,7 +8,13 @@
       <a mat-list-item routerLink="/" (click)="drawer.close()">Home</a>
       <a mat-list-item routerLink="/upload" (click)="drawer.close()">📤 Upload</a>
       <a mat-list-item routerLink="/discipline" (click)="drawer.close()">📗 Disciplines</a>
-      <a mat-list-item routerLink="/settings" (click)="drawer.close()">🔧 ️Settings</a>
+      <!--<ng-container *ngIf="!validToken(); else userSettings1">
+        <a mat-list-item routerLink="/login" (click)="drawer.close()">🚪 ️Login</a>
+      </ng-container>
+      <template #userSettings1>
+        <a mat-list-item routerLink="/keycloack" (click)="drawer.close()">🔒 Settings</a>
+        <a mat-list-item routerLink="/logout" (click)="drawer.close()">🚪 ️Logout</a>
+      </template>-->
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -29,7 +35,11 @@
       <div *ngIf="(isHandset$ | async) === false">
         <a mat-button routerLink="/upload">📤 Upload</a>
         <a mat-button routerLink="/discipline">📗 Disciplines</a>
-        <a mat-button routerLink="/settings">🔧 Settings</a>
+        <a mat-button routerLink="/login" *ngIf="!validToken(); else userSettings2">🚪 Lopin</a>
+        <ng-template #userSettings2>
+          <a mat-button routerLink="/keycloack">🔒 Settings</a>
+          <a mat-button routerLink="/logout">🚪 Logout</a>
+        </ng-template>
       </div>
 
     </mat-toolbar>
