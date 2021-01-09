@@ -4,6 +4,7 @@ import {Tag} from '../shared/models/Tag';
 import {MatDialog} from '@angular/material/dialog';
 import {EditDialogComponent} from './edit-dialog/edit-dialog.component';
 import {ErrorService} from '../shared/services/error.service';
+import {AuthService} from "../shared/services/auth.service";
 
 export interface DialogData {
   tagName: string;
@@ -20,7 +21,11 @@ export class EditTagsComponent implements OnInit {
 
   constructor(private tagService: TagService,
               public dialog: MatDialog,
-              private errorService: ErrorService) {
+              private errorService: ErrorService,
+              private auth: AuthService) {
+    if (!this.auth.isModOrAdmin) {
+      window.location.href = '/login';
+    }
   }
 
   ngOnInit(): void {
