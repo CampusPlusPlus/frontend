@@ -26,6 +26,7 @@ import { CommentListComponent } from './comment/comment-list/comment-list.compon
 import { CommentDetailComponent } from './comment/comment-list/comment-detail/comment-detail.component';
 import { CommentWriterComponent } from './comment/comment-writer/comment-writer.component';
 import { KeycloakComponent } from './keycloak/keycloak.component';
+import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
 
 

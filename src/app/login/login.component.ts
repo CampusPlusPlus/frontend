@@ -26,7 +26,7 @@ export class LoginComponent implements OnInit {
     if (fromRedirect) {
       this.route.fragment.pipe(
         map(fragment => {
-          return { raw: fragment, parsed: new URLSearchParams(fragment) }
+          return { raw: fragment, parsed: new URLSearchParams(fragment) };
         }),
         map(params => ({
           raw: params.raw,
@@ -46,4 +46,7 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  getName(): string {
+    return this.auth ? this.auth.token.name : '';
+  }
 }
