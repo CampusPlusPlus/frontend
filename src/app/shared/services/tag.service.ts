@@ -5,13 +5,14 @@ import {Observable, throwError} from 'rxjs';
 import {Tag} from '../models/Tag';
 import {PageableResponse} from '../models/PageableResponse';
 import {ErrorService} from './error.service';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TagService {
 
-  constructor(private http: HttpClient, private errorService: ErrorService) {
+  constructor(private http: HttpClient, private errorService: ErrorService, private auth: AuthService) {
   }
 
   SERVER_URL = 'http://localhost:9000/tags';
@@ -30,7 +31,7 @@ export class TagService {
           return responseData.content;
         }),
         catchError((errorResponse: HttpErrorResponse) => {
-          this.errorService.errorSnackbar(errorResponse);
+          this.errorService.errorHTTPSnackbar(errorResponse);
           return throwError(errorResponse);
         })
       );
@@ -41,7 +42,7 @@ export class TagService {
     this.getAllTags$()
       .subscribe((response) => {
         response.forEach((t) => tags.push(t));
-      }, (error => this.errorService.errorSnackbar(error)));
+      }, (error => this.errorService.errorHTTPSnackbar(error)));
     return tags;
   }
 
@@ -56,7 +57,7 @@ export class TagService {
       }
     ).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
-        this.errorService.errorSnackbar(errorResponse);
+        this.errorService.errorHTTPSnackbar(errorResponse);
         return new Observable();
       })
     );
@@ -76,12 +77,16 @@ export class TagService {
   }
 
   deleteTag$(tagId: number): Observable<any> {
+    if (!this.auth.isModOrAdmin) {
+      this.errorService.errorUnauthorized();
+      return new Observable<any>();
+    }
     const id: string = String(tagId);
     return this.http.delete(this.SERVER_URL + '/' + id, {
       observe: 'response'
     }).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
-        this.errorService.errorSnackbar(errorResponse);
+        this.errorService.errorHTTPSnackbar(errorResponse);
         return new Observable();
       })
     );

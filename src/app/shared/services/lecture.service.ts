@@ -7,6 +7,7 @@ import { PageableResponse } from '../models/PageableResponse';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import { SimpleFile } from '../models/SimpleFile';
 import {ErrorService} from './error.service';
+import { AuthService } from './auth.service';
 
 interface LectureBody {
   name: string;
@@ -19,7 +20,7 @@ interface LectureBody {
 export class LectureService {
   SERVER_URL = 'http://localhost:9000/lectures';
 
-  constructor(private http: HttpClient, private errorService: ErrorService) {
+  constructor(private http: HttpClient, private errorService: ErrorService, private auth: AuthService) {
   }
 
   private getLectures$(): Observable<Lecture[]> {
@@ -29,7 +30,7 @@ export class LectureService {
           return responseData.content;
         }),
         catchError((errorResponse) => {
-          this.errorService.errorSnackbar(errorResponse);
+          this.errorService.errorHTTPSnackbar(errorResponse);
           return throwError(errorResponse);
         })
       );
@@ -40,7 +41,7 @@ export class LectureService {
     this.getLectures$()
       .subscribe((response) => {
         response.forEach((l) => lectures.push(l));
-      }, (error => this.errorService.errorSnackbar(error)));
+      }, (error => this.errorService.errorHTTPSnackbar(error)));
     return lectures;
   }
 
@@ -51,7 +52,7 @@ export class LectureService {
           return responseData.content;
         }),
         catchError((errorResponse) => {
-          this.errorService.errorSnackbar(errorResponse);
+          this.errorService.errorHTTPSnackbar(errorResponse);
           return throwError(errorResponse);
         })
       );
@@ -61,32 +62,44 @@ export class LectureService {
     const files: SimpleFile[] = [];
     this.getFilesByLectureID$(id).subscribe((response) => {
       response.forEach((l) => files.push(l));
-    }, (error => this.errorService.errorSnackbar(error)));
+    }, (error => this.errorService.errorHTTPSnackbar(error)));
     return files;
   }
 
   createLecture(data: object): Observable<any> {
+    if (!this.auth.isModOrAdmin) {
+      this.errorService.errorUnauthorized();
+      return new Observable<any>();
+    }
     return this.http.post(this.SERVER_URL, data).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
-        this.errorService.errorSnackbar(errorResponse);
+        this.errorService.errorHTTPSnackbar(errorResponse);
         return new Observable();
       })
     );
   }
 
   deleteLecture(id: number): Observable<any> {
+    if (!this.auth.isModOrAdmin) {
+      this.errorService.errorUnauthorized();
+      return new Observable<any>();
+    }
     return this.http.delete(`${this.SERVER_URL}/${id}`).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
-        this.errorService.errorSnackbar(errorResponse);
+        this.errorService.errorHTTPSnackbar(errorResponse);
         return new Observable();
       })
     );
   }
 
   updateLectureByID(id: number, data: { name: any; relativeSemester: any; curriculumId: number }): Observable<any> {
+    if (!this.auth.isModOrAdmin) {
+      this.errorService.errorUnauthorized();
+      return new Observable<any>();
+    }
     return this.http.put(`${this.SERVER_URL}/${id}`, data).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
-        this.errorService.errorSnackbar(errorResponse);
+        this.errorService.errorHTTPSnackbar(errorResponse);
         return new Observable();
       })
     );

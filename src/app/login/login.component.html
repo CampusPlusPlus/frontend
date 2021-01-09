@@ -1,4 +1,14 @@
 <div class="centerdiv">
-  <h1>Welcome {{getName()}}</h1>
-  <p>You have successfully logged in!</p>
+  <div *ngIf="getName(); else loading">
+    <h1>Welcome {{getName()}}</h1>
+    <p>You have successfully logged in!</p>
+  </div>
+  <ng-template #loading>
+    <mat-card>
+      <mat-card-content>
+        <h1>Checking Login Status...</h1>
+        <mat-spinner></mat-spinner>
+      </mat-card-content>
+    </mat-card>
+  </ng-template>
 </div>

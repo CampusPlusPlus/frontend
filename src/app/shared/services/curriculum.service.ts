@@ -5,6 +5,7 @@ import {Observable, throwError} from 'rxjs';
 import {Lecture} from '../models/Lecture';
 import {PageableResponse} from '../models/PageableResponse';
 import {ErrorService} from './error.service';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,7 @@ import {ErrorService} from './error.service';
 export class CurriculumService {
   SERVER_URL = 'http://localhost:9000/curricula';
 
-  constructor(private http: HttpClient, private errorService: ErrorService) {
+  constructor(private http: HttpClient, private errorService: ErrorService, private auth: AuthService) {
   }
 
 
@@ -26,7 +27,7 @@ export class CurriculumService {
           return responseData.content;
         }),
         catchError((errorResponse: HttpErrorResponse) => {
-          this.errorService.errorSnackbar(errorResponse);
+          this.errorService.errorHTTPSnackbar(errorResponse);
           return throwError(errorResponse);
         })
       );
@@ -37,7 +38,7 @@ export class CurriculumService {
     this.getLecturesByCurriculaID$(curriculaID)
       .subscribe((response) => {
         response.forEach((s) => lectures.push(s));
-      }, (error => this.errorService.errorSnackbar(error)));
+      }, (error => this.errorService.errorHTTPSnackbar(error)));
     return lectures;
   }
 
@@ -51,32 +52,44 @@ export class CurriculumService {
           }
           lectures[s.relativeSemester - 1].push(s);
         });
-      }, (error => this.errorService.errorSnackbar(error)));
+      }, (error => this.errorService.errorHTTPSnackbar(error)));
     return lectures;
   }
 
   createCurriculum(data: object): Observable<any> {
+    if (!this.auth.isModOrAdmin) {
+      this.errorService.errorUnauthorized();
+      return new Observable<any>();
+    }
     return this.http.post(this.SERVER_URL, data).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
-        this.errorService.errorSnackbar(errorResponse);
+        this.errorService.errorHTTPSnackbar(errorResponse);
         return new Observable();
       })
     );
   }
 
   deleteCurriculum(id: number): Observable<any> {
+    if (!this.auth.isModOrAdmin) {
+      this.errorService.errorUnauthorized();
+      return new Observable<any>();
+    }
     return this.http.delete(`${this.SERVER_URL}/${id}`).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
-        this.errorService.errorSnackbar(errorResponse);
+        this.errorService.errorHTTPSnackbar(errorResponse);
         return new Observable();
       })
     );
   }
 
   updateCurriculumByID(id: number, data: { studyCourseId: number; name: any }): Observable<any> {
+    if (!this.auth.isModOrAdmin) {
+      this.errorService.errorUnauthorized();
+      return new Observable<any>();
+    }
     return this.http.put(`${this.SERVER_URL}/${id}`, data).pipe(
       catchError((errorResponse: HttpErrorResponse) => {
-        this.errorService.errorSnackbar(errorResponse);
+        this.errorService.errorHTTPSnackbar(errorResponse);
         return new Observable();
       })
     );
