@@ -9,7 +9,6 @@ import {AutocompleteFormComponent} from './file-upload-form/autocomplete-form/au
 import {UploadFormComponent} from './file-upload-form/upload-form/upload-form.component';
 import {LevelNavigatorComponent} from './level-navigator/level-navigator.component';
 import {FileDetailComponent} from './file-detail/file-detail.component';
-import {HelloWorldComponent} from './hello-world/hello-world.component';
 import {LevelListComponent} from './level-navigator/level-list/level-list.component';
 import {FileElementComponent} from './file-detail/file-element/file-element.component';
 import {CommentComponent} from './comment/comment.component';
@@ -25,6 +24,7 @@ import { RateComponent } from './file-detail/rate/rate.component';
 import { CommentListComponent } from './comment/comment-list/comment-list.component';
 import { CommentDetailComponent } from './comment/comment-list/comment-detail/comment-detail.component';
 import { CommentWriterComponent } from './comment/comment-writer/comment-writer.component';
+import { EditTagsComponent } from './tags/edit-tags/edit-tags.component';
 
 
 @NgModule({
@@ -34,7 +34,6 @@ import { CommentWriterComponent } from './comment/comment-writer/comment-writer.
     AutocompleteFormComponent,
     LevelNavigatorComponent,
     FileDetailComponent,
-    HelloWorldComponent,
     UploadFormComponent,
     LevelListComponent,
     FileElementComponent,
@@ -49,6 +48,7 @@ import { CommentWriterComponent } from './comment/comment-writer/comment-writer.
     CommentListComponent,
     CommentDetailComponent,
     CommentWriterComponent,
+    EditTagsComponent,
   ],
   imports: [
     BrowserModule,

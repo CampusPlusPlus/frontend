@@ -4,6 +4,7 @@ import { LoginComponent } from './login/login.component';
 import { LevelNavigatorComponent } from './level-navigator/level-navigator.component';
 import { FileDetailComponent } from './file-detail/file-detail.component';
 import { FileUploadFormComponent } from './file-upload-form/file-upload-form.component';
+import {EditTagsComponent} from "./tags/edit-tags/edit-tags.component";
 
 const routes: Routes = [
   // { path: '', pathMatch: 'full', component: LevelNavigatorComponent },
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'discipline/:disciplineID/:studyCourseID/:curriculaID/:lectureID', component: LevelNavigatorComponent },
   { path: 'discipline/:disciplineID/:studyCourseID/:curriculaID/:lectureID/:fileID', component: FileDetailComponent },
   { path: 'file/:fileID', component: FileDetailComponent },
+  { path: 'editTags', component: EditTagsComponent },
   // {
   //   matcher: (segments: UrlSegment[], group: UrlSegmentGroup, route: Route) => {
   //     // console.log('segments', segments);
