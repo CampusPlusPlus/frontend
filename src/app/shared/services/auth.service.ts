@@ -20,6 +20,11 @@ export class AuthService {
 
   constructor(private http: HttpClient) {
     this.httpHeader = new HttpHeaders();
+    const rawToken = window.localStorage.getItem('rawToken');
+    const parsedToken = window.localStorage.getItem('parsedToken');
+    if (rawToken && parsedToken) {
+      this.setToken(window.localStorage.getItem('rawToken'), JSON.parse(parsedToken));
+    }
   }
 
   helpMyJavaFriend(input: string): string {
@@ -31,6 +36,8 @@ export class AuthService {
     this.rawToken = rawToken;
     this.bearerToken = this.helpMyJavaFriend(this.rawToken);
     this.token = jwt_decode(res.access_token);
+    window.localStorage.setItem('rawToken', this.rawToken);
+    window.localStorage.setItem('parsedToken', JSON.stringify(res));
     this.httpHeader = this.httpHeader.set('Authorization', `Bearer ${this.bearerToken}`);
     this.isModOrAdmin ||= !!this.token.resource_access.frontend.roles.find(elem => elem === 'moderator');
     this.isModOrAdmin ||= !!this.token.resource_access.frontend.roles.find(elem => elem === 'admin');
@@ -52,6 +59,9 @@ export class AuthService {
     console.log(this.rawToken);
     this.isModOrAdmin = false;
     this.httpHeader.delete('Authorization');
+    window.localStorage.removeItem('previous');
+    window.localStorage.removeItem('rawToken');
+    window.localStorage.removeItem('parsedToken');
     window.location.href = this.refKeycloakLogout;
     // this.http.get(this.refKeycloackLogout + '?token=' + this.rawToken).subscribe((res) => {
     //   console.log('res', res);
