@@ -9,6 +9,7 @@ import {Tag} from '../shared/models/Tag';
 import {SimpleFile} from '../shared/models/SimpleFile';
 import {HttpErrorResponse} from '@angular/common/http';
 import {ErrorService} from '../shared/services/error.service';
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-file-upload-form',
@@ -31,7 +32,8 @@ export class FileUploadFormComponent implements OnInit {
     private fileService: FileService,
     private lectureService: LectureService,
     private tagService: TagService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private snackBar: MatSnackBar
   ) {
     this.uploadForm = this.formBuilder.group({
       uploads: ['', Validators.required],
@@ -66,6 +68,9 @@ export class FileUploadFormComponent implements OnInit {
           this.fileService.addTagToFile(fileID, tempTag.id);
         }
       }));
+      this.snackBar.open('The upload was a success', 'Close', {
+        duration: 3000
+      });
       window.history.back();
     }, (error: HttpErrorResponse) => {
       this.errorService.errorSnackbar(error);

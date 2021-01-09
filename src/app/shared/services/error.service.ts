@@ -15,6 +15,11 @@ export class ErrorService {
       this.snackbarService.open(errorResponse.statusText, 'Close', {
         duration: 3000
       });
+    } else if (errorResponse.error.error === 'Unauthorized') {
+      this.snackbarService.open('You are not authorized to do that, login or register',
+        'Close', {
+          duration: 5000
+        });
     } else {
       this.snackbarService.open(errorResponse.error.error, 'Close', {
         duration: 3000

@@ -9,7 +9,6 @@ import {AutocompleteFormComponent} from './file-upload-form/autocomplete-form/au
 import {UploadFormComponent} from './file-upload-form/upload-form/upload-form.component';
 import {LevelNavigatorComponent} from './level-navigator/level-navigator.component';
 import {FileDetailComponent} from './file-detail/file-detail.component';
-import {HelloWorldComponent} from './hello-world/hello-world.component';
 import {LevelListComponent} from './level-navigator/level-list/level-list.component';
 import {FileElementComponent} from './file-detail/file-element/file-element.component';
 import {CommentComponent} from './comment/comment.component';
@@ -19,15 +18,16 @@ import {FormsModule} from '@angular/forms';
 import {TagsComponent} from './tags/tags.component';
 import {CreateLevelFormComponent} from './level-navigator/create-level-form/create-level-form.component';
 import {CreateLevelLectureFormComponent} from './level-navigator/create-level-lecture-form/create-level-lecture-form.component';
-import { DialogDeleteGenericComponent } from './level-navigator/dialog-delete-generic/dialog-delete-generic.component';
-import { DialogConfirmationComponent } from './level-navigator/dialog-confirmation/dialog-confirmation.component';
-import { RateComponent } from './file-detail/rate/rate.component';
-import { CommentListComponent } from './comment/comment-list/comment-list.component';
-import { CommentDetailComponent } from './comment/comment-list/comment-detail/comment-detail.component';
-import { CommentWriterComponent } from './comment/comment-writer/comment-writer.component';
-import { KeycloakComponent } from './keycloak/keycloak.component';
+import {DialogDeleteGenericComponent} from './level-navigator/dialog-delete-generic/dialog-delete-generic.component';
+import {DialogConfirmationComponent} from './level-navigator/dialog-confirmation/dialog-confirmation.component';
+import {RateComponent} from './file-detail/rate/rate.component';
+import {CommentListComponent} from './comment/comment-list/comment-list.component';
+import {CommentDetailComponent} from './comment/comment-list/comment-detail/comment-detail.component';
+import {CommentWriterComponent} from './comment/comment-writer/comment-writer.component';
+import {KeycloakComponent} from './keycloak/keycloak.component';
+import {LogoutComponent} from './logout/logout.component';
+import {EditTagsComponent} from './tags/edit-tags/edit-tags.component';
 import { LoginComponent } from './login/login.component';
-import { LogoutComponent } from './logout/logout.component';
 
 
 @NgModule({
@@ -37,7 +37,6 @@ import { LogoutComponent } from './logout/logout.component';
     AutocompleteFormComponent,
     LevelNavigatorComponent,
     FileDetailComponent,
-    HelloWorldComponent,
     UploadFormComponent,
     LevelListComponent,
     FileElementComponent,
@@ -54,6 +53,8 @@ import { LogoutComponent } from './logout/logout.component';
     CommentWriterComponent,
     KeycloakComponent,
     LogoutComponent,
+    LoginComponent,
+    EditTagsComponent,
   ],
   imports: [
     BrowserModule,

@@ -10,9 +10,15 @@ import {ErrorService} from './error.service';
   providedIn: 'root'
 })
 export class TagService {
-  SERVER_URL = 'http://localhost:9000/tags';
 
   constructor(private http: HttpClient, private errorService: ErrorService) {
+  }
+  SERVER_URL = 'http://localhost:9000/tags';
+
+  private static normalizeTagName(tagName: string): string {
+    const lowerCasedTag = tagName.toLowerCase();
+    const regex = /[!@#\$%\^\&*\)\(+=._\s]+/g;
+    return lowerCasedTag.replace(regex, '-');
   }
 
 
@@ -40,7 +46,7 @@ export class TagService {
 
   // tagType not used => null
   createTag$(tagName: string, tagType: string = 'notImplemented'): Observable<any> {
-    const normalizedTagName = tagName.toLowerCase();
+    const normalizedTagName = TagService.normalizeTagName(tagName);
     return this.http.post(this.SERVER_URL, {
         tagValue: normalizedTagName,
         tagType: tagType,
