@@ -15,6 +15,6 @@
   <app-tags [tags]="tags" [create]="true" [fullFile]="data"></app-tags>
 </div>
 <div class="row">
-  <app-comment *ngIf="data" [data]="data" (sendCommentAction)="sendComment($event)"
+  <app-comment *ngIf="data && isLoggedIn()" [data]="data" (sendCommentAction)="sendComment($event)"
                (executeAction)="deleteComment($event)"></app-comment>
 </div>

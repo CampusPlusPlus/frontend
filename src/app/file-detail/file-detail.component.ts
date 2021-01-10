@@ -73,4 +73,8 @@ export class FileDetailComponent implements OnInit {
       this.fetchFile();
     });
   }
+
+  isLoggedIn(): boolean {
+    return !!this.auth.token;
+  }
 }
