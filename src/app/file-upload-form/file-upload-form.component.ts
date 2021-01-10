@@ -12,7 +12,7 @@ import {ErrorService} from '../shared/services/error.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {AuthService} from '../shared/services/auth.service';
 import {filter, map, mergeMap} from 'rxjs/operators';
-import {Router} from "@angular/router";
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-file-upload-form',

@@ -86,7 +86,7 @@ export class FileService {
       );
   }
 
-  addTagToFile(file: SimpleFile, tagId: number): void {
+  addTagToFile(file: SimpleFile | FullFile, tagId: number): void {
     this.addTagToFile$(file, tagId).subscribe((res) => {
     });
   }
