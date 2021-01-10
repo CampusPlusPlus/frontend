@@ -57,10 +57,10 @@ export class LoginComponent implements OnInit {
       window.location.href = this.auth.refKeycloakLogin;
     }
     if (window.localStorage.getItem('previous')) {
-      this.startTimer(5);
+      this.startTimer(1);
       setTimeout(() => {
         this.router.navigate([window.localStorage.getItem('previous')]);
-      }, 5000);
+      }, 3000);
     }
     // TODO: for DEBUG purposes
     console.log('p', this.auth.token);
