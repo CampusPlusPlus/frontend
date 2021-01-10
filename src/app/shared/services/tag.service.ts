@@ -96,8 +96,4 @@ export class TagService {
     );
   }
 
-  deleteTag(tagId: number): void {
-    this.deleteTag$(tagId).subscribe();
-  }
-
 }

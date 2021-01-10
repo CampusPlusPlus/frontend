@@ -1,10 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {TagService} from '../shared/services/tag.service';
-import {Tag} from '../shared/models/Tag';
-import {MatDialog} from '@angular/material/dialog';
-import {EditDialogComponent} from './edit-dialog/edit-dialog.component';
-import {ErrorService} from '../shared/services/error.service';
-import {AuthService} from '../shared/services/auth.service';
+import { Component, OnInit } from '@angular/core';
+import { TagService } from '../shared/services/tag.service';
+import { Tag } from '../shared/models/Tag';
+import { MatDialog } from '@angular/material/dialog';
+import { EditDialogComponent } from './edit-dialog/edit-dialog.component';
+import { ErrorService } from '../shared/services/error.service';
+import { AuthService } from '../shared/services/auth.service';
 
 export interface DialogData {
   tagName: string;
@@ -39,15 +39,14 @@ export class EditTagsComponent implements OnInit {
   onEdit(tagId): void {
     const dialogRef = this.dialog.open(EditDialogComponent, {
       width: '300px',
-      data: {tagName: this.tagName}
+      data: { tagName: this.tagName }
     });
     dialogRef.afterClosed().subscribe(result => {
-      location.reload();
       if (result === undefined) {
         return;
       }
-      this.tagService.editTag$(tagId, result).subscribe(
-        () => {
+      this.tagService.editTag$(tagId, result).subscribe(() => {
+          this.fetchTags();
         },
         (err) => this.errorService.errorSnackbar(err)
       );
@@ -55,8 +54,11 @@ export class EditTagsComponent implements OnInit {
   }
 
   onDelete(tagId): void {
-    this.tagService.deleteTag(tagId);
-    location.reload();
+    this.tagService.deleteTag$(tagId).subscribe(() => {
+      this.fetchTags();
+    }, (err) => {
+      this.errorService.errorSnackbar(err);
+    });
   }
 
 }
