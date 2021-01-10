@@ -10,7 +10,7 @@ export type FullFile = {
   downvotes: any[],
   comments: Comment[],
   rating: number,
-  author: string,
+  authorName: string,
   authorId: string,
   lectureId: number,
   links: [
