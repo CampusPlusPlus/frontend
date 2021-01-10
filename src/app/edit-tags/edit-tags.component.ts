@@ -42,6 +42,7 @@ export class EditTagsComponent implements OnInit {
       data: {tagName: this.tagName}
     });
     dialogRef.afterClosed().subscribe(result => {
+      location.reload();
       if (result === undefined) {
         return;
       }
@@ -55,6 +56,7 @@ export class EditTagsComponent implements OnInit {
 
   onDelete(tagId): void {
     this.tagService.deleteTag(tagId);
+    location.reload();
   }
 
 }
