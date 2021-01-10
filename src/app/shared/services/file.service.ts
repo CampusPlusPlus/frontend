@@ -167,9 +167,7 @@ export class FileService {
   }
 
   deleteComment(comment: Comment): Observable<any> {
-    console.log("ccc", comment, this.auth.isModOrAdmin, this.auth.ownsFile(comment.authorName));
-    // TODO: if a user should be able to delete his own comment
-    if (!this.auth.isModOrAdmin && !this.auth.ownsFile(comment.authorName)) {
+    if (!this.auth.isModOrAdmin && !this.auth.ownsFile(comment.authorId)) {
       this.errorService.errorUnauthorized();
       return new Observable<any>();
     }
