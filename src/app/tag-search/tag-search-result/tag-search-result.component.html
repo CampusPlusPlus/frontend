@@ -1,0 +1,10 @@
+<div class="centerdiv">
+  <mat-list role="list">
+    <mat-list-item [routerLink]="['/file',file.id]" role="listitem" *ngFor="let file of files">
+      <mat-icon mat-list-icon>attachment</mat-icon>
+      <div>
+        {{file.name}}
+      </div>
+    </mat-list-item>
+  </mat-list>
+</div>

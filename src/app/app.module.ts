@@ -29,6 +29,8 @@ import {LogoutComponent} from './logout/logout.component';
 import {EditTagsComponent} from './edit-tags/edit-tags.component';
 import { LoginComponent } from './login/login.component';
 import { EditDialogComponent } from './edit-tags/edit-dialog/edit-dialog.component';
+import { TagSearchComponent } from './tag-search/tag-search.component';
+import { TagSearchResultComponent } from './tag-search/tag-search-result/tag-search-result.component';
 
 
 @NgModule({
@@ -57,6 +59,8 @@ import { EditDialogComponent } from './edit-tags/edit-dialog/edit-dialog.compone
     LoginComponent,
     EditTagsComponent,
     EditDialogComponent,
+    TagSearchComponent,
+    TagSearchResultComponent,
   ],
   imports: [
     BrowserModule,

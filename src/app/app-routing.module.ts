@@ -7,6 +7,8 @@ import {FileUploadFormComponent} from './file-upload-form/file-upload-form.compo
 import {KeycloakComponent} from './keycloak/keycloak.component';
 import {LogoutComponent} from './logout/logout.component';
 import {EditTagsComponent} from './edit-tags/edit-tags.component';
+import { TagService } from './shared/services/tag.service';
+import { TagSearchComponent } from './tag-search/tag-search.component';
 
 const routes: Routes = [
   // { path: '', pathMatch: 'full', component: LevelNavigatorComponent },
@@ -24,6 +26,7 @@ const routes: Routes = [
   {path: 'discipline/:disciplineID/:studyCourseID/:curriculaID/:lectureID/:fileID', component: FileDetailComponent},
   {path: 'file/:fileID', component: FileDetailComponent},
   {path: 'editTags', component: EditTagsComponent},
+  {path: 'search', component: TagSearchComponent},
 ];
 
 @NgModule({

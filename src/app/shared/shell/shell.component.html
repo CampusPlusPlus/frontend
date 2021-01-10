@@ -8,6 +8,7 @@
       <a mat-list-item routerLink="/" (click)="drawer.close()">Home</a>
       <a *ngIf="isModOrAdmin()" mat-list-item routerLink="/editTags" (click)="drawer.close()">🏷️  Edit Tags</a>
       <a *ngIf="validToken()" mat-list-item routerLink="/upload" (click)="drawer.close()">📤 Upload</a>
+      <a mat-list-item routerLink="/search" (click)="drawer.close()">🔍 Search</a>
       <a mat-list-item routerLink="/discipline" (click)="drawer.close()">📗 Disciplines</a>
       <a mat-list-item routerLink="/login" *ngIf="!validToken(); else userSettings2">🚪 Login</a>
       <ng-template #userSettings2>
@@ -34,6 +35,7 @@
       <div *ngIf="(isHandset$ | async) === false">
         <a *ngIf="isModOrAdmin()" mat-button routerLink="/editTags">🏷️ Edit Tags</a>
         <a *ngIf="validToken()" mat-button routerLink="/upload">📤 Upload</a>
+        <a mat-button routerLink="/search">🔍 Search</a>
         <a mat-button routerLink="/discipline">📗 Disciplines</a>
         <a mat-button routerLink="/login" *ngIf="!validToken(); else userSettings2">🚪 Login</a>
         <ng-template #userSettings2>
