@@ -29,6 +29,9 @@ export class AuthService {
       this.token = JSON.parse(parsedToken);
       this.bearerToken = bearerToken;
       this.token = jwt_decode(accessToken);
+      this.httpHeader = this.httpHeader.set('Authorization', `Bearer ${this.bearerToken}`);
+      this.isModOrAdmin ||= !!this.token.resource_access.frontend.roles.find(elem => elem === 'moderator');
+      this.isModOrAdmin ||= !!this.token.resource_access.frontend.roles.find(elem => elem === 'admin');
     }
   }
 
@@ -68,6 +71,8 @@ export class AuthService {
     window.localStorage.removeItem('previous');
     window.localStorage.removeItem('rawToken');
     window.localStorage.removeItem('parsedToken');
+    window.localStorage.removeItem('access_token');
+    window.localStorage.removeItem('bearerToken');
     window.location.href = this.refKeycloakLogout;
     // this.http.get(this.refKeycloackLogout + '?token=' + this.rawToken).subscribe((res) => {
     //   console.log('res', res);
