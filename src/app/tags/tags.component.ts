@@ -1,16 +1,16 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {FormControl} from '@angular/forms';
-import {Observable} from 'rxjs';
-import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
-import {map, startWith} from 'rxjs/operators';
-import {MatChipInputEvent} from '@angular/material/chips';
-import {TagService} from '../shared/services/tag.service';
-import {Tag} from '../shared/models/Tag';
-import {FileService} from '../shared/services/file.service';
-import {FullFile} from '../shared/models/FullFile';
-import {AuthService} from '../shared/services/auth.service';
-import {Router} from '@angular/router';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { FormControl } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { map, startWith } from 'rxjs/operators';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { TagService } from '../shared/services/tag.service';
+import { Tag } from '../shared/models/Tag';
+import { FileService } from '../shared/services/file.service';
+import { FullFile } from '../shared/models/FullFile';
+import { AuthService } from '../shared/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-tags',
@@ -18,9 +18,10 @@ import {Router} from '@angular/router';
   styleUrls: ['./tags.component.scss']
 })
 export class TagsComponent implements OnInit {
-  @ViewChild('tagInput', {static: false}) tagInput: ElementRef<HTMLInputElement>;
+  @ViewChild('tagInput', { static: false }) tagInput: ElementRef<HTMLInputElement>;
   @Input() tags: string[];
   @Input() fullFile: FullFile;
+  @Input() create: boolean;
   tagNames: string[] = [];
   selectable = true;
   removable = true;
@@ -72,27 +73,28 @@ export class TagsComponent implements OnInit {
   }
 
   onClick(value): void {
-    console.log(value);
     this.tagAlreadyExists(value);
   }
 
-  private tagAlreadyExists(value): boolean {
-    console.log('value', value, this.allTags);
-    const normalTag = this.allTags.find(x => x.tagValue.toLowerCase() === value.toLowerCase());
-    console.log('normalTag', normalTag);
-    if (normalTag) {
-      console.log('inside addTagToFile');
-      this.fileService.addTagToFile(this.fullFile, normalTag.id);
-      return true;
-    }
-    return false;
+  private tagAlreadyExists(value: string): boolean {
+    let retVal = false;
+    this.tagService.getAllTags$().subscribe((ttags) => {
+      const normalTag = ttags.find(x => x.tagValue.toLowerCase() === value.toLowerCase());
+      if (normalTag && this.create) {
+        this.fileService.addTagToFile(this.fullFile, normalTag.id);
+        retVal = true;
+      }
+    });
+    return retVal;
   }
 
   private createTagEvent(value): void {
     this.tagService.createTag$(value).subscribe(
       response => {
         this.tagId = response.body.id;
-        this.fileService.addTagToFile(this.fullFile, this.tagId);
+        if (this.create) {
+          this.fileService.addTagToFile(this.fullFile, this.tagId);
+        }
         this.fetchTags();
         return;
       }
@@ -113,11 +115,16 @@ export class TagsComponent implements OnInit {
     if (input) {
       input.value = '';
     }
+
     const temp = this.tagAlreadyExists(value);
     console.log(temp);
-
     if (!temp) {
-      this.createTagEvent(value);
+      console.log('its happening');
+      if (this.fullFile) {
+        this.createTagEvent(value);
+      } else {
+        console.log('no file yet');
+      }
     }
 
     this.tagCtrl.setValue(null);

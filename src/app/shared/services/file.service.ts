@@ -89,7 +89,9 @@ export class FileService {
   }
 
   addTagToFile(file: SimpleFile, tagId: number): void {
-    this.addTagToFile$(file, tagId).subscribe();
+    this.addTagToFile$(file, tagId).subscribe((res) => {
+      console.log("res", res)
+    });
   }
 
   getFileByID$(id: number): Observable<FullFile> {

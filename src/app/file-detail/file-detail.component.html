@@ -2,7 +2,7 @@
 <mat-grid-list [cols]="6">
   <mat-grid-tile [colspan]="4">
   </mat-grid-tile>
-  <app-tags [tags]="tags" [fullFile]="data"></app-tags>
+  <app-tags [tags]="tags" [create]="true" [fullFile]="data"></app-tags>
   <mat-grid-tile [colspan]="2">
     <app-rate [data]="data" (executeAction)="rate(data.id, $event)"></app-rate>
   </mat-grid-tile>
