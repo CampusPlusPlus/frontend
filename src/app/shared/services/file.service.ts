@@ -1,14 +1,14 @@
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {Observable, throwError} from 'rxjs';
-import {FullFile} from '../models/FullFile';
-import {catchError, map} from 'rxjs/operators';
-import {PageableResponse} from '../models/PageableResponse';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {Comment} from '../models/Comment';
-import {ErrorService} from './error.service';
-import {AuthService} from './auth.service';
-import {SimpleFile} from '../models/SimpleFile';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { FullFile } from '../models/FullFile';
+import { catchError, map, subscribeOn } from 'rxjs/operators';
+import { PageableResponse } from '../models/PageableResponse';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Comment } from '../models/Comment';
+import { ErrorService } from './error.service';
+import { AuthService } from './auth.service';
+import { SimpleFile } from '../models/SimpleFile';
 
 @Injectable({
   providedIn: 'root'
@@ -117,7 +117,7 @@ export class FileService {
       this.errorService.errorUnauthorized();
       return new Observable<any>();
     }
-    return this.http.delete(`${this.SERVER_URL}/${file.id}`, {headers: this.auth.httpHeader})
+    return this.http.delete(`${this.SERVER_URL}/${file.id}`, { headers: this.auth.httpHeader })
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           this.errorService.errorHTTPSnackbar(errorResponse);
@@ -127,7 +127,7 @@ export class FileService {
   }
 
   upvote(id: number): Observable<any> {
-    return this.http.patch(`${this.SERVER_URL}/${id}/upvote`, {}, {headers: this.auth.httpHeader})
+    return this.http.patch(`${this.SERVER_URL}/${id}/upvote`, {}, { headers: this.auth.httpHeader })
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           this.errorService.errorHTTPSnackbar(errorResponse);
@@ -137,7 +137,7 @@ export class FileService {
   }
 
   downvote(id: number): Observable<any> {
-    return this.http.patch(`${this.SERVER_URL}/${id}/downvote`, {}, {headers: this.auth.httpHeader})
+    return this.http.patch(`${this.SERVER_URL}/${id}/downvote`, {}, { headers: this.auth.httpHeader })
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           this.errorService.errorHTTPSnackbar(errorResponse);
@@ -147,7 +147,7 @@ export class FileService {
   }
 
   removevote(id: number): Observable<any> {
-    return this.http.patch(`${this.SERVER_URL}/${id}/removeVote`, {}, {headers: this.auth.httpHeader})
+    return this.http.patch(`${this.SERVER_URL}/${id}/removeVote`, {}, { headers: this.auth.httpHeader })
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           this.errorService.errorHTTPSnackbar(errorResponse);
@@ -157,7 +157,7 @@ export class FileService {
   }
 
   addCommentToFileByID(id: number, text: string): Observable<any> {
-    return this.http.post(`${this.SERVER_URL}/${id}/comment`, {text}, {headers: this.auth.httpHeader}).pipe()
+    return this.http.post(`${this.SERVER_URL}/${id}/comment`, { text }, { headers: this.auth.httpHeader }).pipe()
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           this.errorService.errorHTTPSnackbar(errorResponse);
@@ -171,13 +171,20 @@ export class FileService {
       this.errorService.errorUnauthorized();
       return new Observable<any>();
     }
-    return this.http.delete(`${this.SERVER_URL}/${comment.fileId}/comments/${comment.id}`, {headers: this.auth.httpHeader})
+    return this.http.delete(`${this.SERVER_URL}/${comment.fileId}/comments/${comment.id}`, { headers: this.auth.httpHeader })
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           this.errorService.errorHTTPSnackbar(errorResponse);
           return new Observable();
         })
       );
+  }
+
+  getFilesByTagIDs$(inputIDs: number[]): Observable<any> {
+    let searchString = '?tags=';
+    searchString += inputIDs.reduce((id, ids) => id += `${ids},`, '');
+    searchString = searchString.substr(0, searchString.length - 1);
+    return this.http.get(this.SERVER_URL + '/search' + searchString);
   }
 }
 
