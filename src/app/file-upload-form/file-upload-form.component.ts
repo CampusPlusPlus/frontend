@@ -1,17 +1,18 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
-import { FileService } from '../shared/services/file.service';
-import { LectureService } from '../shared/services/lecture.service';
-import { TagService } from '../shared/services/tag.service';
-import { Lecture } from '../shared/models/Lecture';
-import { forkJoin, Subject } from 'rxjs';
-import { Tag } from '../shared/models/Tag';
-import { SimpleFile } from '../shared/models/SimpleFile';
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { ErrorService } from '../shared/services/error.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthService } from '../shared/services/auth.service';
-import { filter, map, mergeMap } from 'rxjs/operators';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {FormBuilder, FormGroup, NgForm, Validators} from '@angular/forms';
+import {FileService} from '../shared/services/file.service';
+import {LectureService} from '../shared/services/lecture.service';
+import {TagService} from '../shared/services/tag.service';
+import {Lecture} from '../shared/models/Lecture';
+import {forkJoin, Subject} from 'rxjs';
+import {Tag} from '../shared/models/Tag';
+import {SimpleFile} from '../shared/models/SimpleFile';
+import {HttpErrorResponse, HttpResponse} from '@angular/common/http';
+import {ErrorService} from '../shared/services/error.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {AuthService} from '../shared/services/auth.service';
+import {filter, map, mergeMap} from 'rxjs/operators';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-file-upload-form',
@@ -37,7 +38,7 @@ export class FileUploadFormComponent implements OnInit {
     private tagService: TagService,
     private errorService: ErrorService,
     private snackBar: MatSnackBar,
-    private auth: AuthService
+    private router: Router
   ) {
     this.uploadForm = this.formBuilder.group({
       uploads: ['', Validators.required],
@@ -98,7 +99,7 @@ export class FileUploadFormComponent implements OnInit {
           this.snackBar.open('The upload was a success', 'Close', {
             duration: 3000
           });
-          window.history.back();
+          this.router.navigate(['/file/' + file.id]);
         }, (error: HttpErrorResponse) => {
           this.errorService.errorHTTPSnackbar(error);
         });
