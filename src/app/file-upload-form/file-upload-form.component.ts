@@ -53,7 +53,8 @@ export class FileUploadFormComponent implements OnInit {
   onSubmit(): void {
     const formData = new FormData();
     const lectureName: string = this.uploadForm.get('fileUploadLocations').value.lectures;
-    const lectureId: string = String(this.getLectureIdByName(lectureName));
+    const lid = this.getLectureIdByName(lectureName);
+    const lectureId: string = String(lid);
 
     formData.append('lectureId', lectureId);
     formData.append('file', this.uploadForm.get('uploads').value.dummyFile);
@@ -71,9 +72,6 @@ export class FileUploadFormComponent implements OnInit {
     ).subscribe((x) => {
       notExistingTags.push(...this.tags.filter((elem) => !x.includes(elem)));
       Promise.all(this.tagService.createTags(notExistingTags)).then((p: HttpResponse<any>[]) => {
-        // let ttags = p.map((http) => http.body) as Tag[];
-
-
         forkJoin(
           {
             file: this.fileService.uploadFile$(formData),
@@ -111,14 +109,7 @@ export class FileUploadFormComponent implements OnInit {
   }
 
   getLectureIdByName(name: string): number {
-    let id: number;
-    this.lectures
-      .forEach(l => {
-        if (l.name === name) {
-          id = l.id;
-        }
-      });
-    return id;
+    return this.lectures.find((lecture) => lecture.name === name).id;
   }
 
   onReset(): void {
