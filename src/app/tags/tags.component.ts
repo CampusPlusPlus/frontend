@@ -1,16 +1,16 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { FormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { map, startWith } from 'rxjs/operators';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { TagService } from '../shared/services/tag.service';
-import { Tag } from '../shared/models/Tag';
-import { FileService } from '../shared/services/file.service';
-import { FullFile } from '../shared/models/FullFile';
-import { AuthService } from '../shared/services/auth.service';
-import { Router } from '@angular/router';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import {FormControl} from '@angular/forms';
+import {Observable} from 'rxjs';
+import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import {map, startWith} from 'rxjs/operators';
+import {MatChipInputEvent} from '@angular/material/chips';
+import {TagService} from '../shared/services/tag.service';
+import {Tag} from '../shared/models/Tag';
+import {FileService} from '../shared/services/file.service';
+import {FullFile} from '../shared/models/FullFile';
+import {AuthService} from '../shared/services/auth.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-tags',
@@ -18,7 +18,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./tags.component.scss']
 })
 export class TagsComponent implements OnInit {
-  @ViewChild('tagInput', { static: false }) tagInput: ElementRef<HTMLInputElement>;
+  @ViewChild('tagInput', {static: false}) tagInput: ElementRef<HTMLInputElement>;
   @Input() tags: string[];
   @Input() fullFile: FullFile;
   tagNames: string[] = [];
@@ -28,8 +28,9 @@ export class TagsComponent implements OnInit {
   tagCtrl = new FormControl();
   filteredTags: Observable<string[]>;
   allTags: Tag[] = [];
-  id: number;
   readonly = false;
+  tagId: number;
+  userInput = [];
 
 
   constructor(private tagService: TagService,
@@ -70,19 +71,31 @@ export class TagsComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onClick(): void {
-    console.log('inside on click');
-    try {
-      this.tagService.getAllTags$().subscribe(response => {
-        response.forEach(tempTag => this.tags.forEach(htmlTags => {
-          if (htmlTags === tempTag.tagValue) {
-            this.fileService.addTagToFile(this.fullFile, tempTag.id);
-          }
-        }));
-      });
-    } catch (e) {
-      // TODO: catch or remove the try/catch
-    }
+  onClick(event): void {
+    // TODO: need to get value
+    const value = event.value;
+    console.log(value);
+    this.allTags.forEach(x => {
+      if (x.tagValue === value) {
+        return this.tagId = x.id;
+      }
+    });
+    console.log(this.tagId);
+  }
+
+  private tagAlreadyExisted(value): boolean {
+    let b: boolean;
+    this.allTags.forEach(x => {
+      if (x.tagValue === value) {
+        this.tagId = x.id;
+        console.log('inside add tag');
+        this.fileService.addTagToFile(this.fullFile, this.tagId);
+        return b = true;
+      } else {
+        return b = false;
+      }
+    });
+    return b;
   }
 
   add(event: MatChipInputEvent): void {
@@ -100,34 +113,50 @@ export class TagsComponent implements OnInit {
       input.value = '';
     }
 
-    this.tags = this.tags.filter((v, index, self) => {
-      return self.indexOf(v) === index;
-    });
-
-    try {
-      this.tags.forEach(textTag => {
-        const tmp = this.allTags.find(v => textTag === v.tagValue);
-        this.fileService.addTagToFile(this.fullFile, tmp.id);
-      });
-      // this.tagService.getAllTags$().subscribe(response => {
-      //   response.forEach(tempTag => this.tags.forEach(htmlTags => {
-      //     if (htmlTags === tempTag.tagValue) {
-      //       this.fileService.addTagToFile(this.fullFile, tempTag.id);
-      //     }
-      //   }));
-      // });
-    } catch (e) {
-    }
-
-    if (this.allTags.map(x => x.tagValue).findIndex(x => x === value.toString()) === -1) {
-      this.tagService.createTag$(value).subscribe(response => {
-        try {
-          this.fileService.addTagToFile(this.fullFile, response.body.id);
-          console.log('inside try block');
-        } catch (e) {
+    if (this.tagAlreadyExisted(value)) {
+      console.log('inside create tag');
+      this.tagService.createTag$(value).subscribe(
+        response => {
+          this.tagId = response.body.id;
+          this.fileService.addTagToFile(this.fullFile, this.tagId);
+          return;
         }
-      });
+      );
     }
+    // this.fileService.addTagToFile(this.fullFile, this.tagId);
+
+    // this.tags = this.tags.filter((v, index, self) => {
+    //   return self.indexOf(v) === index;
+    // });
+    // this.tags.forEach(textTag => {
+    //   const tmp = this.allTags.find(result => textTag === result.tagValue);
+    //   this.fileService.addTagToFile(this.fullFile, tmp.id);
+    // });
+    //
+    // try {
+    //   this.tags.forEach(textTag => {
+    //     const tmp = this.allTags.find(v => textTag === v.tagValue);
+    //     this.fileService.addTagToFile(this.fullFile, tmp.id);
+    //   });
+    // this.tagService.getAllTags$().subscribe(response => {
+    //   response.forEach(tempTag => this.tags.forEach(htmlTags => {
+    //     if (htmlTags === tempTag.tagValue) {
+    //       this.fileService.addTagToFile(this.fullFile, tempTag.id);
+    //     }
+    //   }));
+    // });
+    // } catch (e) {
+    // }
+
+    // // if (this.allTags.map(x => x.tagValue).findIndex(x => x === value.toString()) === -1) {
+    // //   this.tagService.createTag$(value).subscribe(response => {
+    // //     try {
+    // //       this.fileService.addTagToFile(this.fullFile, response.body.id);
+    // //       console.log('inside try block');
+    // //     } catch (e) {
+    // //     }
+    //   });
+    // }
 
     this.tagCtrl.setValue(null);
     this.fetchTags();
@@ -136,7 +165,7 @@ export class TagsComponent implements OnInit {
   remove(tag: string): void {
     const index = this.tags.indexOf(tag);
     try {
-      console.log('inside try');
+      console.log('inside remove');
       this.tagService.getAllTags$().subscribe(
         response => {
           response.forEach(t => {

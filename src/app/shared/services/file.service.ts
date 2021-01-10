@@ -65,6 +65,7 @@ export class FileService {
     })
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
+          console.log('tag already exits on file');
           this.errorService.errorHTTPSnackbar(errorResponse);
           return new Observable();
         })
