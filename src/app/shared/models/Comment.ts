@@ -1,7 +1,8 @@
 export type Comment = {
   id: number;
   visibility: boolean;
-  author: string;
+  authorName: string;
+  authorId: string;
   fileId: number;
   text: string;
 };

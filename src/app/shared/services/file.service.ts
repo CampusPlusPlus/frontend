@@ -127,7 +127,6 @@ export class FileService {
   }
 
   upvote(id: number): Observable<any> {
-    console.log('3', 'upvote', id);
     return this.http.patch(`${this.SERVER_URL}/${id}/upvote`, {}, {headers: this.auth.httpHeader})
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
@@ -138,7 +137,6 @@ export class FileService {
   }
 
   downvote(id: number): Observable<any> {
-    console.log('3', 'downvote', id);
     return this.http.patch(`${this.SERVER_URL}/${id}/downvote`, {}, {headers: this.auth.httpHeader})
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
@@ -149,8 +147,13 @@ export class FileService {
   }
 
   removevote(id: number): Observable<any> {
-    // TODO: implement
-    return new Observable<any>();
+    return this.http.patch(`${this.SERVER_URL}/${id}/removeVote`, {}, {headers: this.auth.httpHeader})
+      .pipe(
+        catchError((errorResponse: HttpErrorResponse) => {
+          this.errorService.errorHTTPSnackbar(errorResponse);
+          return new Observable();
+        })
+      );
   }
 
   addCommentToFileByID(id: number, text: string): Observable<any> {
@@ -165,7 +168,7 @@ export class FileService {
 
   deleteComment(comment: Comment): Observable<any> {
     // TODO: if a user should be able to delete his own comment
-    if (!this.auth.isModOrAdmin && !this.auth.ownsFile(comment.author)) {
+    if (!this.auth.isModOrAdmin && !this.auth.ownsFile(comment.authorName)) {
       this.errorService.errorUnauthorized();
       return new Observable<any>();
     }

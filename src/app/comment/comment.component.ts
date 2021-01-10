@@ -24,11 +24,12 @@ export class CommentComponent implements OnInit {
   }
 
   handleDelete(comment: Comment): void {
+    console.log('c', comment);
     this.dialog.open(DialogConfirmationComponent, {
       data: {
-        name: this.data.name,
+        name: comment.text,
         action: 'delete',
-        type: 'a comment from ' + comment.author,
+        type: 'a comment from ' + comment.authorName,
         confirmed: false
       }
     }).afterClosed().subscribe(x => {

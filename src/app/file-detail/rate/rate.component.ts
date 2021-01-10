@@ -17,12 +17,10 @@ export class RateComponent implements OnInit {
   }
 
   upvote(): void {
-    console.log("1", "upvote");
     this.executeAction.emit(true);
   }
 
   downvote(): void {
-    console.log("1", "downvote");
     this.executeAction.emit(false);
   }
 }
