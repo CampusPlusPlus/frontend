@@ -83,18 +83,15 @@ export class TagsComponent implements OnInit {
     console.log(this.tagId);
   }
 
-  private tagAlreadyExisted(value): boolean {
-    let b: boolean;
-    this.allTags.forEach(x => {
-      if (x.tagValue === value) {
-        this.tagId = x.id;
-        console.log('inside add tag');
+  private tagAlreadyExists(value): boolean {
+    let b = false;
+    for (let i = 0; i < this.allTags.length; i++) {
+      if (this.allTags[i].tagValue === value) {
+        this.tagId = this.allTags[i].id;
         this.fileService.addTagToFile(this.fullFile, this.tagId);
         return b = true;
-      } else {
-        return b = false;
       }
-    });
+    }
     return b;
   }
 
@@ -112,9 +109,9 @@ export class TagsComponent implements OnInit {
     if (input) {
       input.value = '';
     }
+    const temp = this.tagAlreadyExists(value);
 
-    if (this.tagAlreadyExisted(value)) {
-      console.log('inside create tag');
+    if (!temp) {
       this.tagService.createTag$(value).subscribe(
         response => {
           this.tagId = response.body.id;
