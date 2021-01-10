@@ -24,7 +24,7 @@ export class LectureService {
   }
 
   private getLectures$(): Observable<Lecture[]> {
-    return this.http.get(this.SERVER_URL)
+    return this.http.get(this.SERVER_URL + '/?page=0&size=10000')
       .pipe(
         map((responseData: PageableResponse<Lecture>) => {
           return responseData.content;
