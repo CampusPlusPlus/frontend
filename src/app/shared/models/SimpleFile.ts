@@ -3,7 +3,7 @@ export type SimpleFile = {
   name: string,
   size: number,
   rating: number,
-  author: string,
+  authorName: string,
   authorId: string,
   lectureId: number,
   links: [

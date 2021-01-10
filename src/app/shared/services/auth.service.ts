@@ -29,6 +29,7 @@ export class AuthService {
       this.token = JSON.parse(parsedToken);
       this.bearerToken = bearerToken;
       this.token = jwt_decode(accessToken);
+      console.log(this.token, new Date(this.token.exp * 1000));
       this.httpHeader = this.httpHeader.set('Authorization', `Bearer ${this.bearerToken}`);
       this.isModOrAdmin ||= !!this.token.resource_access.frontend.roles.find(elem => elem === 'moderator');
       this.isModOrAdmin ||= !!this.token.resource_access.frontend.roles.find(elem => elem === 'admin');
