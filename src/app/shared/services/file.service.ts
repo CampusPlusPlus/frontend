@@ -168,12 +168,11 @@ export class FileService {
   }
 
   deleteComment(comment: Comment): Observable<any> {
-    // TODO: if a user should be able to delete his own comment
-    if (!this.auth.isModOrAdmin && !this.auth.ownsFile(comment.authorName)) {
+    if (!this.auth.isModOrAdmin && !this.auth.ownsFile(comment.authorId)) {
       this.errorService.errorUnauthorized();
       return new Observable<any>();
     }
-    return this.http.delete(`${this.SERVER_URL}/${comment.fileId}/comment/${comment.id}`, {headers: this.auth.httpHeader})
+    return this.http.delete(`${this.SERVER_URL}/${comment.fileId}/comments/${comment.id}`, {headers: this.auth.httpHeader})
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           this.errorService.errorHTTPSnackbar(errorResponse);

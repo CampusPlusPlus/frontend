@@ -69,7 +69,6 @@ export class FileDetailComponent implements OnInit {
   }
 
   sendComment(text: string): void {
-    console.log("i got text", text);
     this.fileService.addCommentToFileByID(this.id, text).subscribe((res) => {
       this.fetchFile();
     });

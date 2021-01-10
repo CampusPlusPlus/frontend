@@ -24,7 +24,6 @@ export class CommentComponent implements OnInit {
   }
 
   handleDelete(comment: Comment): void {
-    console.log('c', comment);
     this.dialog.open(DialogConfirmationComponent, {
       data: {
         name: comment.text,
