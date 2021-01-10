@@ -21,10 +21,8 @@ export class LoginComponent implements OnInit {
     private router: Router
   ) {
     if (window.localStorage.getItem('previous')) {
-      console.log('history', window.localStorage.getItem('previous'));
       this.previousURL = window.localStorage.getItem('previous');
     } else {
-      console.log('no history');
     }
   }
 
@@ -63,7 +61,6 @@ export class LoginComponent implements OnInit {
       }, 3000);
     }
     // TODO: for DEBUG purposes
-    console.log('p', this.auth.token);
   }
 
   getName(): string {

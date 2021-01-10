@@ -58,15 +58,8 @@ export class TagsComponent implements OnInit {
   }
 
   private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    this.allTags.forEach(t => {
-      if (this.tagNames.length < this.allTags.length) {
-        this.tagNames.push(t.tagValue);
-        console.log(t);
-      }
-    });
-    return this.tagNames.filter(tag =>
-      tag.toLowerCase().indexOf(filterValue) === 0);
+    this.tagNames = [...this.allTags.map((tag) => tag.tagValue)];
+    return this.tagNames.filter(tag => tag.toLowerCase().indexOf(value.toLowerCase()) === 0);
   }
 
   ngOnInit(): void {
@@ -117,13 +110,10 @@ export class TagsComponent implements OnInit {
     }
 
     const temp = this.tagAlreadyExists(value);
-    console.log(temp);
     if (!temp) {
-      console.log('its happening');
       if (this.fullFile) {
         this.createTagEvent(value);
       } else {
-        console.log('no file yet');
       }
     }
 
@@ -134,7 +124,6 @@ export class TagsComponent implements OnInit {
   remove(tag: string): void {
     const index = this.tags.indexOf(tag);
     try {
-      console.log('inside remove');
       this.tagService.getAllTags$().subscribe(
         response => {
           response.forEach(t => {

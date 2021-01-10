@@ -22,7 +22,6 @@ export class CreateLevelFormComponent implements OnInit {
   }
 
   onSubmit(): void {
-    console.log('submit');
     this.onClose();
   }
 

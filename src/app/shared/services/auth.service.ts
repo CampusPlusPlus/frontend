@@ -74,9 +74,6 @@ export class AuthService {
     window.localStorage.removeItem('access_token');
     window.localStorage.removeItem('bearerToken');
     window.location.href = this.refKeycloakLogout;
-    // this.http.get(this.refKeycloackLogout + '?token=' + this.rawToken).subscribe((res) => {
-    //   console.log('res', res);
-    // });
   }
 
   ownsFile(userIDofElement: string): boolean {

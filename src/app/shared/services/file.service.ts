@@ -41,7 +41,6 @@ export class FileService {
   }
 
   uploadFile$(formData): Observable<any> {
-    console.log('inside uploadFile: ', this.auth.httpHeader);
     return this.http.post(this.SERVER_URL,
       formData, {
         observe: 'response',
@@ -65,7 +64,6 @@ export class FileService {
     })
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
-          console.log('tag already exits on file');
           this.errorService.errorHTTPSnackbar(errorResponse);
           return new Observable();
         })
@@ -90,7 +88,6 @@ export class FileService {
 
   addTagToFile(file: SimpleFile, tagId: number): void {
     this.addTagToFile$(file, tagId).subscribe((res) => {
-      console.log("res", res)
     });
   }
 

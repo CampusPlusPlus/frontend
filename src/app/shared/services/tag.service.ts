@@ -46,7 +46,6 @@ export class TagService {
   }
 
   createTags(tags: string[]): Promise<any>[] {
-    console.log("this tags", tags);
     return tags.map(tag => this.createTag$(tag).toPromise());
   }
 

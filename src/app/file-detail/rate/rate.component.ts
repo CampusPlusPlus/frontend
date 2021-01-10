@@ -18,7 +18,8 @@ export class RateComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  upvote(): void {
+  upvote(e): void {
+    e.preventDefault();
     this.executeAction.emit(true);
   }
 

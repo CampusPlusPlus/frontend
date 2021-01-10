@@ -24,35 +24,6 @@ const routes: Routes = [
   {path: 'discipline/:disciplineID/:studyCourseID/:curriculaID/:lectureID/:fileID', component: FileDetailComponent},
   {path: 'file/:fileID', component: FileDetailComponent},
   {path: 'editTags', component: EditTagsComponent},
-  // {
-  //   matcher: (segments: UrlSegment[], group: UrlSegmentGroup, route: Route) => {
-  //     // console.log('segments', segments);
-  //     // console.log('group', group);
-  //     // console.log('route', route);
-  //     if (segments.length === 0 || segments.length > 4) {
-  //       return null;
-  //     }
-  //     if (segments[0].toString() !== 'discipline') {
-  //       return null;
-  //     }
-  //     return { consumed: segments };
-  //   }, component: LevelNavigatorComponent
-  // },
-  // {
-  //   matcher: (segments: UrlSegment[], group: UrlSegmentGroup, route: Route) => {
-  //     console.log('segments', segments);
-  //     console.log('group', group);
-  //     console.log('route', route);
-  //     if (segments.length === 0 || segments.length > 5) {
-  //       return null;
-  //     }
-  //     if (segments[0].toString() !== 'discipline') {
-  //       return null;
-  //     }
-  //     return { consumed: segments };
-  //   }, component: FileDetailComponent
-  // },
-
 ];
 
 @NgModule({

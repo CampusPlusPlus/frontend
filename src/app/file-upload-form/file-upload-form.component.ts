@@ -51,7 +51,6 @@ export class FileUploadFormComponent implements OnInit {
 
 
   onSubmit(): void {
-    console.log('swagging');
     const formData = new FormData();
     const lectureName: string = this.uploadForm.get('fileUploadLocations').value.lectures;
     const lectureId: string = String(this.getLectureIdByName(lectureName));
@@ -83,7 +82,6 @@ export class FileUploadFormComponent implements OnInit {
         ).subscribe(response => {
           const file: SimpleFile = response.file.body as SimpleFile;
           const tempTags: Tag[] = response.tag;
-          console.log('tmpTags', tempTags);
           this.immediatelyTagFile = true;
           this.tags.forEach(textTag => {
             const tmp = tempTags.find(value => textTag === value.tagValue);
@@ -91,7 +89,6 @@ export class FileUploadFormComponent implements OnInit {
               this.tagService.getAllTags$().subscribe((ttags) => {
                 const normalTag = ttags.find(k1 => k1.tagValue.toLowerCase() === textTag.toLowerCase());
                 if (normalTag) {
-                  console.log('ohh boi');
                   this.fileService.addTagToFile(file, normalTag.id);
                 }
               });
