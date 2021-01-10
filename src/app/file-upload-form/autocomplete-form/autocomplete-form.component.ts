@@ -127,15 +127,8 @@ export class AutocompleteFormComponent
   }
 
   private _disciplineFilter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    this.disciplines.forEach(d => {
-      if (this.disciplineNames.length < this.disciplines.length) {
-        this.disciplineNames.push(d.name);
-      }
-    });
-    return this.disciplineNames.filter((discipline) =>
-      discipline.toLowerCase().includes(filterValue)
-    );
+    this.disciplineNames = [...this.disciplines.map((discipline) => discipline.name)];
+    return this.disciplineNames.filter((discipline) => discipline.toLowerCase().includes(value?.toLowerCase()));
   }
 
   private initStudyCourses(id: number): void {
@@ -166,15 +159,8 @@ export class AutocompleteFormComponent
   }
 
   private _studyCoursesFilter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    this.studyCourses.forEach(s => {
-      if (this.studyCourseNames.length < this.studyCourses.length) {
-        this.studyCourseNames.push(s.name);
-      }
-    });
-    return this.studyCourseNames.filter((studyCourse) =>
-      studyCourse.toLowerCase().includes(filterValue)
-    );
+    this.studyCourseNames = [...this.studyCourses.map((studyCourse) => studyCourse.name)];
+    return this.studyCourseNames.filter((studyCourse) => studyCourse.toLowerCase().includes(value?.toLowerCase()));
   }
 
   private initCurricular(id: number): void {
@@ -203,15 +189,8 @@ export class AutocompleteFormComponent
   }
 
   private _curriculaFilter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    this.curricula.forEach(c => {
-      if (this.curriculaNames.length < this.curricula.length) {
-        this.curriculaNames.push(c.name);
-      }
-    });
-    return this.curriculaNames.filter((curricula) =>
-      curricula.toLowerCase().includes(filterValue)
-    );
+    this.curriculaNames = [...this.curricula.map((curriculum) => curriculum.name)];
+    return this.curriculaNames.filter((curricula) => curricula.toLowerCase().includes(value?.toLowerCase()));
   }
 
   private initLectures(id: number): void {
@@ -227,15 +206,8 @@ export class AutocompleteFormComponent
   }
 
   private _lectureFilter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    this.lectures.forEach(l => {
-      if (this.lectureNames.length < this.lectures.length) {
-        this.lectureNames.push(l.name);
-      }
-    });
-    return this.lectureNames.filter((lecture) =>
-      lecture.toLowerCase().includes(filterValue)
-    );
+    this.lectureNames = [...this.lectures.map((lecture) => lecture.name)];
+    return this.lectureNames.filter((lecture) => lecture.toLowerCase().includes(value?.toLowerCase()));
   }
 
 

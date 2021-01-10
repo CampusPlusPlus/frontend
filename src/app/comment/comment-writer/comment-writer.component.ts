@@ -18,5 +18,6 @@ export class CommentWriterComponent implements OnInit {
 
   sendComment(): void {
     this.executeAction.emit(this.text);
+    this.text = '';
   }
 }

@@ -1,10 +1,20 @@
 <app-file-element [data]="data" (executeAction)="delete()"></app-file-element>
-<mat-grid-list [cols]="6">
-  <mat-grid-tile [colspan]="4">
-  </mat-grid-tile>
+<div class="row">
+  <mat-grid-list [cols]="2" rowHeight="40px">
+    <mat-grid-tile colspan="1">
+      <div class="block">
+        Uploader: <span class="author" *ngIf="data"><i>{{data.authorName}}</i></span>
+      </div>
+    </mat-grid-tile>
+    <mat-grid-tile colspan="1">
+      <app-rate [data]="data" (executeAction)="rate(data.id, $event)"></app-rate>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
+<div class="row">
   <app-tags [tags]="tags" [create]="true" [fullFile]="data"></app-tags>
-  <mat-grid-tile [colspan]="2">
-    <app-rate [data]="data" (executeAction)="rate(data.id, $event)"></app-rate>
-  </mat-grid-tile>
-</mat-grid-list>
-<app-comment *ngIf="data" [data]="data" (sendCommentAction)="sendComment($event)" (executeAction)="deleteComment($event)"></app-comment>
+</div>
+<div class="row">
+  <app-comment *ngIf="data" [data]="data" (sendCommentAction)="sendComment($event)"
+               (executeAction)="deleteComment($event)"></app-comment>
+</div>
