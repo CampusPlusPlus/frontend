@@ -2,9 +2,13 @@
 
 ## Requirements
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.2.0.  
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.2.0. 
 
-To install the cli run: `npm i -g @angular/cli`
+Make sure you have npm installed, for windows you can download it here: `https://nodejs.org/en/`
+
+To install the cli run: `npm i -g @angular/cli`  
+
+In the Project folder run `npm install` to install all node modules
 
 ## Development server
 
