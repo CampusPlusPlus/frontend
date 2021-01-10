@@ -46,8 +46,8 @@ export class FileDetailComponent implements OnInit {
   }
 
   rate(id: number, vote: boolean): void {
-    if (this.data.upvotes.findIndex(v => v === this.auth.token.sub) > -1
-      || this.data.downvotes.findIndex(v => v === this.auth.token.sub) > -1) { // removevote
+    if ((vote && this.data.upvotes.findIndex(v => v === this.auth.token.sub) > -1)
+      || (!vote && this.data.downvotes.findIndex(v => v === this.auth.token.sub) > -1)) { // removevote
       this.fileService.removevote(id).subscribe((res) => {
         this.fetchFile();
       });

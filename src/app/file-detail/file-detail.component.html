@@ -4,7 +4,7 @@
   </mat-grid-tile>
   <app-tags [tags]="tags" [fullFile]="data"></app-tags>
   <mat-grid-tile [colspan]="2">
-    <app-rate [data]="data" (executeAction)="rate(data.id, $event)"></app-rate>
+    <app-rate [data]="data" [upvotes]="data?.upvotes" [downvotes]="data?.downvotes" (executeAction)="rate(data.id, $event)"></app-rate>
   </mat-grid-tile>
 </mat-grid-list>
 <app-comment *ngIf="data" [data]="data" (sendCommentAction)="sendComment($event)" (executeAction)="deleteComment($event)"></app-comment>
