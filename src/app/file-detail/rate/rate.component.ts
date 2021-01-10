@@ -28,14 +28,11 @@ export class RateComponent implements OnInit {
 
   voted(): 0 | 1 | 2 {
     if (this.data && this.data.upvotes.find((x) => x === this.auth.token.sub)) {
-      console.log("v",1);
       return 1;
     }
     if (this.data && this.data.downvotes.find((x) => x === this.auth.token.sub)) {
-      console.log("v",2);
       return 2;
     }
-    console.log("v",0);
     return 0;
   }
 
