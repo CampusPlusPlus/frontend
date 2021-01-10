@@ -71,9 +71,7 @@ export class TagsComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onClick(event): void {
-    // TODO: need to get value
-    const value = event.value;
+  onClick(value): void {
     console.log(value);
     this.allTags.forEach(x => {
       if (x.tagValue === value) {
@@ -120,40 +118,6 @@ export class TagsComponent implements OnInit {
         }
       );
     }
-    // this.fileService.addTagToFile(this.fullFile, this.tagId);
-
-    // this.tags = this.tags.filter((v, index, self) => {
-    //   return self.indexOf(v) === index;
-    // });
-    // this.tags.forEach(textTag => {
-    //   const tmp = this.allTags.find(result => textTag === result.tagValue);
-    //   this.fileService.addTagToFile(this.fullFile, tmp.id);
-    // });
-    //
-    // try {
-    //   this.tags.forEach(textTag => {
-    //     const tmp = this.allTags.find(v => textTag === v.tagValue);
-    //     this.fileService.addTagToFile(this.fullFile, tmp.id);
-    //   });
-    // this.tagService.getAllTags$().subscribe(response => {
-    //   response.forEach(tempTag => this.tags.forEach(htmlTags => {
-    //     if (htmlTags === tempTag.tagValue) {
-    //       this.fileService.addTagToFile(this.fullFile, tempTag.id);
-    //     }
-    //   }));
-    // });
-    // } catch (e) {
-    // }
-
-    // // if (this.allTags.map(x => x.tagValue).findIndex(x => x === value.toString()) === -1) {
-    // //   this.tagService.createTag$(value).subscribe(response => {
-    // //     try {
-    // //       this.fileService.addTagToFile(this.fullFile, response.body.id);
-    // //       console.log('inside try block');
-    // //     } catch (e) {
-    // //     }
-    //   });
-    // }
 
     this.tagCtrl.setValue(null);
     this.fetchTags();

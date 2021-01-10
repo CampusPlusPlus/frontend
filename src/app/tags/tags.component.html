@@ -23,7 +23,7 @@
     </label>
   </mat-chip-list>
   <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-    <mat-option *ngFor="let tag of filteredTags | async" [value]="tag" (click)="onClick($event)">
+    <mat-option *ngFor="let tag of filteredTags | async" [value]="tag" (click)="onClick(tag)">
       {{tag}}
     </mat-option>
   </mat-autocomplete>
