@@ -1,10 +1,10 @@
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {catchError, map} from 'rxjs/operators';
-import {Observable, throwError} from 'rxjs';
-import {Tag} from '../models/Tag';
-import {PageableResponse} from '../models/PageableResponse';
-import {ErrorService} from './error.service';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { catchError, map } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { Tag } from '../models/Tag';
+import { PageableResponse } from '../models/PageableResponse';
+import { ErrorService } from './error.service';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -43,6 +43,11 @@ export class TagService {
         response.forEach((t) => tags.push(t));
       }, (error => this.errorService.errorHTTPSnackbar(error)));
     return tags;
+  }
+
+  createTags(tags: string[]): Promise<any>[] {
+    console.log("this tags", tags);
+    return tags.map(tag => this.createTag$(tag).toPromise());
   }
 
   // tagType not used => null
