@@ -5,6 +5,7 @@ import { FullFile } from '../shared/models/FullFile';
 import { FileService } from '../shared/services/file.service';
 import { Comment } from '../shared/models/Comment';
 import {log} from "util";
+import { AuthService } from '../shared/services/auth.service';
 
 @Component({
   selector: 'app-file-detail',
@@ -21,7 +22,8 @@ export class FileDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private location: Location,
-    private fileService: FileService
+    private fileService: FileService,
+    private auth: AuthService
   ) {
   }
 
@@ -44,12 +46,16 @@ export class FileDetailComponent implements OnInit {
   }
 
   rate(id: number, vote: boolean): void {
-    console.log('2', 'vote', id, vote);
-    if (vote) {
+    if ((vote && this.data.upvotes.findIndex(v => v === this.auth.token.sub) > -1)
+      || (!vote && this.data.downvotes.findIndex(v => v === this.auth.token.sub) > -1)) { // removevote
+      this.fileService.removevote(id).subscribe((res) => {
+        this.fetchFile();
+      });
+    } else if (vote) { // upvote
       this.fileService.upvote(id).subscribe((res) => {
         this.fetchFile();
       });
-    } else {
+    } else { // downvote
       this.fileService.downvote(id).subscribe((res) => {
         this.fetchFile();
       });

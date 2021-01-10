@@ -1,3 +1,3 @@
 vote: <ng-container *ngIf="data"><strong id="rates"> {{data.rating}} </strong></ng-container>
-<button mat-raised-button (click)="upvote()">👍</button>
-<button mat-raised-button (click)="downvote()">👎</button>
+<button mat-raised-button [color]="voted() === 1 ? 'primary':''" (click)="upvote()">👍</button>
+<button mat-raised-button [color]="voted() === 2 ? 'primary':''" (click)="downvote()">👎</button>
