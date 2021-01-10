@@ -73,24 +73,30 @@ export class TagsComponent implements OnInit {
 
   onClick(value): void {
     console.log(value);
-    this.allTags.forEach(x => {
-      if (x.tagValue === value) {
-        return this.tagId = x.id;
-      }
-    });
-    console.log(this.tagId);
+    this.tagAlreadyExists(value);
   }
 
   private tagAlreadyExists(value): boolean {
-    let b = false;
-    for (let i = 0; i < this.allTags.length; i++) {
-      if (this.allTags[i].tagValue === value) {
-        this.tagId = this.allTags[i].id;
-        this.fileService.addTagToFile(this.fullFile, this.tagId);
-        return b = true;
-      }
+    console.log('value', value, this.allTags);
+    const normalTag = this.allTags.find(x => x.tagValue.toLowerCase() === value.toLowerCase());
+    console.log('normalTag', normalTag);
+    if (normalTag) {
+      console.log('inside addTagToFile');
+      this.fileService.addTagToFile(this.fullFile, normalTag.id);
+      return true;
     }
-    return b;
+    return false;
+  }
+
+  private createTagEvent(value): void {
+    this.tagService.createTag$(value).subscribe(
+      response => {
+        this.tagId = response.body.id;
+        this.fileService.addTagToFile(this.fullFile, this.tagId);
+        this.fetchTags();
+        return;
+      }
+    );
   }
 
   add(event: MatChipInputEvent): void {
@@ -108,15 +114,10 @@ export class TagsComponent implements OnInit {
       input.value = '';
     }
     const temp = this.tagAlreadyExists(value);
+    console.log(temp);
 
     if (!temp) {
-      this.tagService.createTag$(value).subscribe(
-        response => {
-          this.tagId = response.body.id;
-          this.fileService.addTagToFile(this.fullFile, this.tagId);
-          return;
-        }
-      );
+      this.createTagEvent(value);
     }
 
     this.tagCtrl.setValue(null);
