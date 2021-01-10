@@ -117,7 +117,7 @@ export class FileService {
       this.errorService.errorUnauthorized();
       return new Observable<any>();
     }
-    return this.http.delete(`${this.SERVER_URL}/${file.id}`)
+    return this.http.delete(`${this.SERVER_URL}/${file.id}`, {headers: this.auth.httpHeader})
       .pipe(
         catchError((errorResponse: HttpErrorResponse) => {
           this.errorService.errorHTTPSnackbar(errorResponse);
