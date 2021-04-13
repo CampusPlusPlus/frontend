@@ -1,0 +1,13 @@
+<mat-card *ngIf="data">
+  <mat-card-header>
+    <mat-card-title>{{data.authorName}}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>
+      {{data.text}}
+    </p>
+  </mat-card-content>
+  <mat-card-actions *ngIf="isAuthorized()" align="end">
+    <button mat-button color="warn" (click)="executeAction.emit(data)">🗑️</button>
+  </mat-card-actions>
+</mat-card>

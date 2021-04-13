@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { Observable } from "rxjs";
-import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
-import { map, shareReplay } from "rxjs/operators";
+import { Observable } from 'rxjs';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { map, shareReplay } from 'rxjs/operators';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-shell',
@@ -16,8 +17,15 @@ export class ShellComponent {
       shareReplay()
     );
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  constructor(private breakpointObserver: BreakpointObserver, private auth: AuthService) {
+  }
+
+  validToken(): boolean {
+    return !!this.auth.token;
+  }
 
 
-
+  isModOrAdmin(): boolean {
+    return this.auth ? this.auth.isModOrAdmin : false;
+  }
 }

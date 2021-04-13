@@ -1,0 +1,16 @@
+<div class="centerdiv">
+  <div *ngIf="getName(); else loading">
+    <h1>Welcome {{getName()}}</h1>
+    <h2>You have successfully logged in!</h2>
+    <p>You'll be redirect to your previous site</p>
+    <mat-progress-bar mode="determinate" value="{{progressbarValue}}"></mat-progress-bar>
+  </div>
+  <ng-template #loading>
+    <mat-card>
+      <mat-card-content>
+        <h1>Checking Login Status...</h1>
+        <mat-spinner></mat-spinner>
+      </mat-card-content>
+    </mat-card>
+  </ng-template>
+</div>

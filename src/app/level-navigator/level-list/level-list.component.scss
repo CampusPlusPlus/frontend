@@ -1,0 +1,11 @@
+.mat-list-icon {
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.mat-list-item {
+  cursor: pointer;
+}
+
+.mat-list-item:hover div {
+  text-decoration: underline;
+}

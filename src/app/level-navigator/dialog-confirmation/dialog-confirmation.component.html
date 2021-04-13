@@ -1,0 +1,10 @@
+<div mat-dialog-content>
+  Are you sure you want to <strong>{{data.action | uppercase }}</strong> {{data.type}}:
+  <div class="centerdiv">
+    <q>{{data.name}}</q>
+  </div>
+</div>
+<div mat-dialog-actions style="float: right;">
+  <button mat-button [mat-dialog-close]="false">Cancel</button>
+  <button mat-button color="warn" [mat-dialog-close]="true" cdkFocusInitial>Delete</button>
+</div>

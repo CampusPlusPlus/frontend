@@ -1,0 +1,13 @@
+<h1 mat-dialog-title>Edit Tag Name</h1>
+<div mat-dialog-content>
+  <p>Please enter the new Tag name</p>
+  <mat-form-field>
+    <label>
+      <input matInput [(ngModel)]="data.tagName">
+    </label>
+  </mat-form-field>
+</div>
+<div>
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-button [mat-dialog-close]="data.tagName" autofocus>Ok</button>
+</div>

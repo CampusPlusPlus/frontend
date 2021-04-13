@@ -1,0 +1,4 @@
+<div>
+  <app-comment-list [comments]="data.comments" (executeAction)="handleDelete($event)"></app-comment-list>
+</div>
+<app-comment-writer (executeAction)="sendCommentAction.emit($event)"></app-comment-writer>

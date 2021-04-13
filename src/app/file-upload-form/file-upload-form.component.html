@@ -1,0 +1,38 @@
+<div class="container">
+  <form [formGroup]="uploadForm" (ngSubmit)="onSubmit()">
+    <div>
+      <div style="margin-top: 100px">
+        <app-upload-form formControlName="uploads"></app-upload-form>
+        <br/>
+        <app-autocomplete-form
+          formControlName="fileUploadLocations"
+          [disciplineNames]="disciplineNames"
+          [studyCourseNames]="studyCourseNames"
+          [curriculaNames]="curriculaNames"
+          [lectureNames]="lectureNames"
+        ></app-autocomplete-form>
+        <br/>
+          <app-tags [create]="immediatelyTagFile" [tags]="tags"></app-tags>
+      </div>
+      <br/>
+      <div style="margin-top: 20px">
+        <button
+          [disabled]="!this.uploadForm.valid"
+          mat-raised-button
+          color="primary"
+          type="submit"
+        >
+          Submit
+        </button>
+        <button
+          mat-raised-button
+          color="warn"
+          (click)="onReset()"
+          type="button"
+        >
+          Reset
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

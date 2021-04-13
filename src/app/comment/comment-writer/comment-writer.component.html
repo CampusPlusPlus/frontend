@@ -1,0 +1,7 @@
+<form class="comment-form">
+  <mat-form-field class="comment-form-full-width">
+    <mat-label>Leave a comment</mat-label>
+    <textarea name="text" [(ngModel)]="text" matInput placeholder="Ex. Your answer is right, however..."></textarea>
+  </mat-form-field>
+  <button mat-raised-button color="primary" (click)="sendComment()">Send</button>
+</form>

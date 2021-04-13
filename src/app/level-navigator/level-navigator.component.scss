@@ -1,0 +1,15 @@
+section {
+  display: table;
+  margin-left: 1em;
+  margin-top: 1em;
+}
+
+.button-row {
+  display: table-cell;
+  width: 100vh;
+}
+
+button {
+  margin-right: 30px;
+  float:right;
+}
