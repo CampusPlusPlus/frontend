@@ -1,5 +1,7 @@
 # Frontend
 
+![Screenshot](https://user-images.githubusercontent.com/2607973/114623761-00692500-9cb0-11eb-80fe-02b022712a77.png)
+
 ## Requirements
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.2.0.  
